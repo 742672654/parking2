@@ -110,7 +110,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             param.put("phone",phone);
             param.put("password",password);
             param.put("edition",edition);
-        HttpManager2.requestPost(Static_bean.login,  param, this, "login");
+        HttpManager2.requestPost(Static_bean.getlogin(),  param, this, "login");
     }
 
     //TODO >>>>接收登录

@@ -105,7 +105,7 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
       if ( !order_all_textview_cph.getText().toString().contains("车牌号") && !order_all_textview_cph.getText().toString().equals("")){
           param.put("carnum",order_all_textview_cph.getText().toString());
       }
-       HttpManager2.requestPost(Static_bean.pointOrderReport_orderlist,  param, this, sign);
+       HttpManager2.requestPost(Static_bean.pointOrderReport_orderlist(),  param, this, sign);
    }
 
    //TODO 接收数据返回

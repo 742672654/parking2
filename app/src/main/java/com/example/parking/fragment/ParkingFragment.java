@@ -72,7 +72,7 @@ public class ParkingFragment extends ParkingBase {
             // 剩余车位和预约车位
             Map<String,String> param = new HashMap<String,String>(1);
             param.put("token",activity.userBean.getToken());
-            HttpManager2.requestPost(Static_bean.firstPageRecord,  param, this, "firstPageRecord");
+            HttpManager2.requestPost(Static_bean.firstPageRecord(),  param, this, "firstPageRecord");
         }
 
     }
@@ -111,7 +111,7 @@ public class ParkingFragment extends ParkingBase {
                 params.put("panorama", panoramaURL);
                 params.put("subid", selectSubPlaceDate.getId());
                 params.put("subname", selectSubPlaceDate.getCode());
-                HttpManager2.requestPost(Static_bean.orderAdd, params, this,"orderAdd");
+                HttpManager2.requestPost(Static_bean.orderAdd(), params, this,"orderAdd");
                 break;
             default:
                 break;
@@ -204,7 +204,7 @@ public class ParkingFragment extends ParkingBase {
                 buf.append("监督电话：0595-28282818");
 
 
-                StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict);
+                StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict());
                 qRcode.append("?orderid=").append(httpBean.getData().getId());
                 qRcode.append("&pointid=").append(activity.userBean.getParkid());
 

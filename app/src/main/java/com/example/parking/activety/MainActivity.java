@@ -277,7 +277,7 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
             params.put("inimageURL",parkingFragment.inimageURL);
             params.put("inimagePath",parkingFragment.inimagePath);
 
-            HttpManager2.onResponseFile(Static_bean.photoToOss, params,
+            HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
                      FileUtil.getFile_Suffix(imageUri),
                      FileUtil.getFile_Byte(imageUri),
@@ -309,7 +309,7 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
             params.put("panoramaPath",parkingFragment.panoramaPath);
 
 
-            HttpManager2.onResponseFile(Static_bean.photoToOss, params,
+            HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
                      FileUtil.getFile_Suffix(imageUri),
                      FileUtil.getFile_Byte(imageUri),
@@ -326,7 +326,7 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
             Map<String,String> params = new HashMap<String,String>(2) ;
             params.put("token", userBean.getToken());
             params.put("type", "1");
-            HttpManager2.onResponseFile(Static_bean.photoToOss, params,
+            HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
                     FileUtil.getFile_Suffix(imageUri),
                     FileUtil.getFile_Byte(imageUri),

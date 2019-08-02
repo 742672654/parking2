@@ -145,7 +145,7 @@ public class OrderBase extends BaseFragment implements OnClickListener, HttpCall
 
         Map<String,String> param = new HashMap<String,String>(1);
         param.put("token",activity.userBean.getToken());
-        HttpManager2.requestPost(Static_bean.orderlist,  param, this, "orderlist");
+        HttpManager2.requestPost(Static_bean.orderlist(),  param, this, "orderlist");
     }
 
     //TODO >>>>刷出订单list

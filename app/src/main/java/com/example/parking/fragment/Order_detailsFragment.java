@@ -74,7 +74,7 @@ public class Order_detailsFragment extends BaseFragment{
         param.put("id",orderlistData.getId());
         param.put("camum",orderlistData.getCarNo());
         param.put("subname",orderlistData.getSubname());
-        HttpManager2.requestPost(Static_bean.getLeavePageOrder,  param, this, "getLeavePageOrder");
+        HttpManager2.requestPost(Static_bean.getLeavePageOrder(),  param, this, "getLeavePageOrder");
     }
 
     @Override
@@ -97,7 +97,7 @@ public class Order_detailsFragment extends BaseFragment{
                         param.put("subid", orderlistData.getSubid());
                         param.put("subname", orderlistData.getSubname());
                         param.put("outimage", activity.orderFragment.outimage);
-                        HttpManager2.requestPost(Static_bean.payPointOrderToPoint, param, Order_detailsFragment.this, "payPointOrderToPoint");
+                        HttpManager2.requestPost(Static_bean.payPointOrderToPoint(), param, Order_detailsFragment.this, "payPointOrderToPoint");
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -139,7 +139,7 @@ public class Order_detailsFragment extends BaseFragment{
                                 param.put("subid",orderlistData.getSubid());
                                 param.put("subname",orderlistData.getSubname());
                                 param.put("carnum",orderlistData.getCarNo());
-                                HttpManager2.requestPost(Static_bean.escape_add,  param, Order_detailsFragment.this, "escape_add");
+                                HttpManager2.requestPost(Static_bean.escape_add(),  param, Order_detailsFragment.this, "escape_add");
                             }
                         });
                         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -156,7 +156,7 @@ public class Order_detailsFragment extends BaseFragment{
                 Map<String,String> param = new HashMap<String,String>(2);
                 param.put("token",activity.userBean.getToken());
                 param.put("id",orderlistData.getId());
-                HttpManager2.requestPost(Static_bean.selectOrderSubPlace,  param, this, "selectOrderSubPlace");
+                HttpManager2.requestPost(Static_bean.selectOrderSubPlace(),  param, this, "selectOrderSubPlace");
                 break;
 
             case R.id.dayin_rucang:
@@ -172,7 +172,7 @@ public class Order_detailsFragment extends BaseFragment{
                 buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
                 buf.append("监督电话：0595-28282818");
 
-                StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict);
+                StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict());
                 qRcode.append("?orderid=").append(orderlistData.getId());
                 qRcode.append("&pointid=");
                 qRcode.append(activity.userBean.getParkid());
@@ -310,7 +310,7 @@ public class Order_detailsFragment extends BaseFragment{
             buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
             buf.append("监督电话：0595-28282818");
 
-            String QRcode = Static_bean.QRcode_orderdetail+"?orderid="+param.get("id");
+            String QRcode = Static_bean.QRcode_orderdetail()+"?orderid="+param.get("id");
             PrintBillBean PrintBillBean = new PrintBillBean(2,buf.toString(),QRcode);
 
             printer_marking(PrintBillBean);

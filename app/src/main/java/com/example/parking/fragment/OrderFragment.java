@@ -44,7 +44,7 @@ public class OrderFragment extends OrderBase {
 
         Map<String,String> param = new HashMap<String,String>(1);
         param.put("token",activity.userBean.getToken());
-        HttpManager2.requestPost(Static_bean.selectSubPlace,  param, this, "selectSubPlace");
+        HttpManager2.requestPost(Static_bean.selectSubPlace(),  param, this, "selectSubPlace");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class OrderFragment extends OrderBase {
 
                                 Map<String,String> param = new HashMap<String,String>(1);
                                 param.put("token",activity.userBean.getToken());
-                                HttpManager2.requestPost(Static_bean.allCharge,  param, OrderFragment.this, "allCharge");
+                                HttpManager2.requestPost(Static_bean.allCharge(),  param, OrderFragment.this, "allCharge");
                             }
                         });
                         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -138,7 +138,7 @@ public class OrderFragment extends OrderBase {
                 //刷新title
                 Map<String, String> param = new HashMap<String, String>();
                 param.put("token", activity.userBean.getToken());
-                HttpManager2.requestPost(Static_bean.selectSubPlace, param, this, "selectSubPlace");
+                HttpManager2.requestPost(Static_bean.selectSubPlace(), param, this, "selectSubPlace");
             } else {
                 toast_makeText(httpBean.getMessage());
             }

@@ -117,7 +117,7 @@ public class MyBase extends BaseFragment implements OnClickListener, HttpCallBac
                             Map<String, String> param = new HashMap<String, String>(2);
                             param.put("token", activity.userBean.getToken());
                             param.put("chkpwd", editTextName.getText().toString());
-                            HttpManager2.requestPost(Static_bean.changePwds, param, MyBase.this, "changePwds");
+                            HttpManager2.requestPost(Static_bean.changePwds(), param, MyBase.this, "changePwds");
 
                         }else {
                             toast_makeText("两次输入的密码不一致");
@@ -175,7 +175,7 @@ public class MyBase extends BaseFragment implements OnClickListener, HttpCallBac
                 buf.append("'").append(activity.userBean.getParkaddr()).append("',");
                 buf.append("'").append(activity.userBean.getMobile()).append("',");
                 buf.append("'").append(activity.userBean.getParkid()).append("',");
-                buf.append("'").append(Static_bean.findOrderByDate).append("')");
+                buf.append("'").append(Static_bean.findOrderByDate()).append("')");
 
                 //需要参数的JS函数名
                 view.evaluateJavascript(buf.toString(), new ValueCallback<String>() {

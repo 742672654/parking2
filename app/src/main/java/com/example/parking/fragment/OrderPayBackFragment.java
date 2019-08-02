@@ -99,7 +99,7 @@ public class OrderPayBackFragment extends BaseFragment {
                 Map<String,String> params = new HashMap<String,String>() ;
                 params.put("token", activity.userBean.getToken());
                 params.put("id", String.valueOf(orderAddDate.getId()));
-                HttpManager2.requestPost(Static_bean.escapedelete, params, this,"escapedelete");
+                HttpManager2.requestPost(Static_bean.escapedelete(), params, this,"escapedelete");
                 break;
 
             case R.id.dayin_qianfei:
