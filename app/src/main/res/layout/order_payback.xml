@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/order_details_s0"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/login_button_shape">
+
+        <TextView
+            android:id="@+id/order_details_a00"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="逃 费 补 缴"
+            android:textColor="#32221E"
+            android:textSize="30dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/escapeprice_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/order_details_s0"
+        android:background="@drawable/login_button_shape">
+
+        <TextView
+            android:id="@+id/escapeprice_view"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="补缴费用："
+            android:textColor="#32221E"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/escapeprice_text"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@id/escapeprice_view"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/blue_239DFD"
+            android:textSize="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/escapeprice_text"
+            android:gravity="center"
+            android:text="元"
+            android:textColor="#32221E"
+            android:textSize="17dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/carnum_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/escapeprice_relative"
+        android:background="@drawable/login_button_shape">
+
+        <TextView
+            android:id="@+id/carnum_view"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="车牌号码："
+            android:textColor="#32221E"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/carnum_text"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@id/carnum_view"
+            android:gravity="center"
+            android:text="闽CA1860"
+            android:textColor="@color/blue_239DFD"
+            android:textSize="17dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/point_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/carnum_relative"
+        android:background="@drawable/login_button_shape">
+
+        <TextView
+            android:id="@+id/point_view"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="泊车地点："
+            android:textColor="#32221E"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/point_text"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@id/point_view"
+            android:gravity="center|left"
+            android:text="0"
+            android:textColor="@color/blue_239DFD"
+            android:textSize="17dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/parkDateStr_Relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/point_relative"
+        android:background="@drawable/login_button_shape">
+
+        <TextView
+            android:id="@+id/parkDateStr_view"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="逃单时间："
+            android:textColor="#32221E"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/parkDateStr_text"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@id/parkDateStr_view"
+            android:gravity="center|left"
+            android:text="0"
+            android:textColor="@color/blue_239DFD"
+            android:textSize="17dp" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/bujiao_button"
+        android:layout_width="270dp"
+        android:layout_height="35dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/button_transformation"
+        android:text="补缴完成"
+        android:textColor="@color/nfc_dialog"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/dayin_qianfei"
+        android:layout_width="270dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/bujiao_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/button_transformation"
+        android:text="打印小票"
+        android:textColor="@color/nfc_dialog"
+        android:textSize="20sp" />
+
+
+</RelativeLayout>

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.7"
+        android:background="@color/colorPrimary">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/left_photo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@mipmap/ce1">
+                <Button
+                    android:id="@+id/parking_photo"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/photo2" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/right_photo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@mipmap/ce2">
+
+                <Button
+                    android:id="@+id/parking_photo3"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/photo2" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:background="@drawable/login_button_shape"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_centerVertical="true"
+                android:layout_weight="0.9"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/chepai" />
+
+            <TextView
+                android:id="@+id/parking_edittext_carmun"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:autoSizeTextType="uniform"
+                android:gravity="center"
+                android:text="车  牌  号:"/>
+
+            <EditText
+                android:id="@+id/parking_carmun"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dip"
+                android:layout_weight="8"
+                android:autoSizeTextType="uniform"
+                android:background="@null"
+                android:gravity="center|left"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textCursorDrawable="@null" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:background="@drawable/login_button_shape"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_centerVertical="true"
+                android:layout_weight="0.9"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/jiaofei" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:autoSizeTextType="uniform"
+                android:gravity="center"
+                android:text="预交费用:"/>
+
+            <EditText
+                android:id="@+id/parking_pre_price"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:autoSizeTextType="uniform"
+                android:layout_marginLeft="5dip"
+                android:gravity="center|left"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:text="0"
+                android:background="@null"
+                android:textCursorDrawable="@null" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:background="@drawable/login_button_shape"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_centerVertical="true"
+                android:layout_weight="0.9"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/tincewei" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:autoSizeTextType="uniform"
+                android:gravity="center"
+                android:text="停  车  位:"/>
+
+            <EditText
+                android:id="@+id/btn_choice_parkingspace"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:enabled="false"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:autoSizeTextType="uniform"
+                android:layout_marginLeft="5dip"
+                android:gravity="center|left"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:text="没有车位"
+                android:background="@null"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@null" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:background="@drawable/login_button_shape">
+
+            <TextView
+                android:id="@+id/aa1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:autoSizeTextType="uniform"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="剩余车位:"/>
+
+            <EditText
+                android:id="@+id/nouse"
+                android:layout_toRightOf="@id/aa1"
+                android:text="150"
+                android:enabled="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_marginLeft="5dip"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:autoSizeTextType="uniform"
+                android:background="@null"
+                android:textColor="@color/occupy_red"
+                android:textCursorDrawable="@null" />
+
+
+            <TextView
+                android:id="@+id/aa2"
+                android:layout_toLeftOf="@id/wxnum"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:autoSizeTextType="uniform"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="预约车位:"/>
+
+            <EditText
+                android:id="@+id/wxnum"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:enabled="false"
+                android:text="20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_marginRight="30dip"
+                android:layout_marginLeft="5dip"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/main_green"
+                android:background="@null"
+                android:textCursorDrawable="@null" />
+
+      <!--      <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/suaxin"
+                android:layout_alignParentRight="true"/> -->
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:layout_marginTop="15dip"
+            android:layout_marginBottom="15dip"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/button_order_add"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="2"
+                android:background="@drawable/button_transformation"
+                android:text="保存订单"
+                android:textAllCaps="false"
+                android:textColor="@color/nfc_dialog"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5">
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

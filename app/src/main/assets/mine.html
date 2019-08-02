@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="jquery.min.js" language="JavaScript"></script>
+
+  <script type="text/javascript" language="JavaScript">
+
+      function implement( parkname, address, mobile, pointid, url ){
+
+
+        //停车场电话
+	    $("#bindPhone").html( "电话："+isnull(mobile) );
+        //停车场名
+	    $("#parkname").html( isnull(parkname) );
+	    //地址
+	    $("#address").html( '地址：'+isnull(address) );
+
+
+    $.ajax({
+			 type: 'POST',
+			 url :url,
+			 data:{ pointid: pointid },
+			 dataType: "json",
+			 success : function(result) {
+
+				  if (result.code==200) {
+                    var data = result.data;
+
+                    //七天内收费总次数
+	                 $("#ordernum7").html( data.weekOrderTotal +"次" );
+	                //七天内收费总金额
+	                 $("#ordertotal7").html( data.weekPriceTotal +"元");
+
+	                //1天内收费总次数
+	                 $("#ordernum1").html( data.todayOrderTotal +"次" );
+	                //1天内收费总金额
+	                 $("#ordertotal1").html( data.todayPriceTotal +"元");
+
+	                //30天内收费总次数
+	                 $("#ordernum30").html( data.monthOrderTotal +"次" );
+	                //30天内收费总金额
+	                 $("#ordertotal30").html( data.monthPriceTotal +"元");
+
+				  }
+			 }
+		});
+
+
+
+
+      };
+
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+
+function isnull(date)
+{
+     if( date==undefined || date==null || date=="" || date=="null" || date=="undefined" ){
+
+      return "";
+     }
+     return date;
+}
+
+
+</script>
+</head>
+<style>
+    body{
+      background-color: #eee
+    }
+*{
+  box-sizing: border-box;
+  font-size: 15px;
+  margin:0;
+  padding: 0
+}
+img{
+  display: block
+}
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+}
+.flex{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex
+}
+.flexc{
+  flex-direction: column
+}
+.flexible{
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  -ms-flex: 1;
+  flex: 1
+}
+.j_center{
+  -webkit-justify-content: center;
+  justify-content: center
+}
+.j_between{
+  -webkit-justify-content: space-between;
+  justify-content: space-between
+}
+.j_end{
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end
+}
+.a_center{
+  -webkit-align-items: center;
+  align-items: center
+}
+.a_between{
+  -webkit-align-content: space-between;
+  align-content: space-between
+}
+.a_end{
+  -webkit-align-items: flex-end;
+  align-items: flex-end
+}
+.icon{
+  width: 25px;
+  height: 25px;
+  margin-right: 10px
+}
+.iconr{
+  width: 25px;
+  height: 25px;
+  margin-left: 10px
+}
+.cell_list{
+
+}
+.cell_item{
+  min-height: 40px;
+  padding: 0 10px;
+  border-bottom: 2px solid #eee;
+  background-color: #fff
+}
+.grids_list{
+  flex-wrap: wrap;
+  position: relative;
+  background-color: #fff
+}
+.grids_list::before{
+  content:'';
+  width: 100%;
+  border-top: 2px solid #eee;
+  position: absolute;
+  top: 0;
+  left: 0
+}
+.grids_list::after{
+  content:'';
+  height: 100%;
+  border-left: 2px solid #eee;
+  position: absolute;
+  top: 0;
+  left: 0
+}
+.grids_item{
+  min-height: 10vw;
+  position: relative
+}
+.grids_item::before{
+  content:'';
+  width: 100%;
+  border-bottom: 2px solid #eee;
+  position: absolute;
+  bottom: 0;
+  left: 0
+}
+.grids_item::after{
+  content:'';
+  height: 100%;
+  border-right: 2px solid #eee;
+  position: absolute;
+  top: 0;
+  right: 0
+}
+.top{
+  padding: 10px 20px;
+  background-color: #fff
+}
+.user_info{
+  padding: 10px 0;
+  height: 70px
+}
+
+.btn{
+  color: #29B5FD;
+  border: 2px solid #29B5FD;
+  line-height: 30px;
+  border-radius: 15px;
+  padding: 0 15px;
+  margin-left: 10px
+}
+.base{
+  background-color: #fff;
+  padding: 15px 30px;
+  margin-bottom: 10px
+}
+.base_item:not(:nth-last-child(1)){
+  margin-bottom: 5px
+}
+.grids_item{
+  max-width: 50%;
+  width: 50%;
+  min-width: 50%;
+  padding: 12.5px 0;
+}
+.grids_title{
+  text-align: center;
+  margin-bottom: 12.5px
+}
+.grids_txt{
+  font-size: 30px;
+  font-weight: bolder;
+  text-align: center
+}
+.grids_txt text{
+  font-size: 15px;
+  font-weight: normal;
+  margin-left: 3px
+}
+.icon{
+  width: 20px;
+  height: 20px
+}
+</style>
+<body>
+
+<div class="base flex flexc">
+  <div class="base_item" id="parkname">停车场名</div>
+  <div class="base_item flex"><span style='white-space:nowrap' id="address">地址：</span><span></span></div>
+  <div class="base_item" id="bindPhone">电话：</div>
+</div>
+<div class="grids_list flex">
+  <div class="grids_item" onclick='gotoRecord'>
+    <div class="grids_title">今日收费次数</div>
+    <div class="grids_txt" id="ordernum1">
+      <span>次</span>
+    </div>
+  </div>
+  <div class="grids_item" onclick='gotoRecord'>
+    <div class="grids_title">今日收费金额</div>
+    <div class="grids_txt" id="ordertotal1">
+      <span>元</span>
+    </div>
+  </div>
+</div>
+
+<div class="grids_list flex">
+  <div class="grids_item" onclick='gotoRecord'>
+    <div class="grids_title">7天收费次数</div>
+    <div class="grids_txt" id="ordernum7">
+      <span>次</span>
+    </div>
+  </div>
+  <div class="grids_item" onclick='gotoRecord'>
+    <div class="grids_title">7天收费金额</div>
+    <div class="grids_txt" id="ordertotal7">
+      <span>元</span>
+    </div>
+  </div>
+</div>
+
+<div class="grids_list flex">
+  <div class="grids_item" onclick='gotoRecord'>
+    <div class="grids_title">30天收费次数</div>
+    <div class="grids_txt" id="ordernum30">
+      <span>次</span>
+    </div>
+  </div>
+  <div class="grids_item" onclick='gotoRecord'>
+    <div class="grids_title">30天收费金额</div>
+    <div class="grids_txt" id="ordertotal30">
+      <span>元</span>
+    </div>
+  </div>
+</div>
+
+<div class="cell_item flex a_center" onclick='justTest.orderList()'>
+  <img class="icon" src="list.png"/>
+  <div class="flexible">订单列表</div>
+  <img class="iconr" src="go.png"/>
+</div>
+
+<div class="cell_item flex a_center" onclick='justTest.changePassword()'>
+  <img class="icon" src="mimaxiugai.png"/>
+  <div class="flexible">密码修改</div>
+  <img class="iconr" src="go.png"/>
+</div>
+
+<div class="cell_item flex a_center" onclick='justTest.signout()'>
+  <img class="icon" src="zhongxindenglu.png"/>
+  <div class="flexible">重新登录</div>
+  <img class="iconr" src="go.png"/>
+</div>
+
+</body>
+</html>

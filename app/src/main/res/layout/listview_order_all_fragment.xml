@@ -1,0 +1,231 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/order_allrelativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/plate_text">
+
+        <RelativeLayout
+            android:id="@+id/order_allrelativelayout2"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/login_button_shape">
+
+            <ImageView
+                android:id="@+id/order_all_imageview_rucang"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/jiaofei" />
+
+            <TextView
+                android:id="@+id/order_all_textview_rucang"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/order_all_imageview_rucang"
+                android:autoSizeTextType="uniform"
+                android:gravity="center"
+                android:text=" 入场时间: "
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+
+            <RelativeLayout
+                android:id="@+id/order_all_textview_rucangtime_kaisi"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@id/order_all_textview_rucang">
+
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_kaisi_lian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:visibility="gone" />
+
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_kaisi_yue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="11"
+                    android:textColor="@color/font_gray"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_kaisi_yue_jt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/order_all_textview_rucangtime_kaisi_yue"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="月"
+                    android:textColor="@color/font_gray"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_kaisi_ri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/order_all_textview_rucangtime_kaisi_yue_jt"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="20"
+                    android:textColor="@color/font_gray"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_kaisi_ri_jt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/order_all_textview_rucangtime_kaisi_ri"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="日"
+                    android:textColor="@color/font_gray"
+                    android:textSize="20dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/order_all_textview_rucangtime_zi"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/order_all_textview_rucangtime_kaisi"
+                android:background="@null"
+                android:gravity="center"
+                android:text=" 至 "
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <RelativeLayout
+                android:id="@+id/order_all_textview_rucangtime_jiesu"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@id/order_all_textview_rucangtime_zi">
+
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_jiesu_lian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_jiesu_yue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="12"
+                    android:textColor="@color/font_gray"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_jiesu_yue_jt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/order_all_textview_rucangtime_jiesu_yue"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="月"
+                    android:textColor="@color/font_gray"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_jiesu_ri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/order_all_textview_rucangtime_jiesu_yue_jt"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="20"
+                    android:textColor="@color/font_gray"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/order_all_textview_rucangtime_jiesu_ri_jt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/order_all_textview_rucangtime_jiesu_ri"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="日"
+                    android:textColor="@color/font_gray"
+                    android:textSize="20dp" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/order_allrelativelayout3"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/order_allrelativelayout2"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/login_button_shape">
+
+            <ImageView
+                android:id="@+id/order_all_imageview_rucang2"
+                android:layout_width="26dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/chepai" />
+
+            <TextView
+                android:id="@+id/order_all_textview_rucang2"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/order_all_imageview_rucang2"
+                android:autoSizeTextType="uniform"
+                android:gravity="center"
+                android:text=" 车牌号码: "
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/order_all_textview_cph"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/order_all_textview_rucang2"
+                android:background="@null"
+                android:gravity="center|left"
+                android:text="请输入车牌号"
+                android:textColor="@color/font_gray"
+                android:textSize="20dp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/menulist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/order_allrelativelayout"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
