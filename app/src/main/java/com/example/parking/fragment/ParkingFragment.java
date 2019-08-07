@@ -39,14 +39,10 @@ import java.util.Map;
  */
 public class ParkingFragment extends ParkingBase {
 
-
+    public static boolean sss = false;
 
     public static final String TAG = "ParkingFragment";
 
-    public String inimageURL = null; //车牌远程地址
-    public String panoramaURL = null; //全景远程地址
-    public String inimagePath = null; //车牌本地地址
-    public String panoramaPath = null; // 全景本地地址
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,25 +53,20 @@ public class ParkingFragment extends ParkingBase {
     public void onStart() {
         super.onStart();
         super.onPosition(TAG);
-
-        if (selectSubPlaceDate!=null){
-            parking_carmun.setText(selectSubPlaceDate.getCarnum()==null?"":selectSubPlaceDate.getCarnum());
-            //parking_pre_price.setText(selectSubPlaceDate.getPreprice()==null?"":selectSubPlaceDate.getPreprice().toString());
-        }
         Log.i(TAG,getArguments().getString("joinType")+"---------------------");
-        if ( getArguments().getString("joinType")!=null){
-            inimageURL = "";
-            panoramaURL = "";
-            inimagePath = "";
-            panoramaPath = "";
-            distinguish_carmun = null;
-            // 剩余车位和预约车位
-            Map<String,String> param = new HashMap<String,String>(1);
-            param.put("token",activity.userBean.getToken());
-            HttpManager2.requestPost(Static_bean.firstPageRecord(),  param, this, "firstPageRecord");
-        }
 
+        if (sss){
+            distinguish_carmun = null;
+            parking_carmun.setText("");
+            // 剩余车位和预约车位
+            Map<String, String> param = new HashMap<String, String>(2);
+            param.put("token", activity.userBean.getToken());
+            HttpManager2.requestPost(Static_bean.firstPageRecord(), param, this, "firstPageRecord");
+            sss = false;
+        }
     }
+
+
 
     @Override
     public void onClick(View view) {
@@ -107,10 +98,11 @@ public class ParkingFragment extends ParkingBase {
                 params.put("carnum", parking_carmun.getText().toString());
                 params.put("preprice", parking_pre_price.getText().toString());
                 params.put("ordertype", String.valueOf(1));
-                params.put("inimage", inimageURL);
-                params.put("panorama", panoramaURL);
+                params.put("inimage", right_photo.getTag()==null ?"":right_photo.getTag().toString().split("###")[1]);
+                params.put("panorama",left_photo.getTag()==null ?"": left_photo.getTag().toString().split("###")[1]);
                 params.put("subid", selectSubPlaceDate.getId());
                 params.put("subname", selectSubPlaceDate.getCode());
+
                 HttpManager2.requestPost(Static_bean.orderAdd(), params, this,"orderAdd");
                 break;
             default:
@@ -128,14 +120,13 @@ public class ParkingFragment extends ParkingBase {
             public void run() {
                 try {
 
+                   left_photo.setBackground(Drawable.createFromPath(param.get("panoramaPath")));
+
                     final PhotoToOssBean photoToOssBean = new Gson().fromJson(URLDecoder.decode(obj, "UTF-8"), PhotoToOssBean.class);
                     Log.i(TAG, obj+"----"+URLDecoder.decode(obj, "UTF-8") + "---------" + photoToOssBean.toString());
 
-                    panoramaURL = photoToOssBean.getImgurl();
-                    panoramaPath = param.get("panoramaPath");
+                    left_photo.setTag(param.get("panoramaPath")+"###"+photoToOssBean.getImgurl());
 
-                    inimagePath = param.get("inimagePath");
-                    inimageURL = param.get("inimageURL");
                 } catch (Exception e) {
                     Log.w(TAG, e);
                 }
@@ -155,10 +146,8 @@ public class ParkingFragment extends ParkingBase {
                     final PhotoToOssBean photoToOssBean = new Gson().fromJson(URLDecoder.decode(obj, "UTF-8"), PhotoToOssBean.class);
                     Log.i(TAG, obj+"----"+URLDecoder.decode(obj, "UTF-8") + "---------" + photoToOssBean.toString());
 
-                    inimagePath = param.get("inimagePath");
-                    panoramaURL = param.get("panoramaURL");
-                    panoramaPath = param.get("panoramaPath");
-                    inimageURL = photoToOssBean.getImgurl();
+                    right_photo.setBackground(Drawable.createFromPath(param.get("inimagePath")));
+                    right_photo.setTag(param.get("inimagePath")+"###"+photoToOssBean.getImgurl());
 
                     if (photoToOssBean.getCarmun()==null || "".equals(photoToOssBean.getCarmun())){
                         toast_makeText("车牌识别错误，请手动输入车牌");
@@ -167,8 +156,8 @@ public class ParkingFragment extends ParkingBase {
                         return;
                     }
 
-                    parking_carmun.setText(photoToOssBean.getCarmun());
                     distinguish_carmun = photoToOssBean.getCarmun();
+                    parking_carmun.setText(photoToOssBean.getCarmun());
                 } catch (Exception e) {
                     Log.w(TAG, e);
                     toast_makeText("车牌识别错误，请手动输入车牌");
@@ -213,25 +202,29 @@ public class ParkingFragment extends ParkingBase {
                 printer_marking(PrintBillBean);
 
                 //保存到数据库
+
+                String[] inimage = right_photo.getTag()==null ?new String[]{"",""}:right_photo.getTag().toString().split("###");
+                String[] panorama = left_photo.getTag()==null ?new String[]{"",""}:left_photo.getTag().toString().split("###");
+
                 OrderDbBean orderDbBean = new OrderDbBean();
                 orderDbBean.setId(String.valueOf(httpBean.getData().getId()));
-                orderDbBean.setPhoto1_path(panoramaPath);
-                orderDbBean.setPhoto1_url(panoramaURL);
-                orderDbBean.setPhoto2_path(inimagePath);
-                orderDbBean.setPhoto2_url(inimageURL);
+                orderDbBean.setPhoto1_path(panorama[0]);
+                orderDbBean.setPhoto1_url(panorama[1]);
+                orderDbBean.setPhoto2_path(inimage[0]);
+                orderDbBean.setPhoto2_url(inimage[1]);
                 Order_DB.insert_in_Order(activity.baseSQL_DB,orderDbBean);
 
                 activity.openParkingIndex();
 
             }else if ("order".equals(httpBean.getMessage())){
 
-                AlertDialog_Builder("提示","已有订单");
+                super.AlertDialog_Builder("提示","已有订单","确定");
             }else if ("escape".equals(httpBean.getMessage())){
 
                 activity.openOrderPayBack(httpBean.getData());
             }else{
 
-                AlertDialog_Builder("上传失败",httpBean.getMessage());
+                super.AlertDialog_Builder("上传失败",httpBean.getMessage(),"确定");
             }
         } catch (Exception e) {
             Log.w(TAG, e);

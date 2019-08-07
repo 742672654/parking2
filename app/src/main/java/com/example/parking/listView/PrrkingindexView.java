@@ -12,9 +12,6 @@ import com.example.parking.R;
 import com.example.parking.bean.http.OrderlistBean;
 import com.example.parking.bean.http.SelectSubPlaceBean;
 import com.example.parking.fragment.ParkingIndexFragment;
-import com.example.parking.util.StringUtil;
-import com.example.parking.util.TimeUtil;
-
 import java.util.List;
 
 
@@ -94,7 +91,7 @@ public class PrrkingindexView extends BaseAdapter {
             });
         }else{
 
-            relativeLayout.setBackgroundResource(R.color.idle_green);
+            relativeLayout.setBackgroundResource(R.drawable.listview_index_no);
             id_number_left.setText(selectSubPlaceDate.getCode());
 
             view1.findViewById(R.id.car_fang_left).setVisibility( View.INVISIBLE );
@@ -165,7 +162,7 @@ public class PrrkingindexView extends BaseAdapter {
             });
         }else{
 
-            relativeLayout.setBackgroundResource(R.color.idle_green);
+            relativeLayout.setBackgroundResource(R.drawable.listview_index_no);
             id_number_right.setText(selectSubPlaceDate.getCode());
 
             view1.findViewById(R.id.car_fang_right).setVisibility( View.INVISIBLE );

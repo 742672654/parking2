@@ -60,7 +60,7 @@ public class ParkingIndexFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
 
-        Map<String,String> param = new HashMap<String,String>(1);
+        Map<String,String> param = new HashMap<String,String>(3);
         param.put("token",activity.userBean.getToken());
         HttpManager2.requestPost(Static_bean.selectSubPlace(),  param, this, "selectSubPlace");
     }

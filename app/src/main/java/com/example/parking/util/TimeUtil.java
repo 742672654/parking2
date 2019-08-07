@@ -69,6 +69,16 @@ public class TimeUtil {
 	 
 		return DATE_TIME.format(new Date());
 	}
+
+	/**
+	 * 获取当前日期时间
+	 * 格式：yyyy-MM-dd HH:mm:ss
+	 */
+	public static String getDateTime(Date date) {
+
+		return DATE_TIME.format(date);
+	}
+
 	/**
 	 * 获取当前日期时间Short
 	 * 格式：yyyy-MM-dd HH:mm:ss
@@ -78,14 +88,7 @@ public class TimeUtil {
 		return DATE_TIME.format(new Date(time));
 	}
 
-	/**
-	 * 获取当前日期时间Short
-	 * 格式：yyyy-MM-dd HH:mm:ss
-	 */
-	public static String getDateTime(Date date) {
 
-		return DATE_TIME.format(date);
-	}
     /**
      * 获取当前日期时间Short
      * 格式：MM-dd HH:mm
@@ -99,9 +102,9 @@ public class TimeUtil {
 	 * 获取当前日期时间Long
 	 * 格式：yyyyMMddHHmmss
 	 */
-	public static String getDateTimeLong() {
+	public static long getDateTimeLong() {
 
-		return DATE_TIME_LONG.format(new Date());
+		return Long.valueOf(DATE_TIME_LONG.format(new Date()));
 	}
 
 	/**
@@ -307,14 +310,39 @@ public class TimeUtil {
 	    return  min;
 	}
 
-
-
 	/*
 	 * 将时间戳转换为时间
 	 */
-	public static String stampToDate(long s){
+	public static String stampToDate(long slong){
 
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(slong));
+	}
 
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(s));
+	/*
+	 * 将时间转换为时间戳
+	 */
+	public static long dateToStamp(String date){
+
+		try {
+
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date).getTime();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	/*
+	 * 将String时间转换为时间对象
+	 */
+	public static Date StringToDate(String date,String pattern){
+
+		try {
+
+			return new SimpleDateFormat(pattern).parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

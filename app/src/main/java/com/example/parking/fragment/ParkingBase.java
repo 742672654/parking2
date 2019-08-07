@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.example.parking.R;
 import com.example.parking.bean.http.ParkingSpaceData;
 import com.example.parking.bean.http.SelectSubPlaceBean;
+import com.example.parking.db.Jiguang_DB;
 import com.example.parking.util.InputUtil;
 import com.example.parking.util.StringUtil;
 import com.example.parking.view.KeyboardViewPager;
@@ -34,7 +35,7 @@ public class ParkingBase extends BaseFragment implements View.OnTouchListener {
     public static final String TAG = "ParkingBase";
 
 
-    protected EditText parking_carmun;//车牌号
+    public EditText parking_carmun;//车牌号
     protected EditText parking_pre_price;//预交费用
 
     protected TextView nouse; //剩余车位
@@ -42,13 +43,12 @@ public class ParkingBase extends BaseFragment implements View.OnTouchListener {
 
     public RelativeLayout left_photo,right_photo; //左右拍照
 
-
     protected Button parking_photo;
     protected Button parking_photo2;
     protected Button button_order_add;
     protected TextView button_choice_parkingspace;
 
-    protected String distinguish_carmun;//网上识别的车牌号
+    public String distinguish_carmun;//网上识别的车牌号
 
     private AlertDialog alertDialog = null;
 
@@ -73,8 +73,9 @@ public class ParkingBase extends BaseFragment implements View.OnTouchListener {
         selectSubPlaceDate = (SelectSubPlaceBean.SelectSubPlaceData) getArguments().getSerializable("selectSubPlaceDate");
         //修改停车位
         button_choice_parkingspace.setText( selectSubPlaceDate.getCode() );
-        //清空停车位
-        parking_carmun.setText("");
+
+        // 去除<未处理>标识
+        Jiguang_DB.updata_Jiguang(activity.baseSQL_DB,null,selectSubPlaceDate.getId());
     }
 
 
@@ -137,7 +138,7 @@ public class ParkingBase extends BaseFragment implements View.OnTouchListener {
                 //S：变化后的所有字符；start：字符起始的位置；before: 变化之前的总字节数；count:变化后的字节数
                 Log.i("Seachal:","变s.length()化后:"+s);
 
-                if (  s.length()>=  (StringUtil.is_valid(distinguish_carmun)?distinguish_carmun.length():7)){
+                if (  s.length() >=  (StringUtil.is_valid(distinguish_carmun)?distinguish_carmun.length():8)){
                     if(kvp!=null && kvp.mPopupWindow!=null)kvp.mPopupWindow.dismiss();
                 }
             }
@@ -171,7 +172,6 @@ public class ParkingBase extends BaseFragment implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        Log.i(TAG,"sadasdas="+  (alertDialog==null?null:alertDialog.isShowing()));
 
         if (v.getId()==R.id.parking_carmun && !isShow()){
             charge_carNumber();
@@ -188,7 +188,6 @@ public class ParkingBase extends BaseFragment implements View.OnTouchListener {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     parking_pre_price.setText(String.valueOf(which));
-
                 }
             }).show();
         }

@@ -28,6 +28,7 @@ import com.example.parking.bean.http.OrderDetailsBean;
 import com.example.parking.bean.http.OrderlistBean;
 import com.example.parking.bean.http.ParkingSpaceBean;
 import com.example.parking.bean.http.ParkingSpaceData;
+import com.example.parking.db.Jiguang_DB;
 import com.example.parking.db.Order_DB;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.util.JsonUtil2;
@@ -69,12 +70,22 @@ public class Order_detailsFragment extends BaseFragment{
         orderlistData = null;
         orderlistData = (OrderlistBean.OrderlistData) getArguments().getSerializable("orderlistData");
 
+        // 去除<未处理>标识
+        Jiguang_DB.updata_Jiguang(activity.baseSQL_DB,null,orderlistData.getSubid());
+
         Map<String,String> param = new HashMap<String,String>(4);
         param.put("token",activity.userBean.getToken());
         param.put("id",orderlistData.getId());
         param.put("camum",orderlistData.getCarNo());
         param.put("subname",orderlistData.getSubname());
         HttpManager2.requestPost(Static_bean.getLeavePageOrder(),  param, this, "getLeavePageOrder");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        inimageImageString = null;
+        panoramaImageString = null;
     }
 
     @Override
@@ -182,10 +193,12 @@ public class Order_detailsFragment extends BaseFragment{
                 printer_marking(PrintBillBean);
                 break;
 
-            case R.id.panoramaImageView:showPopupWindow(panoramaImageString);
+            case R.id.panoramaImageView:
+                if (panoramaImageString!=null)showPopupWindow(panoramaImageString);
                 break;
 
-            case R.id.inimageImageView:showPopupWindow(inimageImageString);
+            case R.id.inimageImageView:
+                if (inimageImageString!=null)showPopupWindow(inimageImageString);
                 break;
 
         default:break;
@@ -351,7 +364,6 @@ public class Order_detailsFragment extends BaseFragment{
             public void run() {
 
                 if (httpBean.getCode() == 200) {
-                    toast_makeText("订单已提交");
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Holo_Light_Dialog);
                     builder.setItems(listString, new DialogInterface.OnClickListener() {

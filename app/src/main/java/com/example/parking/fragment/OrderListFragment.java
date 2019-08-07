@@ -113,9 +113,7 @@ public class OrderListFragment extends OrderListBase implements DataChoiceReturn
         }
 
         if (v.getId() == R.id.order_all_textview_cph && !(kvp != null && kvp.mPopupWindow != null && kvp.mPopupWindow.isShowing())) {
-            if (kvp == null) {
-                kvp = new KeyboardViewPager(activity, true);
-            }
+            if (kvp == null) { kvp = new KeyboardViewPager(activity, true); }
             kvp.setEt_carnumber(order_all_textview_cph);
             kvp.showPopupWindow(order_all_textview_cph);
         }

@@ -5,6 +5,7 @@ package com.example.parking.activety;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class BaseActivity extends AppCompatActivity implements HttpCallBack2 {
 
     private static final String TAG = "BaseActivity";
 
-    protected static Activity activity;
+    public static Activity activity;
 
 
     //TODO 提示
@@ -105,6 +106,39 @@ public class BaseActivity extends AppCompatActivity implements HttpCallBack2 {
             return null;
         }
     }
+
+    //TODO 1是进，2是出，3是警告
+    MediaPlayer mMediaPlayer = null;
+    protected void mediaPlayerMP3(String type){
+
+        if (mMediaPlayer!=null){
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+        }
+
+        switch ( type ){
+
+            case "in":mMediaPlayer = MediaPlayer.create(this, R.raw.in);
+                break;
+            case "out":mMediaPlayer = MediaPlayer.create(this, R.raw.out);
+                break;
+            case "alert":mMediaPlayer = MediaPlayer.create(this, R.raw.alert);
+                break;
+            default:
+                return;
+        }
+
+        mMediaPlayer.start();
+
+//        start();//开始播放
+//        pause();//暂停播放
+//        reset()//清空MediaPlayer中的数据
+//        setLooping(boolean);//设置是否循环播放
+//        seekTo(msec)//定位到音频数据的位置，单位毫秒
+//        stop();//停止播放
+//        relase();//释放资源
+    }
+
 
     @Override
     public void onResponseGET(String url, Map<String, String> param, String sign, String object) { }

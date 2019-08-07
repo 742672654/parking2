@@ -120,10 +120,7 @@ public class OrderPayBackFragment extends BaseFragment {
                 qRcode.append("&pointid=");
                 qRcode.append(activity.userBean.getParkid());
 
-
-                PrintBillBean PrintBillBean = new PrintBillBean(3,buf.toString(),qRcode.toString());
-
-                printer_marking(PrintBillBean);
+                printer_marking(new PrintBillBean(3,buf.toString(),qRcode.toString()));
                 break;
 
             default:break;

@@ -16,4 +16,8 @@
         android:icon="@mipmap/a3"
         android:title="我的" />
 
+    <item
+        android:id="@+id/navigation_4"
+        android:icon="@mipmap/a4"
+        android:title="消息" />
 </menu>

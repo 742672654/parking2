@@ -23,6 +23,9 @@ public final class JsonUtil2 {
 
 
     public static <T> T fromJson(String json, Class<T> clazz){
+
+
+        if(!StringUtil.is_valid(json))return null;
         try{
 
             return clazz.equals(String.class) ? (T) json : MAPPER.readValue(json, clazz);

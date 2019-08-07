@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listview_notice_item_relativelayout"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+    <TextView
+        android:id="@+id/notice_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text=" 未处理 "
+        android:background="@drawable/bt_shape6"
+        android:textColor="@color/colorPrimary"
+        android:textSize="10sp" />
+
+
+    <TextView
+        android:id="@+id/notice_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="35dp"
+        android:text="进"
+        android:textSize="70dp" />
+
+    <TextView
+        android:id="@+id/notice_devdockname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="18dp"
+        android:layout_toRightOf="@id/notice_imageview"
+        android:text="所属车位:"
+        android:textColor="#32221E"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/notice_pushtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notice_devdockname"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="53dp"
+        android:layout_toRightOf="@id/notice_imageview"
+        android:text="入场时间:"
+        android:textColor="#32221E"
+        android:textSize="18sp" />
+
+</RelativeLayout>
+

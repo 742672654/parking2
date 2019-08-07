@@ -33,12 +33,21 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
     public MainActivity activity;
     private MediaPlayer mMediaPlayer = null;
 
-    protected static String[] string_pre_price = null;
+    protected static String[] string_pre_price = new String[]{"3","5","10"};
 
 
     @Override
     public void onStart() {
         super.onStart();
+
+        try {
+
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
 
         try {
             // 在activity结束的时候回收资源
@@ -60,11 +69,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
     public void onAttach(Activity activity) {
 
         if (string_pre_price==null){
-            string_pre_price = new String[101];
-            for (int s=0;s<=100;s++){
-
-                string_pre_price[s]=String.valueOf(s);
-            }
+            string_pre_price = new String[]{"3","5","10"};
         }
 
         super.onAttach(activity);
@@ -76,9 +81,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
 
 
     //TODO 判断是否是主线程
-    protected boolean isOnMainThread() {
-        return Thread.currentThread() == Looper.getMainLooper().getThread();
-    }
+    protected boolean isOnMainThread() { return Thread.currentThread() == Looper.getMainLooper().getThread(); }
 
 
     //TODO 提示
@@ -96,15 +99,51 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
     //TODO 播放音乐
     protected void playMusic(){  }
 
+    protected static AlertDialog dialog ;
+    protected void AlertDialog_Builder(final String title,final String Message,final String text ) {
 
-    //TODO 打印提示
-    protected void AlertDialog_Builder(final String title, final String text ) {
+
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                try {
+
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, e);
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle(title);
-                builder.setMessage(text);
+                builder.setMessage(Message);
+                builder.setPositiveButton(text, null);
+                dialog = builder.show();
+            }
+        });
+    }
+
+    //TODO 打印提示
+    protected void AlertDialog_Builder(final String title, final String Message ) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, e);
+                }
+
+
+                AlertDialog.Builder  builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(title);
+                builder.setMessage(Message);
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -115,7 +154,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 });
-                builder.show();
+                  dialog =  builder.show();
             }
         });
     }
@@ -132,9 +171,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
         getActivity().startService(intentService);
     }
 
-    /**
-     * 让屏幕变暗
-     */
+
+    //TODO 让屏幕变暗
     protected void makeWindowDark(){
         Window window = activity.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
@@ -142,9 +180,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
         window.setAttributes(lp);
     }
 
-    /**
-     * 让屏幕变亮
-     */
+
+     //TODO 让屏幕变亮
     protected void makeWindowLight(){
         Window window = activity.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
@@ -161,7 +198,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
 
     @Override
     public void onResponsePOST(String url, Map<String, String> param, String sign, String object) {
-        Log.i(TAG, "url="+url + "----param="+param +";sign="+sign + ";object="+object+"'****"+param);
+        Log.i(TAG, "url="+url +";sign="+sign + ";object="+object+ "----param="+param );
 
         switch (sign) {
             case "checktoken": {

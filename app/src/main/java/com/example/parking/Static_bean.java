@@ -26,6 +26,7 @@ public class Static_bean {
     /**
      * TODO 查询全部车位
      * @param token
+     * @param subId 车位id
      */
     public final static String selectSubPlace(){ return url+"/point/order/parkListToFirstPage";}
 

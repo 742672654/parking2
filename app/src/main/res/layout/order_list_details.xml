@@ -242,7 +242,7 @@
             android:layout_weight="1"
             android:layout_marginRight="2.5dip"
             android:layout_marginLeft="5dip"
-            android:background="@drawable/addaccount" />
+            android:background="@null" />
 
         <ImageView
             android:id="@+id/order_lis_inimageImageView"
@@ -252,7 +252,7 @@
             android:layout_weight="1"
             android:layout_marginRight="5dip"
             android:layout_marginLeft="2.5dip"
-            android:background="@drawable/addaccount" />
+            android:background="@null" />
     </LinearLayout>
 
 </RelativeLayout>

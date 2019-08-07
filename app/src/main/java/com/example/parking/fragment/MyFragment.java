@@ -38,7 +38,7 @@ public class MyFragment extends MyBase {
     @Override
     public void onResponsePOST(String url, Map<String, String> param, String sign, String object) {
         super.onResponsePOST(url, param, sign, object);
-        Log.i(TAG, "url="+url + "----param="+param +";sign="+sign + ";object="+object+"'****"+param);
+        Log.i(TAG, "url="+url + "----param="+param +";sign="+sign + ";object="+object);
 
         switch (sign) {
             default:

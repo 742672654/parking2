@@ -71,6 +71,13 @@ public class Order_list_detailsFragment extends BaseFragment{
         return rootView;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        order_lis_panoramaImage = null;
+        order_lis_inimageImage = null;
+    }
+
     private void initView(View rootView) {
 
         order_details_a11 = rootView.findViewById(R.id.order_details_a11);
@@ -97,13 +104,6 @@ public class Order_list_detailsFragment extends BaseFragment{
 
         article = (Report_orderlistBean.Report_orderlistList) getArguments().getSerializable("report_orderlistList");
 
-        OrderDbBean orderBean = Order_DB.query_Order(activity.baseSQL_DB,String.valueOf(article.id));
-        order_lis_panoramaImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto1_path()));
-        order_lis_panoramaImage = orderBean.getPhoto1_path();
-
-        order_lis_inimageImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto2_path()));
-        order_lis_inimageImage = orderBean.getPhoto2_path();
-
         order_details_a11.setText(article.CarNum);
         order_details_a22.setText(article.OrderPrice);
         order_details_a22222.setText(article.PrePrice);
@@ -113,42 +113,33 @@ public class Order_list_detailsFragment extends BaseFragment{
             Date date2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(article.LeaveDate);
             order_details_a33.setText(TimeUtil.getDatePoor(date2,date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.w(TAG,e);
         }
-
         order_details_a44.setText(article.ParkDate );
         order_details_a55.setText(article.LeaveDate );
         order_details_a66.setText( article.SubName);
+
+        OrderDbBean orderBean = Order_DB.query_Order(activity.baseSQL_DB,String.valueOf(article.id));
+        if (orderBean==null)return;
+
+        order_lis_panoramaImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto1_path()));
+        order_lis_panoramaImage = orderBean.getPhoto1_path();
+
+        order_lis_inimageImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto2_path()));
+        order_lis_inimageImage = orderBean.getPhoto2_path();
     }
 
     @Override
     public void onClick(View v) {
 
-
         switch (v.getId()){
-//            case R.id.order_lis_dayin_rucang:
-//                StringBuffer buf = new StringBuffer("\r\n\n---------------------------\r\n");
-//                buf.append("停车场："+activity.userBean.getParkname()+"   \r\n\r\n");
-//                buf.append("车位号："+article.SubName+"\r\n\r\n");
-//                buf.append("驶入时间"+article.ParkDate+"\r\n\r\n");
-//                buf.append("驶出时间"+article.LeaveDate+"\r\n\r\n");
-//                buf.append("停车时长："+a4.getText().toString()+"\r\n\r\n");
-//                buf.append("总停车费："+ article.OrderPrice+"元\r\n\r\n");
-//                buf.append("已缴金额："+ article.PrePrice+"元\r\n\r\n");
-//                buf.append("本次收取："+ a22.getText().toString()+"元\r\n\r\n");
-//                buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
-//                buf.append("监督电话：0595-28282818");
-//
-//                String QRcode = Static_bean.QRcode_orderdetail+"?orderid="+param.get("id");
-//                PrintBillBean PrintBillBean = new PrintBillBean(2,buf.toString(),QRcode);
-//
-//                printer_marking(PrintBillBean);
-//                break;
-            case R.id.order_lis_panoramaImageView:showPopupWindow(order_lis_panoramaImage);
-                break;
-            case R.id.order_lis_inimageImageView:showPopupWindow(order_lis_inimageImage);
-                break;
 
+            case R.id.order_lis_panoramaImageView:
+                if (order_lis_panoramaImage!=null)showPopupWindow(order_lis_panoramaImage);
+                break;
+            case R.id.order_lis_inimageImageView:
+                if (order_lis_inimageImage!=null)showPopupWindow(order_lis_inimageImage);
+                break;
             default:break;
         }
     }

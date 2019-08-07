@@ -3,6 +3,7 @@ package com.example.parking.activety;
 
 import com.example.parking.R;
 import com.example.parking.Static_bean;
+import com.example.parking.bean.JiguangBean;
 import com.example.parking.bean.http.OrderAddBean;
 import com.example.parking.bean.http.OrderlistBean;
 import com.example.parking.bean.http.Report_orderlistBean;
@@ -11,6 +12,7 @@ import com.example.parking.db.BaseSQL_DB;
 import com.example.parking.http.HttpCallBack2;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.jiguang.ExampleUtil;
+import com.example.parking.jiguang.JiGuangAPI;
 import com.example.parking.jiguang.LocalBroadcastManager;
 import com.example.parking.util.FileUtil;
 import android.annotation.SuppressLint;
@@ -44,6 +46,8 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
     public static final int parkingPhoto2 = 1001; //停车拍照<车牌>
     public static final int orderPhoto = 102; //订单拍照
     public static final int updateTieleParking = 103;//修改车位数量
+    public static final int JiguangPush = 1000001;//极光推送
+
     private Uri imageUri; //照片的中的URi
     public BaseSQL_DB baseSQL_DB = null;
 
@@ -54,16 +58,31 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         super.activity = this;
         super.onCreate(savedInstanceState);
 
-        baseSQL_DB = new BaseSQL_DB(this, "parking.db", null, 1);
+        baseSQL_DB = new BaseSQL_DB(this, "parking.db", null, 4);
+
 
         //初始化推送
         registerMessageReceiver();  // used for receive msg
         //登录
-        JPushInterface.init(getApplicationContext());
+        JPushInterface.init(this);
+
+
+
+        new Thread( new Runnable(){
+            @Override
+            public void run() {
+
+                //等待2秒再开启摄像头
+                try {  Thread.sleep(5000);  } catch (InterruptedException e) { e.printStackTrace(); }
+
+                //设置极光别名
+                new JiGuangAPI().setAlias(activity,userBean.getParkid().replaceAll("-",""));
+            }
+        }).start();
+
     }
 
-    @Override
-    protected void onStart() { super.onStart(); }
+
 
     @SuppressLint("HandlerLeak")
     public Handler handler = new Handler() {
@@ -117,6 +136,21 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                     parking_already.setText(String.valueOf(msg.getData().getInt("already")));
                     break;
 
+                //TODO 极光推送
+                case MainActivity.JiguangPush:
+
+                    JiguangBean jiguangBean = (JiguangBean)msg.obj;
+                    switch (jiguangBean.getMsgType()){
+                        case "move":
+                                mediaPlayerMP3(jiguangBean.getInOut());
+                            break;
+                        case "alert":
+                            mediaPlayerMP3("alert");
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -140,6 +174,9 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                parkingFragment.setArguments(bundle);
                fragmentTransaction.addToBackStack(null);
                fragmentTransaction.commit();
+
+               //清空停车位
+               parkingFragment.sss = true;
            }
        });
    }
@@ -173,7 +210,6 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
             }
         });
     }
-
 
     //TODO 打开收费页面
     public void openOrder_details(final OrderlistBean.OrderlistData orderlistData ){
@@ -248,6 +284,23 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         });
     }
 
+    //TODO 打开警告拍照页面
+    public void openAlertFeagment(final JiguangBean jiguangBean){
+
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.activity_fragment, alertFeagment);
+                fragmentTransaction.addToBackStack(null);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("jiguangBean",jiguangBean);
+                alertFeagment.setArguments(bundle);
+                fragmentTransaction.commit();
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -258,24 +311,12 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
 
         //TODO 上传全景
         if ( requestCode == MainActivity.parkingPhoto && resultCode == -1 ){
-            toast_makeText("照片正在上传......");
 
-            //修改照片
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        parkingFragment.left_photo.setBackground(Drawable.createFromPath(FileUtil.getFile_Path(imageUri)));
-                    } catch (Exception e) { Log.w(TAG, e); } }
-            });
 
             Map<String,String> params = new HashMap<String,String>(5) ;
             params.put("token", userBean.getToken());
             params.put("type", "2");
-
             params.put("panoramaPath",FileUtil.getFile_Path(imageUri));
-            params.put("inimageURL",parkingFragment.inimageURL);
-            params.put("inimagePath",parkingFragment.inimagePath);
 
             HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
@@ -284,30 +325,18 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                     this,
                     "photoToOssNO");
             Log.i(TAG,"上传停车页面拍摄的全景照片");
+
+            toast_makeText("照片正在上传...请稍等");
         }
 
         //TODO 上传车牌特写
         if ( requestCode == MainActivity.parkingPhoto2 && resultCode == -1 ){
-            toast_makeText("照片正在上传......");
 
-
-            //修改照片
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        parkingFragment.right_photo.setBackground(Drawable.createFromPath(FileUtil.getFile_Path(imageUri)));
-                    } catch (Exception e) { Log.w(TAG, e); } }
-            });
 
             Map<String,String> params = new HashMap<String,String>(5) ;
             params.put("token", userBean.getToken());
             params.put("type", "1");
-
             params.put("inimagePath",FileUtil.getFile_Path(imageUri));
-            params.put("panoramaURL",parkingFragment.panoramaURL);
-            params.put("panoramaPath",parkingFragment.panoramaPath);
-
 
             HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
@@ -315,13 +344,12 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                      FileUtil.getFile_Byte(imageUri),
                     this,
                     "photoToOss");
-            Log.i(TAG,"上传停车页面拍摄的车牌照片");
+
+            toast_makeText("照片正在上传...请稍等");
         }
 
 
         if ( requestCode == MainActivity.orderPhoto && resultCode == -1 ){
-
-            toast_makeText("照片正在上传......");
 
             Map<String,String> params = new HashMap<String,String>(2) ;
             params.put("token", userBean.getToken());
@@ -332,7 +360,8 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                     FileUtil.getFile_Byte(imageUri),
                     this,
                     "orderPhoto");
-            Log.i(TAG,"上传订单页面拍摄的照片");
+
+            toast_makeText("照片正在上传...请稍等");
         }
     }
 
@@ -363,17 +392,11 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
 
 
     @Override
-    protected void onResume() {
-        isForeground = true;
-        super.onResume();
-    }
+    protected void onResume() { isForeground = true;super.onResume(); }
 
 
     @Override
-    protected void onPause() {
-        isForeground = false;
-        super.onPause();
-    }
+    protected void onPause() { isForeground = false;super.onPause(); }
 
 
     @Override
@@ -381,7 +404,6 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
-
 
 
     //for receive customer msg from jpush server

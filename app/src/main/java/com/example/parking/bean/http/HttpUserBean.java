@@ -1,8 +1,6 @@
 package com.example.parking.bean.http;
 
 
-
-
 public class HttpUserBean {
 
     private int code;
@@ -74,4 +72,5 @@ public class HttpUserBean {
                     '}';
         }
     }
+
 }

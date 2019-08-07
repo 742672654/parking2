@@ -21,8 +21,10 @@ import com.example.parking.R;
 import com.example.parking.Static_bean;
 import com.example.parking.bean.UserBean;
 import com.example.parking.Shared.User_Shared;
+import com.example.parking.fragment.AlertFeagment;
 import com.example.parking.fragment.MyBase;
 import com.example.parking.fragment.MyFragment;
+import com.example.parking.fragment.NoticeFragment;
 import com.example.parking.fragment.OrderBase;
 import com.example.parking.fragment.OrderFragment;
 import com.example.parking.fragment.OrderListBase;
@@ -60,12 +62,13 @@ public class MainBaseActivity extends BaseActivity {
     public ParkingIndexFragment parkingIndexFragment =  null;
     public OrderFragment orderFragment = null;
     public MyFragment myFragment = null;
+    public NoticeFragment noticeFragment = null;
     public Order_detailsFragment order_detailsFragment = null;
     public OrderPayBackFragment orderPayBackFragment = null;
     public OrderListFragment orderListFragment = null;
-    public UserBean userBean;
+    public UserBean userBean = null;
     public Order_list_detailsFragment order_list_detailsFragment = null;
-
+    public AlertFeagment alertFeagment = null;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -92,6 +95,20 @@ public class MainBaseActivity extends BaseActivity {
                     fragmentTransaction.replace(R.id.activity_fragment,myFragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
+                    return true;
+
+                case R.id.navigation_4:
+
+
+                        Log.i(TAG,"BottomNavigationView点击："+4);
+
+                        fragmentTransaction.replace(R.id.activity_fragment,noticeFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    if (FragmentStartTAG.equals(NoticeFragment.TAG)){
+                        noticeFragment.initView();
+                    }
+
                     return true;
             }
             return false;
@@ -145,24 +162,29 @@ public class MainBaseActivity extends BaseActivity {
         orderPayBackFragment = new OrderPayBackFragment();
         orderListFragment = new OrderListFragment();
         order_list_detailsFragment = new Order_list_detailsFragment();
+        noticeFragment = new NoticeFragment();
+        alertFeagment = new AlertFeagment();
         userBean = User_Shared.getALL(getApplicationContext());
 
 
+
+
+        //TODO 如果是登录进来的就打开首页，否则打开消息页
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.activity_fragment, parkingIndexFragment);
+        fragmentTransaction.replace(R.id.activity_fragment,
+                            getIntent().getStringExtra("joinType") != null ? parkingIndexFragment : myFragment);
         fragmentTransaction.commit();
+
 
         if (user_name!=null && userBean!=null && userBean.getNickName()!=null){
             user_name.setText(userBean.getNickName()+"");
         }
-
 
         if (user_parkingName!=null && userBean!=null && userBean.getParkname()!=null){
             user_parkingName.setText(userBean.getParkname()+"");
         }
 
         ImageUitls.setImageHttpURL(this,user_photo,userBean.getAvatarUrl());
-
 
         tokenServiceTimer = new Timer(true);
         tokenServiceTimer.schedule(new TimerTask() {
@@ -177,8 +199,6 @@ public class MainBaseActivity extends BaseActivity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;//创建的菜单显示出来
-    }
+    public boolean onCreateOptionsMenu(Menu menu) { return true; }//创建的菜单显示出来
 
 }

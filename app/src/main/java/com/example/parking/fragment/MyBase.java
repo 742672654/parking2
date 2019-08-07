@@ -242,7 +242,7 @@ public class MyBase extends BaseFragment implements OnClickListener, HttpCallBac
     public void onResponsePOST(String url, Map<String, String> param, String sign, String object) {
 
         super.onResponsePOST( url,  param,  sign,  object);
-        Log.i(TAG, "url="+url + "----param="+param +";sign="+sign + ";object="+object+"'****"+param);
+        Log.i(TAG, "url="+url +";sign="+sign + ";object="+object + "----param="+param );
 
         switch (sign) {
             case "changePwds":changePwds(object);
