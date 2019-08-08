@@ -154,5 +154,12 @@ public class Static_bean {
      */
     public final static String pointOrderReport_orderlist(){ return url+"/pointOrderReport/orderlist";}
 
+    /**
+     * TODO 警告拍照上传
+     * @param file 文件
+     * @param subId 车位ID
+     */
+    public final static String photoToAlert(){ return url+"/abnormalSubMonitorReport/park/upload/photoToAlert";}
+
 
 }

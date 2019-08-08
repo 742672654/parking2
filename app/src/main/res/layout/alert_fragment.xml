@@ -13,7 +13,7 @@
         android:background="@color/colorPrimary">
 
         <Button
-            android:id="@+id/order_photo"
+            android:id="@+id/alert_photo"
             android:layout_width="142dp"
             android:layout_height="147dp"
             android:layout_centerInParent="true"
@@ -23,8 +23,9 @@
 
     <LinearLayout
         android:layout_below="@id/alert_fragment_relativelayout"
+        android:id="@+id/alert_fragment_linearlayout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:background="@drawable/login_button_shape">
@@ -37,7 +38,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="#32221E"
-            android:text="修改车位："
+            android:text="车 位 号："
             android:textSize="20dp" />
 
         <TextView
@@ -47,13 +48,20 @@
             android:layout_weight="2"
             android:layout_height="match_parent"
             android:gravity="left|center"
-
             android:textColor="#32221E"
-            android:text="农行车位13"
+            android:text="车位"
             android:textSize="20dp" />
 
     </LinearLayout>
 
+
+    <ImageView
+        android:id="@+id/alert_imageview"
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:layout_below="@id/alert_fragment_linearlayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp" />
 
 
 

@@ -12,24 +12,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.parking.R;
-
 import cn.jpush.android.api.InstrumentedActivity;
 import cn.jpush.android.api.JPushInterface;
 
 
 public class MainActivity extends InstrumentedActivity implements OnClickListener{
 
-	private Button mInit;
-	private Button mSetting;
-	private Button mStopPush;
-	private Button mResumePush;
-	private Button mGetRid;
+
+	private Button mInit,mSetting,mStopPush,mResumePush,mGetRid;
 	private TextView mRegId;
 	private EditText msgText;
 
 	public static boolean isForeground = false;
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,7 +78,6 @@ public class MainActivity extends InstrumentedActivity implements OnClickListene
 		msgText = (EditText)findViewById(R.id.msg_rec);
 	}
 
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -110,23 +106,14 @@ public class MainActivity extends InstrumentedActivity implements OnClickListene
 	}
 
 	// 初始化 JPush。如果已经初始化，但没有登录成功，则执行重新登录。
-	private void init(){
-		 JPushInterface.init(getApplicationContext());
-	}
+	private void init(){ JPushInterface.init(getApplicationContext()); }
+
+	@Override
+	protected void onResume() { isForeground = true;super.onResume(); }
 
 
 	@Override
-	protected void onResume() {
-		isForeground = true;
-		super.onResume();
-	}
-
-
-	@Override
-	protected void onPause() {
-		isForeground = false;
-		super.onPause();
-	}
+	protected void onPause() { isForeground = false;super.onPause(); }
 
 
 	@Override

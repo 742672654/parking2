@@ -15,11 +15,13 @@ public class MyJPushMessageReceiver extends JPushMessageReceiver {
         TagAliasOperatorHelper.getInstance().onTagOperatorResult(context,jPushMessage);
         super.onTagOperatorResult(context, jPushMessage);
     }
+
     @Override
     public void onCheckTagOperatorResult(Context context,JPushMessage jPushMessage){
         TagAliasOperatorHelper.getInstance().onCheckTagOperatorResult(context,jPushMessage);
         super.onCheckTagOperatorResult(context, jPushMessage);
     }
+
     @Override
     public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
         TagAliasOperatorHelper.getInstance().onAliasOperatorResult(context,jPushMessage);

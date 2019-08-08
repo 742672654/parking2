@@ -40,11 +40,18 @@ import java.util.Map;
 public class BaseActivity extends AppCompatActivity implements HttpCallBack2 {
 
 
+    public static String ActivityStartTAG = "";
 
     private static final String TAG = "BaseActivity";
 
     public static Activity activity;
 
+    //TODO 所在地址
+    public void onPosition(String TAG) {
+
+
+        ActivityStartTAG = TAG;
+    }
 
     //TODO 提示
     protected void toast_makeText(final String text) {
@@ -123,6 +130,8 @@ public class BaseActivity extends AppCompatActivity implements HttpCallBack2 {
             case "out":mMediaPlayer = MediaPlayer.create(this, R.raw.out);
                 break;
             case "alert":mMediaPlayer = MediaPlayer.create(this, R.raw.alert);
+                break;
+            case "finish":mMediaPlayer = MediaPlayer.create(this, R.raw.tiqianjiaofei);
                 break;
             default:
                 return;

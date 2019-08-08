@@ -32,7 +32,7 @@ class TagAliasCallbackUser implements TagAliasCallback {
         String logs;
         switch (code) {
             case 0:
-                logs = "Set tag and alias success";
+                logs = "尚宝泊车启动完成";
                 Log.i(JiGuangAPI.TAG, logs);
                 // 建议这里往 SharePreference 里写一个成功设置的状态。成功设置一次后，以后不必再次设置了。
                 break;

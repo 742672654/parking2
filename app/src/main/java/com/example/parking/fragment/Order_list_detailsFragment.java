@@ -135,52 +135,14 @@ public class Order_list_detailsFragment extends BaseFragment{
         switch (v.getId()){
 
             case R.id.order_lis_panoramaImageView:
-                if (order_lis_panoramaImage!=null)showPopupWindow(order_lis_panoramaImage);
+                if (order_lis_panoramaImage!=null)super.showPopupWindow(order_details_a11,order_lis_panoramaImage);
                 break;
             case R.id.order_lis_inimageImageView:
-                if (order_lis_inimageImage!=null)showPopupWindow(order_lis_inimageImage);
+                if (order_lis_inimageImage!=null)super.showPopupWindow(order_details_a11,order_lis_inimageImage);
                 break;
             default:break;
         }
     }
-
-    private void showPopupWindow(String path) {
-
-        if (popupWindow == null) {
-            //获取自定义的菜单布局文件
-            View inflate = getLayoutInflater().inflate(R.layout.popuwindow_photo_layout, null, false);
-            //创建popupwindow的实例
-            popupWindow = new PopupWindow(inflate, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
-
-            popuwindow_ImageView = inflate.findViewById(R.id.popuwindow_ImageView);
-
-            DisplayMetrics dm = new DisplayMetrics();
-            //获取屏幕信息
-            activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-            popupWindow.setWidth(dm.widthPixels);
-            popupWindow.setHeight((int) (dm.heightPixels * 0.8 - 8));
-
-            //单机其他地方消失
-            inflate.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent notionEvent) {
-                    //如果菜单存在并且为显示状态，就关闭菜单，并且初始化菜单
-                    if (popupWindow != null && popupWindow.isShowing()) {
-                        popupWindow.dismiss();
-                    }
-                    return false;
-                }
-            });
-            // 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
-            popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        }
-        //设置PopupWindow显示在按钮的下面
-        //  popupWindow.showAsDropDown(inimageImageView,0,dm.heightPixels);
-        popupWindow.showAtLocation(order_details_a11, Gravity.NO_GRAVITY, 0, 150);
-        popuwindow_ImageView.setImageBitmap( BitmapFactory.decodeFile(path));
-    }
-
-
 
 }
 

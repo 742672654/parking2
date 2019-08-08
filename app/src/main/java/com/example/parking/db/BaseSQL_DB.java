@@ -36,7 +36,7 @@ public class BaseSQL_DB extends SQLiteOpenHelper {
             case 2:upgrade2( sqLiteDatabase, oldVersion, newVersion );
             case 3:upgrade3( sqLiteDatabase, oldVersion, newVersion );
             case 4:upgrade4( sqLiteDatabase, oldVersion, newVersion );
-            case 5:;
+            case 5:upgrade5( sqLiteDatabase, oldVersion, newVersion );
         }
     }
 
@@ -102,6 +102,19 @@ public class BaseSQL_DB extends SQLiteOpenHelper {
         }
 
     }
+
+    private void upgrade5( SQLiteDatabase sqLiteDatabase,int oldVersion, int newVersion ){
+
+
+        try {
+
+            sqLiteDatabase.execSQL("alter table localJiguang add column photo_path text;");
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
+
+    }
+
 }
 
 class static_SQL{
@@ -111,5 +124,6 @@ class static_SQL{
             "photo1_path text,photo1_url text,photo2_path text,photo2_url text,time text,PRIMARY KEY (id))";
 
     static final String CREATE_TEBLE2 = "CREATE TABLE localJiguang(nOTIFICATION_ID text NOT NULL," +
-            "pushTime text,pushTimeLong INTEGER,msgid text,devDock text,devDockName text,inOut text,msgType text,PRIMARY KEY (nOTIFICATION_ID))";
+            "pushTime text,pushTimeLong INTEGER,msgid text,devDock text,devDockName text,inOut text," +
+            "msgType text, photo_path text, PRIMARY KEY (nOTIFICATION_ID))";
 }

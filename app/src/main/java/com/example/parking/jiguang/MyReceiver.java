@@ -7,17 +7,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+
+import com.example.parking.Static_bean;
+import com.example.parking.activety.BaseActivity;
 import com.example.parking.activety.MainActivity;
 import com.example.parking.bean.JiguangBean;
 import com.example.parking.bean.OrderDbBean;
+import com.example.parking.bean.http.HttpBean;
 import com.example.parking.db.Jiguang_DB;
 import com.example.parking.db.Order_DB;
+import com.example.parking.fragment.Order_detailsFragment;
+import com.example.parking.http.HttpCallBack2;
+import com.example.parking.http.HttpManager2;
 import com.example.parking.util.IntentUtil;
 import com.example.parking.util.JsonUtil2;
 import com.example.parking.util.StringUtil;
 import com.example.parking.util.TimeUtil;
 
+import java.util.HashMap;
+import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 
 
 /**
@@ -27,7 +37,7 @@ import com.example.parking.util.TimeUtil;
  * 1) 默认用户会打开主界面
  * 2) 接收不到自定义消息
  */
-public class MyReceiver extends BroadcastReceiver {
+public class MyReceiver extends BroadcastReceiver{
 	private static final String TAG = "MyReceiver<jiguang极光推送>";
 
 	@Override
@@ -44,8 +54,6 @@ public class MyReceiver extends BroadcastReceiver {
 			Logger.i(TAG+"<接收的内容>","cn.jpush.android.ALERT="+bundle.get("cn.jpush.android.ALERT"));
 			Logger.i(TAG+"<接收消息的ID>","cn.jpush.android.NOTIFICATION_ID="+bundle.get("cn.jpush.android.NOTIFICATION_ID"));
 
-
-
 			JiguangBean jiguangBean = JsonUtil2.fromJson(bundle.get("cn.jpush.android.ALERT").toString(), com.example.parking.bean.JiguangBean.class);
 			if (jiguangBean==null)return;
 
@@ -56,77 +64,79 @@ public class MyReceiver extends BroadcastReceiver {
 			//保存到数据库
 			Jiguang_DB.insert_in_Jiguang(((MainActivity)MainActivity.activity).baseSQL_DB,jiguangBean);
 
+			if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
+				String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
+				Log.d(TAG, "[MyReceiver62] 接收Registration Id : " + regId);
 
-			Bundle bundle2 = new Bundle();
-			bundle2.putString( "joinType",TAG );
-			bundle2.putString("text","接收到推送");
-			Message message2 = new Message();
-			message2.obj = jiguangBean;
-			message2.what = MainActivity.JiguangPush;
-			((MainActivity)MainActivity.activity).handler.sendMessage(message2);
+			} else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
+				Log.d(TAG, "[MyReceiver66] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+
+			} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
+			//添加语音播报
+
+				Bundle bundle2 = new Bundle();
+				bundle2.putString( "joinType",TAG );
+				bundle2.putString("text","接收到推送,播放音乐");
+				Message message2 = new Message();
+				message2.obj = jiguangBean;
+				message2.what = MainActivity.JiguangPush;
+				((MainActivity)MainActivity.activity).handler.sendMessage(message2);
+
+				if (Order_detailsFragment.TAG.equals(((MainActivity)MainActivity.activity).FragmentStartTAG)){
+
+					if (((MainActivity)MainActivity.activity)
+							.order_detailsFragment.orderlistData.getId().equals(jiguangBean.getDevId())){
+
+						Map<String, String> param = new HashMap<String, String>(3);
+						param.put("id",jiguangBean.getDevId());
+						param.put("joinType",TAG);
+						HttpBean httpBean = new HttpBean();
+						httpBean.setCode(200);
+						httpBean.setData(jiguangBean.getPushTime());
+						((MainActivity)MainActivity.activity).order_detailsFragment.payPointOrderToPoint(param,JsonUtil2.toJson(httpBean));
+					}
+				}
+
+			} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
+				Log.d(TAG, "[MyReceiver75] 用户点击打开了通知");
+
+				//打开对应车位
+				if (jiguangBean.getMsgType().equals("move")){
+
+					Map<String,String> param = new HashMap<String, String>(5);
+					param.put("subId",jiguangBean.getDevDock());
+					param.put("type", jiguangBean.getInOut());
+					param.put("token", ((MainActivity)BaseActivity.activity).userBean.getToken());
+					HttpManager2.requestPost(Static_bean.selectSubPlace(),  param, ((MainActivity)BaseActivity.activity).noticeFragment, "selectSubPlace");
+				}else if (jiguangBean.getMsgType().equals("finish")){
+
+					Map<String, String> param = new HashMap<String, String>(3);
+					param.put("id",jiguangBean.getDevId());
+					param.put("joinType",TAG);
+					HttpBean httpBean = new HttpBean();
+					httpBean.setCode(200);
+					httpBean.setData(jiguangBean.getPushTime());
+					((MainActivity)MainActivity.activity).order_detailsFragment.payPointOrderToPoint(param,JsonUtil2.toJson(httpBean));
+
+				}else {
+
+					((MainActivity)BaseActivity.activity).openWhite();
+					((MainActivity)BaseActivity.activity).openAlert(jiguangBean );
+				}
+
+			} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
+				Log.d(TAG, "[MyReceiver79] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
+
+			} else if(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
+				boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
+				Log.w(TAG, "[MyReceiver83]" + intent.getAction() +" connected state change to "+connected);
+			} else {
+				Log.d(TAG, "[MyReceiver85] Unhandled intent - " + intent.getAction());
+			}
 
 		} catch (Exception e){
 			Log.w(TAG,e);
 		}
 	}
-
-
-
-
-	//			if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
-//				String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-//				Logger.d(TAG, "[MyReceiver] 接收Registration Id : " + regId);
-//				//send the Registration Id to your server...
-//
-//			} else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
-//				Logger.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
-//				processCustomMessage(context, bundle);
-//
-//			} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-//				Logger.d(TAG, "[MyReceiver] 接收到推送下来的通知");
-//				int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-//				Logger.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
-//
-//			} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
-//				Logger.d(TAG, "[MyReceiver] 用户点击打开了通知");
-//
-//				//打开自定义的Activity
-////				Intent i = new Intent(context, TestActivity.class);
-////				i.putExtras(bundle);
-////				//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-////				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-////				context.startActivity(i);
-//
-//			} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
-//				Logger.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
-//				//在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..
-//
-//			} else if(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
-//				boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
-//				Logger.w(TAG, "[MyReceiver]" + intent.getAction() +" connected state change to "+connected);
-//			} else {
-//				Logger.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
-//			}
-	//send msg to MainActivity
-//	private void processCustomMessage(Context context, Bundle bundle) {
-//		if (MainActivity.isForeground) {
-//			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
-//			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-//			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-//			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
-//			if (!ExampleUtil.isEmpty(extras)) {
-//				try {
-//					JSONObject extraJson = new JSONObject(extras);
-//					if (extraJson.length() > 0) {
-//						msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
-//					}
-//				} catch (JSONException e) {
-//
-//				}
-//			}
-//			LocalBroadcastManager.getInstance(context).sendBroadcast(msgIntent);
-//		}
-//	}
-
 
 }

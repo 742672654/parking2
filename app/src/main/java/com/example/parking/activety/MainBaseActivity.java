@@ -4,28 +4,21 @@ package com.example.parking.activety;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.JavascriptInterface;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.parking.R;
-import com.example.parking.Static_bean;
 import com.example.parking.bean.UserBean;
 import com.example.parking.Shared.User_Shared;
 import com.example.parking.fragment.AlertFeagment;
-import com.example.parking.fragment.MyBase;
 import com.example.parking.fragment.MyFragment;
 import com.example.parking.fragment.NoticeFragment;
-import com.example.parking.fragment.OrderBase;
 import com.example.parking.fragment.OrderFragment;
 import com.example.parking.fragment.OrderListBase;
 import com.example.parking.fragment.OrderListFragment;
@@ -35,14 +28,12 @@ import com.example.parking.fragment.Order_list_detailsFragment;
 import com.example.parking.fragment.ParkingBase;
 import com.example.parking.fragment.ParkingFragment;
 import com.example.parking.fragment.ParkingIndexFragment;
-import com.example.parking.http.HttpManager2;
+import com.example.parking.fragment.WhiteFragment;
 import com.example.parking.service.TokenServiceF5;
 import com.example.parking.util.ImageUitls;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 
 public class MainBaseActivity extends BaseActivity {
@@ -69,6 +60,7 @@ public class MainBaseActivity extends BaseActivity {
     public UserBean userBean = null;
     public Order_list_detailsFragment order_list_detailsFragment = null;
     public AlertFeagment alertFeagment = null;
+    public WhiteFragment whiteFragment = null;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -159,15 +151,15 @@ public class MainBaseActivity extends BaseActivity {
         parkingIndexFragment =  new ParkingIndexFragment();
         parkingFragment = new ParkingFragment();
         order_detailsFragment = new Order_detailsFragment();
+        order_detailsFragment.activity = (MainActivity)activity;
+
         orderPayBackFragment = new OrderPayBackFragment();
         orderListFragment = new OrderListFragment();
         order_list_detailsFragment = new Order_list_detailsFragment();
         noticeFragment = new NoticeFragment();
         alertFeagment = new AlertFeagment();
+        whiteFragment = new WhiteFragment();
         userBean = User_Shared.getALL(getApplicationContext());
-
-
-
 
         //TODO 如果是登录进来的就打开首页，否则打开消息页
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

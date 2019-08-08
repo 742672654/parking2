@@ -65,7 +65,7 @@ public class NoticeFragment extends BaseFragment {
     @Override
     public void onResponsePOST(String url, Map<String, String> param, String sign, String object) {
         super.onResponsePOST(url, param, sign, object);
-
+        Log.i(TAG, "url="+url +";param="+param+";sign="+sign + ";\r\n object="+object);
 
         switch (sign){
 
@@ -76,13 +76,11 @@ public class NoticeFragment extends BaseFragment {
                 try {
 
                     if (!StringUtil.is_valid(object)){ return; }
-
                     SelectSubPlaceBean selectSubPlaceBean = JsonUtil2.fromJson(object,SelectSubPlaceBean.class);
 
                     if (selectSubPlaceBean.getCode() == 200){
 
                         if ("out".equals(param.get("type"))){
-
 
                             SelectSubPlaceBean.SelectSubPlaceData selectSubPlaceData = selectSubPlaceBean.getData().get(0);
 
@@ -93,6 +91,7 @@ public class NoticeFragment extends BaseFragment {
                             }
 
                             super.AlertDialog_Builder("提示", "正在加载数据...", "确定");
+                            activity.openWhite();
                             activity.openOrder_details( new OrderlistBean.OrderlistData( selectSubPlaceData ) );
                         }else if ("in".equals(param.get("type"))){
 
@@ -107,6 +106,7 @@ public class NoticeFragment extends BaseFragment {
                             }
 
                             super.AlertDialog_Builder("提示", "正在加载数据...", "确定");
+                            activity.openWhite();
                             activity.openParking( selectSubPlaceData );
                         }
                     }else{
@@ -177,7 +177,7 @@ public class NoticeFragment extends BaseFragment {
                     notice_relative.setTag( tagJson );
                 }
             }else{
-                notice_imageview.setText("事");
+                notice_imageview.setText("拍");
                 notice_imageview.setTextColor(getContext().getResources().getColorStateList(R.color.bg_blue));
                 notice_pushtime.setText("发布时间:"+itemList.get(position).getPushTime().substring(5,16));
                 notice_devdockname.setText("所属车位:"+itemList.get(position).getDevDockName());
@@ -185,6 +185,7 @@ public class NoticeFragment extends BaseFragment {
                 String tagJson = "{\"nOTIFICATION_ID\":\""+itemList.get(position).getnOTIFICATION_ID()
                         +"\",\"position\":\""+position
                         +"\",\"subId\":\""+itemList.get(position).getDevDock() +"\",\"type\":\"other\"}";
+
                 notice_relative.setTag( tagJson );
             }
 
@@ -197,11 +198,10 @@ public class NoticeFragment extends BaseFragment {
 
                     if ("other".equals(param.get("type"))){
 
-                            activity.openAlertFeagment(itemList.get(Integer.valueOf(param.get("position"))));
+                            activity.openAlert(itemList.get(Integer.valueOf(param.get("position"))));
                     }else{
 
                         param.put("token",activity.userBean.getToken());
-
                         HttpManager2.requestPost(Static_bean.selectSubPlace(),  param, noticeFragment, "selectSubPlace");
                     }
 

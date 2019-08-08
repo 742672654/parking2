@@ -60,15 +60,20 @@ public class Jiguang_DB {
             if (cursor.getColumnIndex("devDockName")!=-1)   jiguangBean.setDevDockName(cursor.getString(cursor.getColumnIndex("devDockName")));
             if (cursor.getColumnIndex("inOut")!=-1)   jiguangBean.setInOut(cursor.getString(cursor.getColumnIndex("inOut")));
             if (cursor.getColumnIndex("msgType")!=-1)   jiguangBean.setMsgType(cursor.getString(cursor.getColumnIndex("msgType")));
+
+            if (cursor.getColumnIndex("photo_path")!=-1)   jiguangBean.setPhoto_path(cursor.getString(cursor.getColumnIndex("photo_path")));
+
+            if (cursor.getColumnIndex("state")!=-1)   jiguangBean.setState(cursor.getInt(cursor.getColumnIndex("state")));
+            if (cursor.getColumnIndex("stateTime")!=-1)   jiguangBean.setStateTime(cursor.getString(cursor.getColumnIndex("stateTime")));
+
+
             Log.i(TAG,jiguangBean.toString()+""+cursor.getString(cursor.getColumnIndex("nOTIFICATION_ID")));
             return jiguangBean;
         } catch (Exception e) {
-           Log.w(TAG,e);
+            Log.w(TAG,e);
             return null;
         } finally {
-            try {
-                if (cursor != null){ cursor.close(); }
-            } catch (Exception e) { }
+            try { if (cursor != null){ cursor.close(); } } catch (Exception e) { }
         }
     }
 
@@ -107,6 +112,8 @@ public class Jiguang_DB {
                 if (cursor.getColumnIndex("devDockName")!=-1)jiguangBean.setDevDockName(cursor.getString(cursor.getColumnIndex("devDockName")));
                 if (cursor.getColumnIndex("inOut")!=-1)jiguangBean.setInOut(cursor.getString(cursor.getColumnIndex("inOut")));
                 if (cursor.getColumnIndex("msgType")!=-1)jiguangBean.setMsgType(cursor.getString(cursor.getColumnIndex("msgType")));
+
+                if (cursor.getColumnIndex("photo_path")!=-1)   jiguangBean.setPhoto_path(cursor.getString(cursor.getColumnIndex("photo_path")));
 
                 if (cursor.getColumnIndex("state")!=-1)jiguangBean.setState(cursor.getInt(cursor.getColumnIndex("state")));
                 if (cursor.getColumnIndex("stateTime")!=-1)jiguangBean.setStateTime(cursor.getString(cursor.getColumnIndex("stateTime")));
@@ -149,6 +156,25 @@ public class Jiguang_DB {
                 buf.append(" and pushTimeLong > ").append( yesterdayLong );
             }
 
+            Log.i(TAG, "nOTIFICATION_ID=" + nOTIFICATION_ID + "--------" + buf.toString());
+            baseSQL_DB.getWritableDatabase().execSQL(buf.toString());
+
+            return true;
+        } catch (Exception e) {
+            Log.w(TAG, e);
+            return false;
+        }
+    }
+
+    //TODO 根据id添加警告拍照照片地址
+    public static boolean updata_Jinggao(BaseSQL_DB baseSQL_DB, String nOTIFICATION_ID, String photo_path) {
+
+        try {
+
+            StringBuffer buf = new StringBuffer();
+            buf.append("update localJiguang");
+            buf.append(" set photo_path = '").append(photo_path).append("'");
+            buf.append(" where nOTIFICATION_ID = '").append(nOTIFICATION_ID).append("'");
 
             Log.i(TAG, "nOTIFICATION_ID=" + nOTIFICATION_ID + "--------" + buf.toString());
             baseSQL_DB.getWritableDatabase().execSQL(buf.toString());
@@ -159,6 +185,7 @@ public class Jiguang_DB {
             return false;
         }
     }
+
 
 
 }

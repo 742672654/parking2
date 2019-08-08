@@ -1,12 +1,9 @@
 package com.example.parking.fragment;
 
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,9 +20,7 @@ import com.example.parking.bean.http.OrderAddBean;
 import com.example.parking.bean.http.PhotoToOssBean;
 import com.example.parking.db.Order_DB;
 import com.example.parking.http.HttpManager2;
-import com.example.parking.util.FileUtil;
 import com.example.parking.util.JsonUtil2;
-import com.example.parking.util.TimeUtil;
 import com.google.gson.Gson;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -65,8 +60,6 @@ public class ParkingFragment extends ParkingBase {
             sss = false;
         }
     }
-
-
 
     @Override
     public void onClick(View view) {
@@ -110,8 +103,6 @@ public class ParkingFragment extends ParkingBase {
         }
     }
 
-
-
     //TODO 全景拍照
     public void parking_quanjin(final Map<String, String> param, final String obj ) {
 
@@ -133,7 +124,6 @@ public class ParkingFragment extends ParkingBase {
             }
         });
     }
-
 
     //TODO 车牌拍照
     public void parking_carmun(final Map<String, String> param, final String obj ) {
@@ -166,8 +156,6 @@ public class ParkingFragment extends ParkingBase {
         });
 
     }
-
-
 
     //TODO >>>>>接收上传订单
     public void orderAdd(final String obj) {

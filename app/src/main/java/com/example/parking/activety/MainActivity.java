@@ -6,20 +6,25 @@ import com.example.parking.Static_bean;
 import com.example.parking.bean.JiguangBean;
 import com.example.parking.bean.http.OrderAddBean;
 import com.example.parking.bean.http.OrderlistBean;
+import com.example.parking.bean.http.PhotoToOssBean;
 import com.example.parking.bean.http.Report_orderlistBean;
 import com.example.parking.bean.http.SelectSubPlaceBean;
 import com.example.parking.db.BaseSQL_DB;
+import com.example.parking.db.Jiguang_DB;
 import com.example.parking.http.HttpCallBack2;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.jiguang.ExampleUtil;
 import com.example.parking.jiguang.JiGuangAPI;
 import com.example.parking.jiguang.LocalBroadcastManager;
 import com.example.parking.util.FileUtil;
+import com.google.gson.Gson;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +36,8 @@ import android.util.Log;
 import android.view.View;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +53,8 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
     public static final int parkingPhoto2 = 1001; //停车拍照<车牌>
     public static final int orderPhoto = 102; //订单拍照
     public static final int updateTieleParking = 103;//修改车位数量
+    public static final int alertPhoto = 104; //警告拍照
+
     public static final int JiguangPush = 1000001;//极光推送
 
     private Uri imageUri; //照片的中的URi
@@ -58,8 +67,7 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         super.activity = this;
         super.onCreate(savedInstanceState);
 
-        baseSQL_DB = new BaseSQL_DB(this, "parking.db", null, 4);
-
+        baseSQL_DB = new BaseSQL_DB(this, "parking.db", null, 5);
 
         //初始化推送
         registerMessageReceiver();  // used for receive msg
@@ -67,13 +75,12 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         JPushInterface.init(this);
 
 
-
         new Thread( new Runnable(){
             @Override
             public void run() {
 
                 //等待2秒再开启摄像头
-                try {  Thread.sleep(5000);  } catch (InterruptedException e) { e.printStackTrace(); }
+                try {  Thread.sleep(5000);  } catch (InterruptedException e) { Log.w(TAG,e); }
 
                 //设置极光别名
                 new JiGuangAPI().setAlias(activity,userBean.getParkid().replaceAll("-",""));
@@ -130,6 +137,20 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                     startActivityForResult( openCameraIntent3.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION), MainActivity.orderPhoto);
                     break;
 
+
+                //TODO 订单拍照
+                case MainActivity.alertPhoto:
+
+                    //获取安卓Uri
+                    imageUri = getOutputMediaFileUri();
+                    //发起拍照
+                    Intent openCameraIntent4 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    openCameraIntent4.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    //Android7.0添加临时权限标记
+                    startActivityForResult( openCameraIntent4.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION), MainActivity.alertPhoto);
+                    break;
+
+
                 //TODO 修改title车位数量
                 case MainActivity.updateTieleParking:
                     parking_surplus.setText(String.valueOf(msg.getData().getInt("surplus")));
@@ -142,10 +163,13 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                     JiguangBean jiguangBean = (JiguangBean)msg.obj;
                     switch (jiguangBean.getMsgType()){
                         case "move":
-                                mediaPlayerMP3(jiguangBean.getInOut());
+                            mediaPlayerMP3(jiguangBean.getInOut());
                             break;
                         case "alert":
                             mediaPlayerMP3("alert");
+                            break;
+                        case "finish":
+                            mediaPlayerMP3("finish");
                             break;
                         default:
                             break;
@@ -285,7 +309,7 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
     }
 
     //TODO 打开警告拍照页面
-    public void openAlertFeagment(final JiguangBean jiguangBean){
+    public void openAlert(final JiguangBean jiguangBean){
 
         MainActivity.this.runOnUiThread(new Runnable() {
             @Override
@@ -302,22 +326,33 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         });
     }
 
+    //TODO 打开空白页面
+    public void openWhite(){
+
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.activity_fragment, whiteFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         Log.i(TAG,resultCode == -1 ?FileUtil.getFile_Suffix(imageUri)+"----"+ FileUtil.getFile_Byte(imageUri).length
                 +"系统相机拍照完成，requestCode="+requestCode+"; resultCode="+resultCode+"; File_Path="+FileUtil.getFile_Path(imageUri):"拍照取消");
 
-
         //TODO 上传全景
         if ( requestCode == MainActivity.parkingPhoto && resultCode == -1 ){
-
-
             Map<String,String> params = new HashMap<String,String>(5) ;
             params.put("token", userBean.getToken());
             params.put("type", "2");
             params.put("panoramaPath",FileUtil.getFile_Path(imageUri));
-
             HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
                      FileUtil.getFile_Suffix(imageUri),
@@ -325,32 +360,28 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                     this,
                     "photoToOssNO");
             Log.i(TAG,"上传停车页面拍摄的全景照片");
-
             toast_makeText("照片正在上传...请稍等");
+            return;
         }
 
         //TODO 上传车牌特写
         if ( requestCode == MainActivity.parkingPhoto2 && resultCode == -1 ){
-
-
             Map<String,String> params = new HashMap<String,String>(5) ;
             params.put("token", userBean.getToken());
             params.put("type", "1");
             params.put("inimagePath",FileUtil.getFile_Path(imageUri));
-
             HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
                      FileUtil.getFile_Suffix(imageUri),
                      FileUtil.getFile_Byte(imageUri),
                     this,
                     "photoToOss");
-
             toast_makeText("照片正在上传...请稍等");
+            return;
         }
 
-
+        //TODO 订单拍照
         if ( requestCode == MainActivity.orderPhoto && resultCode == -1 ){
-
             Map<String,String> params = new HashMap<String,String>(2) ;
             params.put("token", userBean.getToken());
             params.put("type", "1");
@@ -360,8 +391,34 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                     FileUtil.getFile_Byte(imageUri),
                     this,
                     "orderPhoto");
-
             toast_makeText("照片正在上传...请稍等");
+            return;
+        }
+
+        //TODO 警告拍照
+        if ( requestCode == MainActivity.alertPhoto && resultCode == -1 ){
+
+
+
+            alertFeagment.alert_imageview.setImageBitmap(
+                    BitmapFactory.decodeFile( alertFeagment.inimageImageString = FileUtil.getFile_Path(imageUri) ));
+
+            Jiguang_DB.updata_Jinggao(baseSQL_DB,alertFeagment.jiguangBean.getnOTIFICATION_ID(),alertFeagment.inimageImageString);
+
+            Log.i(TAG," 警告拍照"+alertFeagment.inimageImageString);
+
+            Map<String,String> params = new HashMap<String,String>(3) ;
+            params.put("subId", alertFeagment.jiguangBean.getDevDock());
+            params.put("nOTIFICATION_ID", alertFeagment.jiguangBean.getnOTIFICATION_ID());
+
+            HttpManager2.onResponseFile(Static_bean.photoToAlert(), params,
+                    "file",
+                    FileUtil.getFile_Suffix(imageUri),
+                    FileUtil.getFile_Byte(imageUri),
+                    this,
+                    "photoToAlert");
+            toast_makeText("照片正在上传...请稍等");
+            return;
         }
     }
 
@@ -370,23 +427,30 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         super.onResponseFile( url,  param,  sign,  object);
 
         Log.i( TAG,"url="+url+";  param="+param+"; \r\n object="+object );
+        try {
+            switch (sign) {
 
-        switch (sign){
+                case "photoToOssNO":
+                    parkingFragment.parking_quanjin(param, object);
+                    break;
 
-            case "photoToOssNO":
-                parkingFragment.parking_quanjin( param, object );
-                break;
+                case "photoToOss":
+                    parkingFragment.parking_carmun(param, object);
+                    break;
 
-            case "photoToOss":
-                parkingFragment.parking_carmun( param, object );
-                break;
+                case "orderPhoto":
+                    orderFragment.parking_carmun(object);
+                    break;
 
-            case "orderPhoto":
-                orderFragment.parking_carmun( object );
-                break;
+                case "photoToAlert":
 
-            default:
-                break;
+                    //PhotoToOssBean photoToOssBean = new Gson().fromJson(URLDecoder.decode(object, "UTF-8"), PhotoToOssBean.class);
+
+                    break;
+                default: break;
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
         }
     }
 

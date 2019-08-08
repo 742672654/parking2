@@ -16,6 +16,8 @@ import com.example.parking.bean.http.HttpUserBean;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.util.FileUtil;
 import com.example.parking.util.JsonUtil2;
+import com.example.parking.util.TimeUtil;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,12 +32,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText editText_pass;
     private EditText editText_edition;
 
-
+    private static long loginTime = 0;
 
     @Override
     public void onBackPressed() {
         // 返回键监听
         // super.onBackPressed();//注释掉这行,back键不退出activity
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        super.onPosition(TAG);
     }
 
     @Override
@@ -106,7 +114,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
 
-        Map<String,String> param = new HashMap<String,String>(3);
+//        if ( loginTime !=0 &&  loginTime < ( TimeUtil.getCurrentTime()-4999) ) {
+//
+//            return;
+//        }
+
+      //  loginTime =TimeUtil.getCurrentTime();
+        Map<String,String> param = new HashMap<String,String>(5);
             param.put("phone",phone);
             param.put("password",password);
             param.put("edition",edition);
@@ -128,6 +142,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     if (httpUserBean.getCode()!=200){
                         toast_makeText(httpUserBean.getMessage());
+                       // Re_login( param );
                         return;
                     }
 
@@ -148,9 +163,27 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     Log.w(TAG,e);
                     Toast.makeText(LoginActivity.this,"登录失败.系统错误", Toast.LENGTH_SHORT).show();
+                   // Re_login( param );
                 }
             }
         });
+    }
+
+    //TODO 重新登录
+    private void Re_login( Map<String, String> param ){
+
+        try {
+
+            Log.i(TAG,"重新登录");
+            if (TAG.equals(super.ActivityStartTAG)){
+                Thread.sleep(5000);
+                loginTime = TimeUtil.getCurrentTime();
+
+                HttpManager2.requestPost(Static_bean.getlogin(),  param, LoginActivity.this, "login");
+            }
+        } catch (Exception e) {
+            Log.w(TAG,e);
+        }
     }
 
 

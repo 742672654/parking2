@@ -2,6 +2,7 @@ package com.example.parking.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
@@ -19,8 +20,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.parking.R;
 import com.example.parking.Static_bean;
+import com.example.parking.activety.MainBaseActivity;
 import com.example.parking.bean.OrderDbBean;
 import com.example.parking.bean.PrintBillBean;
 import com.example.parking.bean.http.HttpBean;
@@ -31,29 +35,27 @@ import com.example.parking.bean.http.ParkingSpaceData;
 import com.example.parking.db.Jiguang_DB;
 import com.example.parking.db.Order_DB;
 import com.example.parking.http.HttpManager2;
+import com.example.parking.activety.MainActivity;
 import com.example.parking.util.JsonUtil2;
 import java.util.HashMap;
 import java.util.Map;
 
 
-@SuppressLint("LongLogTag")
+@SuppressLint({"LongLogTag"})
 public class Order_detailsFragment extends BaseFragment{
 
     public static final String TAG = "Order_detailsFragment<订单收费>";
 
     protected Button soufei_Button,taofei_Button,dayin_rucang;
     protected TextView a1,a22,a3,a33,a4,a5,a6;
-
     protected ImageView inimageImageView;    //车牌本地地址
     protected ImageView panoramaImageView;   // 全景本地地址
-
-    protected ImageView popuwindow_ImageView;
-
     private String inimageImageString = null;
     private String panoramaImageString = null;
 
-    private OrderlistBean.OrderlistData  orderlistData;
-    private PopupWindow popupWindow;
+    public OrderlistBean.OrderlistData  orderlistData;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class Order_detailsFragment extends BaseFragment{
         // 去除<未处理>标识
         Jiguang_DB.updata_Jiguang(activity.baseSQL_DB,null,orderlistData.getSubid());
 
-        Map<String,String> param = new HashMap<String,String>(4);
+        Map<String,String> param = new HashMap<String,String>(6);
         param.put("token",activity.userBean.getToken());
         param.put("id",orderlistData.getId());
         param.put("camum",orderlistData.getCarNo());
@@ -94,26 +96,50 @@ public class Order_detailsFragment extends BaseFragment{
 
         switch (v.getId()){
             case R.id.soufei:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("结算订单");
-                builder.setMessage("是否收费出场");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                        Map<String, String> param = new HashMap<String, String>(6);
-                        param.put("token", activity.userBean.getToken());
-                        param.put("id", orderlistData.getId());
-                        param.put("orderprice", a3.getText().toString());
-                        param.put("subid", orderlistData.getSubid());
-                        param.put("subname", orderlistData.getSubname());
-                        param.put("outimage", activity.orderFragment.outimage);
-                        HttpManager2.requestPost(Static_bean.payPointOrderToPoint(), param, Order_detailsFragment.this, "payPointOrderToPoint");
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Holo_Light_Dialog);
+
+                builder.setTitle("选择支付方式");
+                builder.setIcon(R.mipmap.money);
+
+                //    指定下拉列表的显示数据
+                final String[] cities = {"现金支付", "扫码支付"};
+                //    设置一个下拉的列表选择项
+                builder.setItems(cities, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) { }
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Toast.makeText(getActivity(), "支付方式：" + cities[which], Toast.LENGTH_SHORT).show();
+
+                        switch (cities[which]){
+
+                            case "现金支付":
+                                Map<String, String> param2 = new HashMap<String, String>(11);
+                                param2.put("token", activity.userBean.getToken());
+                                param2.put("id", orderlistData.getId());
+                                param2.put("paytype", "1");
+                                param2.put("orderprice", a3.getText().toString());
+                                param2.put("subid", orderlistData.getSubid());
+                                param2.put("subname", orderlistData.getSubname());
+                                param2.put("outimage", activity.orderFragment.outimage);
+                                HttpManager2.requestPost(Static_bean.payPointOrderToPoint(), param2, Order_detailsFragment.this, "payPointOrderToPoint");
+                                break;
+
+                            case "扫码支付":
+                                Map<String, String> param = new HashMap<String, String>(11);
+                                param.put("token", activity.userBean.getToken());
+                                param.put("id", orderlistData.getId());
+                                param.put("paytype", "2");
+                                param.put("orderprice", a3.getText().toString());
+                                param.put("subid", orderlistData.getSubid());
+                                param.put("subname", orderlistData.getSubname());
+                                param.put("outimage", activity.orderFragment.outimage);
+                                HttpManager2.requestPost(Static_bean.payPointOrderToPoint(), param, Order_detailsFragment.this, "payPointOrderToPoint");
+                                break;
+
+                            default: break;
+                        }
+                    }
                 });
                 builder.show();
                 break;
@@ -144,7 +170,7 @@ public class Order_detailsFragment extends BaseFragment{
                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Map<String,String> param = new HashMap<String,String>(6);
+                                Map<String,String> param = new HashMap<String,String>(8);
                                 param.put("token",activity.userBean.getToken());
                                 param.put("id",orderlistData.getId());
                                 param.put("subid",orderlistData.getSubid());
@@ -164,41 +190,39 @@ public class Order_detailsFragment extends BaseFragment{
 
             case R.id.order_details_a6:
 
-                Map<String,String> param = new HashMap<String,String>(2);
+                Map<String,String> param = new HashMap<String,String>(3);
                 param.put("token",activity.userBean.getToken());
                 param.put("id",orderlistData.getId());
                 HttpManager2.requestPost(Static_bean.selectOrderSubPlace(),  param, this, "selectOrderSubPlace");
                 break;
 
             case R.id.dayin_rucang:
-
-                StringBuffer buf = new StringBuffer("\r\n\r\n---------------------------\r\n");
-                buf.append("停车场："+activity.userBean.getParkname()+"   \r\n\r\n");
-                buf.append("车位号："+orderlistData.getSubname()+" \r\n\r\n");
-                buf.append("车牌号："+orderlistData.getCarNo()+" \r\n\r\n");
-                buf.append("驶入时间"+ (a5.getText())+" \r\n");
-                buf.append("预交金额："+a33.getText().toString()+"元\r\n\r\n");
-
-                buf.append("每天单次收费5元，晚上12点后重新收费。车辆离开车位后，视为停车订单结算完成。\r\n\r\n");
-                buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
-                buf.append("监督电话：0595-28282818");
-
-                StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict());
-                qRcode.append("?orderid=").append(orderlistData.getId());
-                qRcode.append("&pointid=");
-                qRcode.append(activity.userBean.getParkid());
-
-                PrintBillBean PrintBillBean = new PrintBillBean(1,buf.toString(),qRcode.toString());
-
-                printer_marking(PrintBillBean);
+                printing();
+//                StringBuffer buf = new StringBuffer("\r\n\r\n---------------------------\r\n");
+//                buf.append("停车场："+activity.userBean.getParkname()+"   \r\n\r\n");
+//                buf.append("车位号："+orderlistData.getSubname()+" \r\n\r\n");
+//                buf.append("车牌号："+orderlistData.getCarNo()+" \r\n\r\n");
+//                buf.append("驶入时间"+ (a5.getText())+" \r\n");
+//                buf.append("预交金额："+a33.getText().toString()+"元\r\n\r\n");
+//
+//                buf.append("每天单次收费5元，晚上12点后重新收费。车辆离开车位后，视为停车订单结算完成。\r\n\r\n");
+//                buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
+//                buf.append("监督电话：0595-28282818");
+//
+//                StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict());
+//                qRcode.append("?orderid=").append(orderlistData.getId());
+//                qRcode.append("&pointid=");
+//                qRcode.append(activity.userBean.getParkid());
+//
+//                printer_marking( new PrintBillBean(1,buf.toString(),qRcode.toString()) );
                 break;
 
             case R.id.panoramaImageView:
-                if (panoramaImageString!=null)showPopupWindow(panoramaImageString);
+                if (panoramaImageString!=null)super.showPopupWindow(a1,panoramaImageString);
                 break;
 
             case R.id.inimageImageView:
-                if (inimageImageString!=null)showPopupWindow(inimageImageString);
+                if (inimageImageString!=null)super.showPopupWindow(a1,inimageImageString);
                 break;
 
         default:break;
@@ -206,43 +230,7 @@ public class Order_detailsFragment extends BaseFragment{
     }
 
 
-    private void showPopupWindow(String path) {
-
-        if (popupWindow == null) {
-            //获取自定义的菜单布局文件
-            View inflate = getLayoutInflater().inflate(R.layout.popuwindow_photo_layout, null, false);
-            //创建popupwindow的实例
-            popupWindow = new PopupWindow(inflate, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
-
-            popuwindow_ImageView = inflate.findViewById(R.id.popuwindow_ImageView);
-
-            DisplayMetrics dm = new DisplayMetrics();
-            //获取屏幕信息
-            activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-            popupWindow.setWidth(dm.widthPixels);
-            popupWindow.setHeight((int) (dm.heightPixels * 0.8 - 8));
-
-            //单机其他地方消失
-            inflate.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent notionEvent) {
-                    //如果菜单存在并且为显示状态，就关闭菜单，并且初始化菜单
-                    if (popupWindow != null && popupWindow.isShowing()) {
-                        popupWindow.dismiss();
-                    }
-                    return false;
-                }
-            });
-            // 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
-            popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        }
-        //设置PopupWindow显示在按钮的下面
-        //  popupWindow.showAsDropDown(inimageImageView,0,dm.heightPixels);
-        popupWindow.showAtLocation(a1, Gravity.NO_GRAVITY, 0, 150);
-        popuwindow_ImageView.setImageBitmap( BitmapFactory.decodeFile(path));
-    }
-
-    // 初始化控件
+    //TODO 初始化控件
     private void initView(View rootView) {
 
         soufei_Button = rootView.findViewById(R.id.soufei);
@@ -303,7 +291,7 @@ public class Order_detailsFragment extends BaseFragment{
     }
 
     //TODO >>>获取订单收费结果
-    private void payPointOrderToPoint(final Map<String, String> param, final String object) {
+    public void payPointOrderToPoint(final Map<String, String> param, final String object) {
 
         HttpBean httpBean = JsonUtil2.fromJson(object,HttpBean.class);
         if (httpBean.getCode()==200){
@@ -389,7 +377,30 @@ public class Order_detailsFragment extends BaseFragment{
         });
     }
 
-    @SuppressLint("LongLogTag")
+    //TODO 打印入场小票
+    private void printing(){
+
+        StringBuffer buf = new StringBuffer("\r\n\r\n---------------------------\r\n");
+        buf.append("停车场："+activity.userBean.getParkname()+"   \r\n\r\n");
+        buf.append("车位号："+orderlistData.getSubname()+" \r\n\r\n");
+        buf.append("车牌号："+orderlistData.getCarNo()+" \r\n\r\n");
+        buf.append("驶入时间"+ (a5.getText())+" \r\n");
+        buf.append("预交金额："+a33.getText().toString()+"元\r\n\r\n");
+
+        buf.append("每天单次收费5元，晚上12点后重新收费。车辆离开车位后，视为停车订单结算完成。\r\n\r\n");
+        buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
+        buf.append("监督电话：0595-28282818");
+
+        StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict());
+        qRcode.append("?orderid=").append(orderlistData.getId());
+        qRcode.append("&pointid=");
+        qRcode.append(activity.userBean.getParkid());
+
+        printer_marking( new PrintBillBean(1,buf.toString(),qRcode.toString()) );
+    }
+
+
+
     @Override
     public void onResponsePOST(String url, Map<String, String> param, String sign, String object) {
         super.onResponsePOST(url, param, sign, object);
