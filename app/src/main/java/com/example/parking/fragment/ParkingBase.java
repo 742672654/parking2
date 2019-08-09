@@ -187,7 +187,16 @@ public class ParkingBase extends BaseFragment implements View.OnTouchListener {
             alertDialog= builder.setTitle("请选择").setItems(string_pre_price, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    parking_pre_price.setText(String.valueOf(which));
+
+                    switch (which){
+                        case 0: parking_pre_price.setText("1元");break;
+                        case 1: parking_pre_price.setText("3元");break;
+                        case 2: parking_pre_price.setText("5元");break;
+                        case 3: parking_pre_price.setText("10元");break;
+
+                        default:break;
+                    }
+
                 }
             }).show();
         }

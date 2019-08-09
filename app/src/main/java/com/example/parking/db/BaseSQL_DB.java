@@ -34,9 +34,10 @@ public class BaseSQL_DB extends SQLiteOpenHelper {
 
         switch (oldVersion){
             case 2:upgrade2( sqLiteDatabase, oldVersion, newVersion );
-            case 3:upgrade3( sqLiteDatabase, oldVersion, newVersion );
-            case 4:upgrade4( sqLiteDatabase, oldVersion, newVersion );
-            case 5:upgrade5( sqLiteDatabase, oldVersion, newVersion );
+//            case 3:upgrade3( sqLiteDatabase, oldVersion, newVersion );
+//            case 4:upgrade4( sqLiteDatabase, oldVersion, newVersion );
+//            case 5:upgrade5( sqLiteDatabase, oldVersion, newVersion );
+//            case 6:upgrade6( sqLiteDatabase, oldVersion, newVersion );
         }
     }
 
@@ -77,43 +78,9 @@ public class BaseSQL_DB extends SQLiteOpenHelper {
         }
     }
 
-    private void upgrade3( SQLiteDatabase sqLiteDatabase,int oldVersion, int newVersion ){
 
 
-        try {
 
-              sqLiteDatabase.execSQL("alter table localJiguang add column devDockName text;");
-
-        } catch (Exception e) {
-            Log.w(TAG, e);
-        }
-
-    }
-
-    private void upgrade4( SQLiteDatabase sqLiteDatabase,int oldVersion, int newVersion ){
-
-
-        try {
-
-            sqLiteDatabase.execSQL("alter table localJiguang add column state INTEGER ;");
-            sqLiteDatabase.execSQL("alter table localJiguang add column stateTime text;");
-        } catch (Exception e) {
-            Log.w(TAG, e);
-        }
-
-    }
-
-    private void upgrade5( SQLiteDatabase sqLiteDatabase,int oldVersion, int newVersion ){
-
-
-        try {
-
-            sqLiteDatabase.execSQL("alter table localJiguang add column photo_path text;");
-        } catch (Exception e) {
-            Log.w(TAG, e);
-        }
-
-    }
 
 }
 
@@ -125,5 +92,5 @@ class static_SQL{
 
     static final String CREATE_TEBLE2 = "CREATE TABLE localJiguang(nOTIFICATION_ID text NOT NULL," +
             "pushTime text,pushTimeLong INTEGER,msgid text,devDock text,devDockName text,inOut text," +
-            "msgType text, photo_path text, PRIMARY KEY (nOTIFICATION_ID))";
+            "msgType text, photo_path text,state INTEGER,stateTime text, devId text,PRIMARY KEY (nOTIFICATION_ID))";
 }

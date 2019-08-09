@@ -8,11 +8,11 @@ public class JiguangBean implements Serializable {
     private String pushTime; //接收到的时间
     private long pushTimeLong; //接收到的时间
     private String msgid;   //uuid
-    private String devId;
+    private String devId;   //订单id
     private String devDock; // 具体车位id
     private String devDockName; //车位名
     private String inOut;   // 出场 out 入场 in
-    private String msgType; // move 出入信息  alert 告警信
+    private String msgType; // move 出入信息  alert 告警信 , finish用户扫码缴费
 
     private String photo_path;//警告的照片地址
 

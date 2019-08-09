@@ -2,57 +2,39 @@ package com.example.parking.fragment;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.example.parking.R;
 import com.example.parking.Static_bean;
 import com.example.parking.bean.OrderDbBean;
 import com.example.parking.bean.PrintBillBean;
-import com.example.parking.bean.http.HttpBean;
-import com.example.parking.bean.http.OrderAddBean;
-import com.example.parking.bean.http.OrderDetailsBean;
-import com.example.parking.bean.http.OrderlistBean;
-import com.example.parking.bean.http.ParkingSpaceBean;
-import com.example.parking.bean.http.ParkingSpaceData;
 import com.example.parking.bean.http.Report_orderlistBean;
+import com.example.parking.db.Jiguang_DB;
 import com.example.parking.db.Order_DB;
-import com.example.parking.http.HttpManager2;
 import com.example.parking.util.JsonUtil2;
 import com.example.parking.util.TimeUtil;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 
-@SuppressLint("LongLogTag")
 public class Order_list_detailsFragment extends BaseFragment{
 
-    public static final String TAG = "Order_detailsFragment<订单收费>";
+
+    public static final String TAG = "Order_list_detailsFragment<历史订单的详情>";
 
 
-
-    private TextView order_details_a11,order_details_a22,order_details_a22222,order_details_a33,
+    private TextView order_details_a11,order_details_aa22,order_details_a22222,order_details_aa33,
                 order_details_a44,order_details_a55,order_details_a66;
-//    protected Button order_lis_dayin_rucang;
+    protected Button order_lis_dayin_rucang;
 
     private ImageView order_lis_panoramaImageView;  // 车牌本地地址
     private String order_lis_panoramaImage;
@@ -60,8 +42,7 @@ public class Order_list_detailsFragment extends BaseFragment{
     private String order_lis_inimageImage;
 
     private Report_orderlistBean.Report_orderlistList article;
-    private PopupWindow popupWindow;
-    protected ImageView popuwindow_ImageView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,25 +52,18 @@ public class Order_list_detailsFragment extends BaseFragment{
         return rootView;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        order_lis_panoramaImage = null;
-        order_lis_inimageImage = null;
-    }
-
     private void initView(View rootView) {
 
         order_details_a11 = rootView.findViewById(R.id.order_details_a11);
-        order_details_a22 = rootView.findViewById(R.id.order_details_a22);
+        order_details_aa22 = rootView.findViewById(R.id.order_details_aa22);
         order_details_a22222 = rootView.findViewById(R.id.order_details_a22222);
-        order_details_a33 = rootView.findViewById(R.id.order_details_a33);
+        order_details_aa33 = rootView.findViewById(R.id.order_details_aa33);
         order_details_a44 = rootView.findViewById(R.id.order_details_a44);
         order_details_a55 = rootView.findViewById(R.id.order_details_a55);
         order_details_a66 = rootView.findViewById(R.id.order_details_a66);
 
-//        order_lis_dayin_rucang = rootView.findViewById(R.id.order_lis_dayin_rucang);
-//        order_lis_dayin_rucang.setOnClickListener(this);
+        order_lis_dayin_rucang = rootView.findViewById(R.id.order_lis_dayin_rucang);
+        order_lis_dayin_rucang.setOnClickListener(this);
 
         order_lis_panoramaImageView = rootView.findViewById(R.id.order_lis_panoramaImageView);    //车牌本地地址
         order_lis_panoramaImageView.setOnClickListener(this);
@@ -97,21 +71,23 @@ public class Order_list_detailsFragment extends BaseFragment{
         order_lis_inimageImageView.setOnClickListener(this);
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void onStart() {
         super.onStart();
         super.onPosition(TAG);
 
         article = (Report_orderlistBean.Report_orderlistList) getArguments().getSerializable("report_orderlistList");
+        if (article==null)return;
 
         order_details_a11.setText(article.CarNum);
-        order_details_a22.setText(article.OrderPrice);
+        order_details_aa22.setText(article.OrderPrice);
         order_details_a22222.setText(article.PrePrice);
 
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(article.ParkDate);
             Date date2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(article.LeaveDate);
-            order_details_a33.setText(TimeUtil.getDatePoor(date2,date));
+            order_details_aa33.setText(TimeUtil.getDatePoor(date2,date));
         } catch (ParseException e) {
             Log.w(TAG,e);
         }
@@ -127,7 +103,10 @@ public class Order_list_detailsFragment extends BaseFragment{
 
         order_lis_inimageImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto2_path()));
         order_lis_inimageImage = orderBean.getPhoto2_path();
+
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -137,11 +116,87 @@ public class Order_list_detailsFragment extends BaseFragment{
             case R.id.order_lis_panoramaImageView:
                 if (order_lis_panoramaImage!=null)super.showPopupWindow(order_details_a11,order_lis_panoramaImage);
                 break;
+
             case R.id.order_lis_inimageImageView:
                 if (order_lis_inimageImage!=null)super.showPopupWindow(order_details_a11,order_lis_inimageImage);
                 break;
+
+            case R.id.order_lis_dayin_rucang:
+                printingTickets();
+                break;
+
             default:break;
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        order_lis_panoramaImage = null;
+        order_lis_inimageImage = null;
+    }
+
+    public void printingTickets() {
+
+        StringBuffer buf = new StringBuffer("\r\n\n---------------------------\r\n");
+        buf.append("停车场："+activity.userBean.getParkname()+"   \r\n\r\n");
+        buf.append("车位号："+order_details_a66.getText().toString()+"\r\n\r\n");
+        buf.append("车牌号："+order_details_a11.getText().toString()+"\r\n\r\n");
+        buf.append("驶入时间"+order_details_a44.getText().toString()+"\r\n\r\n");
+        buf.append("驶出时间"+order_details_a55.getText().toString()+"\r\n\r\n");
+        buf.append("停车时长："+order_details_aa33.getText().toString()+"\r\n\r\n");
+        buf.append("总停车费："+ order_details_aa22.getText().toString()+"元\r\n\r\n");
+        buf.append("已缴金额："+ order_details_a22222.getText().toString()+"元\r\n\r\n");
+        buf.append("本次收取："+ ( Double.valueOf(order_details_aa22.getText().toString())
+                -Double.valueOf(order_details_a22222.getText().toString()) )+"元\r\n\r\n");
+        buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
+        buf.append("监督电话：0595-28282818");
+
+        String QRcode = Static_bean.QRcode_orderdetail()+"?orderid=" + article.id;
+        PrintBillBean PrintBillBean = new PrintBillBean(2,buf.toString(),QRcode);
+
+        printer_marking(PrintBillBean);
+
+    }
+
+    @SuppressLint("LongLogTag")
+    @Override
+    public void onResponsePOST(String url, final Map<String, String> param, String sign, final String object) {
+        super.onResponsePOST(url, param, sign, object);
+
+        Log.i(TAG,"url="+url+";param="+param+";sign="+sign+";\r\n object="+object);
+
+
+        switch (sign){
+
+            case "pointOrderReport_orderlist":
+
+                activity.openOrder_list_details(getArticleList(object));
+                break;
+
+            default:break;
+        }
+
+    }
+
+    //TODO 接收数据返回
+    @SuppressLint("LongLogTag")
+    private Report_orderlistBean.Report_orderlistList getArticleList( String object ) {
+
+        try {
+
+            Report_orderlistBean report_orderlistBean = JsonUtil2.fromJson(object, Report_orderlistBean.class);
+            Log.i(TAG, "解析http返回的json数据=" + report_orderlistBean.toString());
+
+            if (report_orderlistBean.getCode() == 200 && report_orderlistBean.getData() != null) {
+
+                return report_orderlistBean.getData().getList().get(0);
+            }
+            toast_makeText(report_orderlistBean.getMessage());
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
+        return null;
     }
 
 }

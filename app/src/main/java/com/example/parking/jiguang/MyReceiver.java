@@ -14,6 +14,7 @@ import com.example.parking.activety.MainActivity;
 import com.example.parking.bean.JiguangBean;
 import com.example.parking.bean.OrderDbBean;
 import com.example.parking.bean.http.HttpBean;
+import com.example.parking.bean.http.Report_orderlistBean;
 import com.example.parking.db.Jiguang_DB;
 import com.example.parking.db.Order_DB;
 import com.example.parking.fragment.Order_detailsFragment;
@@ -61,8 +62,7 @@ public class MyReceiver extends BroadcastReceiver{
 			jiguangBean.setPushTimeLong(TimeUtil.dateToStamp(jiguangBean.getPushTime()));
 
 			Log.i(TAG,"保存="+jiguangBean.toString());
-			//保存到数据库
-			Jiguang_DB.insert_in_Jiguang(((MainActivity)MainActivity.activity).baseSQL_DB,jiguangBean);
+
 
 			if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
 				String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
@@ -72,8 +72,12 @@ public class MyReceiver extends BroadcastReceiver{
 				Log.d(TAG, "[MyReceiver66] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
 
 			} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-			//添加语音播报
 
+
+				//保存到数据库
+				Jiguang_DB.insert_in_Jiguang(((MainActivity)MainActivity.activity).baseSQL_DB,jiguangBean);
+
+				//添加语音播报
 				Bundle bundle2 = new Bundle();
 				bundle2.putString( "joinType",TAG );
 				bundle2.putString("text","接收到推送,播放音乐");
@@ -82,8 +86,10 @@ public class MyReceiver extends BroadcastReceiver{
 				message2.what = MainActivity.JiguangPush;
 				((MainActivity)MainActivity.activity).handler.sendMessage(message2);
 
+				//如果是在订单详情页面
 				if (Order_detailsFragment.TAG.equals(((MainActivity)MainActivity.activity).FragmentStartTAG)){
 
+					//刚好也在查看这个订单
 					if (((MainActivity)MainActivity.activity)
 							.order_detailsFragment.orderlistData.getId().equals(jiguangBean.getDevId())){
 
@@ -100,7 +106,7 @@ public class MyReceiver extends BroadcastReceiver{
 			} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 				Log.d(TAG, "[MyReceiver75] 用户点击打开了通知");
 
-				//打开对应车位
+				//打开对应车位页面
 				if (jiguangBean.getMsgType().equals("move")){
 
 					Map<String,String> param = new HashMap<String, String>(5);
@@ -110,28 +116,21 @@ public class MyReceiver extends BroadcastReceiver{
 					HttpManager2.requestPost(Static_bean.selectSubPlace(),  param, ((MainActivity)BaseActivity.activity).noticeFragment, "selectSubPlace");
 				}else if (jiguangBean.getMsgType().equals("finish")){
 
-					Map<String, String> param = new HashMap<String, String>(3);
-					param.put("id",jiguangBean.getDevId());
-					param.put("joinType",TAG);
-					HttpBean httpBean = new HttpBean();
-					httpBean.setCode(200);
-					httpBean.setData(jiguangBean.getPushTime());
-					((MainActivity)MainActivity.activity).order_detailsFragment.payPointOrderToPoint(param,JsonUtil2.toJson(httpBean));
+					Map<String,String> param = new HashMap<String,String>(6);
+					param.put("page","1");
+					param.put("size","1");
+					param.put("orderid",jiguangBean.getDevId());
+					param.put("token",((MainActivity)BaseActivity.activity).userBean.getToken());
+					HttpManager2.requestPost(Static_bean.pointOrderReport_orderlist(),  param, ((MainActivity)BaseActivity.activity).order_list_detailsFragment, "pointOrderReport_orderlist");
 
+					//去除<未处理>标记
+					Jiguang_DB.updata_Jiguang(((MainActivity)BaseActivity.activity).baseSQL_DB,jiguangBean.getnOTIFICATION_ID(),null);
 				}else {
 
 					((MainActivity)BaseActivity.activity).openWhite();
 					((MainActivity)BaseActivity.activity).openAlert(jiguangBean );
 				}
 
-			} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
-				Log.d(TAG, "[MyReceiver79] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
-
-			} else if(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
-				boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
-				Log.w(TAG, "[MyReceiver83]" + intent.getAction() +" connected state change to "+connected);
-			} else {
-				Log.d(TAG, "[MyReceiver85] Unhandled intent - " + intent.getAction());
 			}
 
 		} catch (Exception e){

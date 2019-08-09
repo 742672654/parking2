@@ -20,11 +20,12 @@ public class Jiguang_DB {
         try{
 
 
-        StringBuffer buf = new StringBuffer("INSERT INTO localJiguang(nOTIFICATION_ID, pushTime, pushTimeLong, msgid, devDock, devDockName, inOut, msgType) VALUES ");
+        StringBuffer buf = new StringBuffer("INSERT INTO localJiguang(nOTIFICATION_ID, pushTime, pushTimeLong, msgid, devId, devDock, devDockName, inOut, msgType) VALUES ");
         buf.append("('").append(jiguangBean.getnOTIFICATION_ID()).append("',");
         buf.append("'").append(jiguangBean.getPushTime()).append("',");
         buf.append("").append(jiguangBean.getPushTimeLong()).append(",");
         buf.append("'").append(jiguangBean.getMsgid()).append("',");
+        buf.append("'").append(jiguangBean.getDevId()).append("',");
         buf.append("'").append(jiguangBean.getDevDock()).append("',");
         buf.append("'").append(jiguangBean.getDevDockName()).append("',");
         buf.append("'").append(jiguangBean.getInOut()).append("',");
@@ -56,6 +57,7 @@ public class Jiguang_DB {
             if (cursor.getColumnIndex("pushTime")!=-1)   jiguangBean.setPushTime(cursor.getString(cursor.getColumnIndex("pushTime")));
             if (cursor.getColumnIndex("pushTimeLong")!=-1)   jiguangBean.setPushTimeLong(cursor.getLong(cursor.getColumnIndex("pushTimeLong")));
             if (cursor.getColumnIndex("msgid")!=-1)   jiguangBean.setMsgid(cursor.getString(cursor.getColumnIndex("msgid")));
+            if (cursor.getColumnIndex("devId")!=-1)   jiguangBean.setDevId(cursor.getString(cursor.getColumnIndex("devId")));
             if (cursor.getColumnIndex("devDock")!=-1)   jiguangBean.setDevDock(cursor.getString(cursor.getColumnIndex("devDock")));
             if (cursor.getColumnIndex("devDockName")!=-1)   jiguangBean.setDevDockName(cursor.getString(cursor.getColumnIndex("devDockName")));
             if (cursor.getColumnIndex("inOut")!=-1)   jiguangBean.setInOut(cursor.getString(cursor.getColumnIndex("inOut")));
@@ -108,6 +110,7 @@ public class Jiguang_DB {
                 if (cursor.getColumnIndex("pushTime")!=-1)jiguangBean.setPushTime(cursor.getString(cursor.getColumnIndex("pushTime")));
                 if (cursor.getColumnIndex("pushTimeLong")!=-1)jiguangBean.setPushTimeLong(cursor.getLong(cursor.getColumnIndex("pushTimeLong")));
                 if (cursor.getColumnIndex("msgid")!=-1)jiguangBean.setMsgid(cursor.getString(cursor.getColumnIndex("msgid")));
+                if (cursor.getColumnIndex("devId")!=-1)jiguangBean.setDevId(cursor.getString(cursor.getColumnIndex("devId")));
                 if (cursor.getColumnIndex("devDock")!=-1)jiguangBean.setDevDock(cursor.getString(cursor.getColumnIndex("devDock")));
                 if (cursor.getColumnIndex("devDockName")!=-1)jiguangBean.setDevDockName(cursor.getString(cursor.getColumnIndex("devDockName")));
                 if (cursor.getColumnIndex("inOut")!=-1)jiguangBean.setInOut(cursor.getString(cursor.getColumnIndex("inOut")));
@@ -143,7 +146,7 @@ public class Jiguang_DB {
             StringBuffer buf = new StringBuffer();
                 buf.append("update localJiguang");
                 buf.append(" set state = 1 ,stateTime = '").append(TimeUtil.getDateTime()).append("'");
-                buf.append(" where  1 = 1 " );
+                buf.append(" where  1 = 1   " );
 
             if (StringUtil.is_valid(nOTIFICATION_ID)) {
                 buf.append(" and nOTIFICATION_ID = '").append(nOTIFICATION_ID).append("'");
@@ -185,7 +188,5 @@ public class Jiguang_DB {
             return false;
         }
     }
-
-
 
 }

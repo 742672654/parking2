@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.parking.R;
 import com.example.parking.Static_bean;
+import com.example.parking.activety.BaseActivity;
+import com.example.parking.activety.MainActivity;
 import com.example.parking.bean.JiguangBean;
 import com.example.parking.bean.http.OrderlistBean;
 import com.example.parking.bean.http.SelectSubPlaceBean;
@@ -20,6 +22,8 @@ import com.example.parking.db.Jiguang_DB;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.util.JsonUtil2;
 import com.example.parking.util.StringUtil;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -150,9 +154,10 @@ public class NoticeFragment extends BaseFragment {
             TextView notice_tips = convertView.findViewById(R.id.notice_tips);
 
             //如果已经处理，就不显示
-            if (itemList.get(position).getState()==1){
-                notice_tips.setVisibility( View.GONE);
-            }
+            if (itemList.get(position).getState()==1){ notice_tips.setVisibility( View.GONE); }
+
+            Log.i(TAG,itemList.get(position).toString());
+
 
 
             if ("move".equals(itemList.get(position).getMsgType())){
@@ -164,6 +169,7 @@ public class NoticeFragment extends BaseFragment {
                     notice_devdockname.setText("所属车位:"+itemList.get(position).getDevDockName());
 
                     String tagJson = "{\"nOTIFICATION_ID\":\""+itemList.get(position).getnOTIFICATION_ID()
+                            +"\",\"devId\":\""+itemList.get(position).getDevId()
                             +"\",\"subId\":\""+itemList.get(position).getDevDock() +"\",\"type\":\"in\"}";
                     notice_relative.setTag( tagJson );
                 }else{
@@ -173,10 +179,24 @@ public class NoticeFragment extends BaseFragment {
                     notice_devdockname.setText("所属车位:"+itemList.get(position).getDevDockName());
 
                     String tagJson = "{\"nOTIFICATION_ID\":\""+itemList.get(position).getnOTIFICATION_ID()
+                            +"\",\"devId\":\""+itemList.get(position).getDevId()
                             +"\",\"subId\":\""+itemList.get(position).getDevDock() +"\",\"type\":\"out\"}";
                     notice_relative.setTag( tagJson );
                 }
-            }else{
+            }else if ("finish".equals(itemList.get(position).getMsgType())){
+
+                notice_imageview.setText("费");
+                notice_imageview.setTextColor(getContext().getResources().getColorStateList(R.color.orange));
+                notice_pushtime.setText("缴费时间:"+itemList.get(position).getPushTime().substring(5,16));
+                notice_devdockname.setText("所属车位:"+itemList.get(position).getDevDockName());
+
+                String tagJson = "{\"nOTIFICATION_ID\":\""+itemList.get(position).getnOTIFICATION_ID()
+                        +"\",\"position\":\""+position
+                        +"\",\"devId\":\""+itemList.get(position).getDevId()
+                        +"\",\"subId\":\""+itemList.get(position).getDevDock() +"\",\"type\":\"finish\"}";
+
+                notice_relative.setTag( tagJson );
+            }else if ("alert".equals(itemList.get(position).getMsgType())){
                 notice_imageview.setText("拍");
                 notice_imageview.setTextColor(getContext().getResources().getColorStateList(R.color.bg_blue));
                 notice_pushtime.setText("发布时间:"+itemList.get(position).getPushTime().substring(5,16));
@@ -184,11 +204,13 @@ public class NoticeFragment extends BaseFragment {
 
                 String tagJson = "{\"nOTIFICATION_ID\":\""+itemList.get(position).getnOTIFICATION_ID()
                         +"\",\"position\":\""+position
+                        +"\",\"devId\":\""+itemList.get(position).getDevId()
                         +"\",\"subId\":\""+itemList.get(position).getDevDock() +"\",\"type\":\"other\"}";
 
                 notice_relative.setTag( tagJson );
-            }
 
+
+            }
 
             notice_relative.setOnClickListener(new android.view.View.OnClickListener() {
                 @Override
@@ -199,12 +221,22 @@ public class NoticeFragment extends BaseFragment {
                     if ("other".equals(param.get("type"))){
 
                             activity.openAlert(itemList.get(Integer.valueOf(param.get("position"))));
+                    }else if("finish".equals(param.get("type"))){
+
+                        Map<String,String> param2 = new HashMap<String,String>(6);
+                        param2.put("page","1");
+                        param2.put("size","1");
+                        param2.put("orderid",param.get("devId"));
+                        param2.put("token",((MainActivity) BaseActivity.activity).userBean.getToken());
+                        HttpManager2.requestPost(Static_bean.pointOrderReport_orderlist(),  param2, ((MainActivity)BaseActivity.activity).order_list_detailsFragment, "pointOrderReport_orderlist");
+
+                        //去除<未处理>标记
+                        Jiguang_DB.updata_Jiguang(activity.baseSQL_DB,null,itemList.get(Integer.valueOf(param.get("position"))).getDevDock());
                     }else{
 
                         param.put("token",activity.userBean.getToken());
                         HttpManager2.requestPost(Static_bean.selectSubPlace(),  param, noticeFragment, "selectSubPlace");
                     }
-
                 }
             });
 

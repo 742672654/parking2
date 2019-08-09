@@ -399,8 +399,6 @@ public class Order_detailsFragment extends BaseFragment{
         printer_marking( new PrintBillBean(1,buf.toString(),qRcode.toString()) );
     }
 
-
-
     @Override
     public void onResponsePOST(String url, Map<String, String> param, String sign, String object) {
         super.onResponsePOST(url, param, sign, object);

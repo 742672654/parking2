@@ -11,6 +11,7 @@ import com.example.parking.bean.http.Report_orderlistBean;
 import com.example.parking.bean.http.SelectSubPlaceBean;
 import com.example.parking.db.BaseSQL_DB;
 import com.example.parking.db.Jiguang_DB;
+import com.example.parking.fragment.ParkingBase;
 import com.example.parking.http.HttpCallBack2;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.jiguang.ExampleUtil;
@@ -54,7 +55,6 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
     public static final int orderPhoto = 102; //订单拍照
     public static final int updateTieleParking = 103;//修改车位数量
     public static final int alertPhoto = 104; //警告拍照
-
     public static final int JiguangPush = 1000001;//极光推送
 
     private Uri imageUri; //照片的中的URi
@@ -67,13 +67,13 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         super.activity = this;
         super.onCreate(savedInstanceState);
 
-        baseSQL_DB = new BaseSQL_DB(this, "parking.db", null, 5);
+        baseSQL_DB = new BaseSQL_DB(this, "parking.db", null, 6);
 
         //初始化推送
         registerMessageReceiver();  // used for receive msg
+
         //登录
         JPushInterface.init(this);
-
 
         new Thread( new Runnable(){
             @Override
@@ -88,8 +88,6 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         }).start();
 
     }
-
-
 
     @SuppressLint("HandlerLeak")
     public Handler handler = new Handler() {
@@ -185,16 +183,21 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
     //TODO 打开停车保存页面
     public void openParking(final SelectSubPlaceBean.SelectSubPlaceData selectSubPlaceDate){
 
+        if ( FragmentStartTAG.equals(parkingFragment.TAG) || FragmentStartTAG.equals(ParkingBase.TAG)){
+            openWhite();
+        }
+
        MainActivity.this.runOnUiThread(new Runnable() {
            @Override
            public void run() {
+
 
                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                fragmentTransaction.replace(R.id.activity_fragment, parkingFragment);
 
                Bundle bundle = new Bundle();
-               bundle.putSerializable("selectSubPlaceDate",selectSubPlaceDate);
-               bundle.putString("joinType",TAG);
+               bundle.putSerializable("selectSubPlaceDate", selectSubPlaceDate);
+               bundle.putString("joinType", TAG);
                parkingFragment.setArguments(bundle);
                fragmentTransaction.addToBackStack(null);
                fragmentTransaction.commit();
@@ -292,6 +295,8 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
 
     //TODO 打开订单列表详情页面
     public void openOrder_list_details(final Report_orderlistBean.Report_orderlistList article){
+
+        if ( FragmentStartTAG.equals(order_list_detailsFragment.TAG)){ openWhite(); }
 
         MainActivity.this.runOnUiThread(new Runnable() {
             @Override
@@ -398,8 +403,6 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         //TODO 警告拍照
         if ( requestCode == MainActivity.alertPhoto && resultCode == -1 ){
 
-
-
             alertFeagment.alert_imageview.setImageBitmap(
                     BitmapFactory.decodeFile( alertFeagment.inimageImageString = FileUtil.getFile_Path(imageUri) ));
 
@@ -454,14 +457,11 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         }
     }
 
-
     @Override
     protected void onResume() { isForeground = true;super.onResume(); }
 
-
     @Override
     protected void onPause() { isForeground = false;super.onPause(); }
-
 
     @Override
     protected void onDestroy() {

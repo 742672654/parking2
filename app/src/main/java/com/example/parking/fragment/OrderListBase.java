@@ -93,7 +93,7 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
 
    protected void pointOrderReport_orderlist(String sign){
 
-       Map<String,String> param = new HashMap<String,String>(6);
+       Map<String,String> param = new HashMap<String,String>(9);
        param.put("page",String.valueOf(visibleLastIndex/10+1));
        param.put("size","10");
        param.put("token",activity.userBean.getToken());
@@ -148,9 +148,7 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
 
         if (article==null)return;
 
-
         Log.i("点击事件",article.toString());
-
         activity.openOrder_list_details(article);
     }
 

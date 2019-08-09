@@ -131,8 +131,6 @@ public class ParkingIndexFragment extends BaseFragment {
         super.onResponsePOST(url, param, sign, object);
 
 
-        Log.i(TAG,";object9="+object);
-
         Log.i(TAG,"url="+url+";param="+param+";sign="+sign+";object="+object);
 
         switch (sign){

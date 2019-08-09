@@ -39,12 +39,14 @@ import java.util.Map;
 
 public class BaseFragment extends Fragment implements View.OnClickListener, HttpCallBack2 {
 
+
     private static final String TAG = "BaseFragment<Base>";
+
     public MainActivity activity;
+
     private MediaPlayer mMediaPlayer = null;
 
-    protected static String[] string_pre_price = new String[]{"3","5","10"};
-
+    protected static String[] string_pre_price = new String[]{"1元","3元","5元","10元"};
 
     @Override
     public void onStart() {
@@ -185,7 +187,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
         window.setAttributes(lp);
     }
 
-
     //TODO 放大展示照片
     private PopupWindow popupWindow;
     private ImageView popuwindow_ImageView;
@@ -221,6 +222,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
         }
         //设置PopupWindow显示在按钮的下面
         popupWindow.showAtLocation(parent, Gravity.NO_GRAVITY, 0, 150);
+
+        Log.i(TAG,path+"**************");
         popuwindow_ImageView.setImageBitmap( BitmapFactory.decodeFile(path));
     }
 

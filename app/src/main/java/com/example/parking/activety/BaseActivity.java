@@ -46,10 +46,9 @@ public class BaseActivity extends AppCompatActivity implements HttpCallBack2 {
 
     public static Activity activity;
 
+
     //TODO 所在地址
     public void onPosition(String TAG) {
-
-
         ActivityStartTAG = TAG;
     }
 

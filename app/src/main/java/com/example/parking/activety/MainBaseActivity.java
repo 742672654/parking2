@@ -115,7 +115,7 @@ public class MainBaseActivity extends BaseActivity {
         // 返回键监听
         switch (FragmentStartTAG){
 
-
+            case AlertFeagment.TAG: break;
             case ParkingFragment.TAG: if (parkingFragment.isShow()){ return; }   break;
             case ParkingBase.TAG:  if (parkingFragment.isShow()){ return; }   break;
             case Order_detailsFragment.TAG: break;
@@ -147,18 +147,38 @@ public class MainBaseActivity extends BaseActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         myFragment = new MyFragment();
+        myFragment.activity = (MainActivity)activity;
+
         orderFragment = new OrderFragment();
+        orderFragment.activity = (MainActivity)activity;
+
         parkingIndexFragment =  new ParkingIndexFragment();
+        parkingIndexFragment.activity = (MainActivity)activity;
+
         parkingFragment = new ParkingFragment();
+        parkingFragment.activity = (MainActivity)activity;
+
         order_detailsFragment = new Order_detailsFragment();
         order_detailsFragment.activity = (MainActivity)activity;
 
         orderPayBackFragment = new OrderPayBackFragment();
+        orderPayBackFragment.activity = (MainActivity)activity;
+
         orderListFragment = new OrderListFragment();
+        orderListFragment.activity = (MainActivity)activity;
+
         order_list_detailsFragment = new Order_list_detailsFragment();
+        order_list_detailsFragment.activity = (MainActivity)activity;
+
         noticeFragment = new NoticeFragment();
+        noticeFragment.activity = (MainActivity)activity;
+
         alertFeagment = new AlertFeagment();
+        alertFeagment.activity = (MainActivity)activity;
+
         whiteFragment = new WhiteFragment();
+        whiteFragment.activity = (MainActivity)activity;
+
         userBean = User_Shared.getALL(getApplicationContext());
 
         //TODO 如果是登录进来的就打开首页，否则打开消息页
