@@ -174,7 +174,7 @@ public class ParkingFragment extends ParkingBase {
                 buf.append("车位号："+button_choice_parkingspace.getText().toString()+" \r\n\r\n");
                 buf.append("车牌号："+parking_carmun.getText().toString()+" \r\n\r\n");
                 buf.append("驶入时间"+ httpBean.getData().getParkTime()+" \r\n");
-                buf.append("预交金额："+parking_pre_price.getText().toString()+"\r\n\r\n");
+                buf.append("预付金额："+parking_pre_price.getText().toString()+"\r\n\r\n");
 
                 buf.append("每天单次收费5元，晚上12点后重新收费。车辆离开车位后，视为停车订单结算完成。\r\n\r\n");
                 buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");

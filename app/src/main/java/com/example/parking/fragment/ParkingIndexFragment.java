@@ -17,13 +17,8 @@ import com.example.parking.activety.MainActivity;
 import com.example.parking.bean.http.SelectSubPlaceBean;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.listView.PrrkingindexView;
-import com.example.parking.util.JsonUtil;
 import com.example.parking.util.JsonUtil2;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 

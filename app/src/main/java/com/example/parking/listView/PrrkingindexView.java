@@ -2,6 +2,7 @@ package com.example.parking.listView;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,15 @@ import com.example.parking.R;
 import com.example.parking.bean.http.OrderlistBean;
 import com.example.parking.bean.http.SelectSubPlaceBean;
 import com.example.parking.fragment.ParkingIndexFragment;
+import com.example.parking.util.StringUtil;
+
 import java.util.List;
 
 
 public class PrrkingindexView extends BaseAdapter {
+
+    public static final String TAG = "PrrkingindexView";
+
 
     private List<SelectSubPlaceBean.SelectSubPlaceData>  list;  //数据源与配置器建立连接
     private Context context;
@@ -69,10 +75,9 @@ public class PrrkingindexView extends BaseAdapter {
         if ( selectSubPlaceDate.getHavecar() == 2 ){
 
             relativeLayout.setBackgroundResource(R.drawable.listview_index_yes);
-
             id_number_left.setText(selectSubPlaceDate.getCode());
             start_time_left.setText("开始时间:"+selectSubPlaceDate.getParktime().substring(5,16));
-            earnest_money_left.setText("预付金额:"+ (selectSubPlaceDate.getPreprice()==null?selectSubPlaceDate.getPreprice()+"元":"0元"));
+            earnest_money_left.setText("预付金额:"+ ( selectSubPlaceDate.getPreprice()!=null?selectSubPlaceDate.getPreprice()+"元":"0元"));
             car_number_left.setText(selectSubPlaceDate.getCarnum());
             prkingind_p.setVisibility( View.INVISIBLE );
 
@@ -113,9 +118,6 @@ public class PrrkingindexView extends BaseAdapter {
                 }
             });
         }
-
-
-
     }
 
 
@@ -143,7 +145,7 @@ public class PrrkingindexView extends BaseAdapter {
             id_number_right.setText(selectSubPlaceDate.getCode());
             car_number_right.setText(selectSubPlaceDate.getCarnum());
             start_time_right.setText("开始时间:"+selectSubPlaceDate.getParktime().substring(5,16));
-            earnest_money_right.setText("预付金额:"+ (selectSubPlaceDate.getPreprice()==null?selectSubPlaceDate.getPreprice()+"元":"0元"));
+            earnest_money_right.setText("预付金额:"+ (selectSubPlaceDate.getPreprice()!=null?selectSubPlaceDate.getPreprice()+"元":"0元"));
             car_number_right.setText(selectSubPlaceDate.getCarnum());
             prkingind_p2.setVisibility( View.INVISIBLE );
 

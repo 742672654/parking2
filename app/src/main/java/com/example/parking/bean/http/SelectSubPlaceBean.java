@@ -36,7 +36,7 @@ public class SelectSubPlaceBean implements Serializable{
         private String code;// "测试6",  车位名
         private Integer havecar;// 2,   /2是有车，1是没车
         private String parktime;// 1561460260000, 入场时间
-        private Integer preprice;// 8,  //预支付金额
+        private Double preprice;// 8,  //预支付金额
         private String carnum;//"渝M5434N"
 
         private String orderid;// 73  订单id
@@ -52,10 +52,10 @@ public class SelectSubPlaceBean implements Serializable{
         public void setHavecar(Integer havecar) { this.havecar = havecar; }
         public String getParktime() { return parktime; }
         public void setParktime(String parktime) { this.parktime = parktime; }
-        public Integer getPreprice() {
+        public Double getPreprice() {
             return preprice;
         }
-        public void setPreprice(Integer preprice) {
+        public void setPreprice(Double preprice) {
             this.preprice = preprice;
         }
         public String getCarnum() {

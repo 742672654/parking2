@@ -28,10 +28,10 @@ public class OrderDetailsBean {
     public static class OrderDetailsData {
 
 
-        private int wait_price;// 34,
+        private double wait_price;// 34,
         private int id;// 79,
-        private int pre_price;// 6,
-        private int price;// 40,
+        private double pre_price;// 6,
+        private double price;// 40,
 
         private String pointId;// "1d466235-5eb7-4a3d-81e8-ce90be5170be",
         private String startTime;// "2019-06-25 20:36:43",
@@ -40,10 +40,10 @@ public class OrderDetailsBean {
         private String address;// null,
 
 
-        public int getWait_price() {
+        public double getWait_price() {
             return wait_price;
         }
-        public void setWait_price(int wait_price) {
+        public void setWait_price(double wait_price) {
             this.wait_price = wait_price;
         }
         public int getId() {
@@ -52,16 +52,16 @@ public class OrderDetailsBean {
         public void setId(int id) {
             this.id = id;
         }
-        public int getPre_price() {
+        public double getPre_price() {
             return pre_price;
         }
-        public void setPre_price(int pre_price) {
+        public void setPre_price(double pre_price) {
             this.pre_price = pre_price;
         }
-        public int getPrice() {
+        public double getPrice() {
             return price;
         }
-        public void setPrice(int price) {
+        public void setPrice(double price) {
             this.price = price;
         }
         public String getPointId() {

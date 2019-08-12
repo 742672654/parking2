@@ -148,7 +148,7 @@ public class ParkingBase extends BaseFragment implements View.OnTouchListener {
     //TODO 判断软键盘是否展开
     public boolean isShow(){
 
-     return kvp!=null && kvp.mPopupWindow!=null && kvp.mPopupWindow.isShowing();
+        return kvp!=null && kvp.mPopupWindow!=null && kvp.mPopupWindow.isShowing();
     }
 
 

@@ -2,29 +2,20 @@ package com.example.parking.fragment;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.parking.R;
 import com.example.parking.Static_bean;
-import com.example.parking.activety.MainBaseActivity;
 import com.example.parking.bean.OrderDbBean;
 import com.example.parking.bean.PrintBillBean;
 import com.example.parking.bean.http.HttpBean;
@@ -35,7 +26,6 @@ import com.example.parking.bean.http.ParkingSpaceData;
 import com.example.parking.db.Jiguang_DB;
 import com.example.parking.db.Order_DB;
 import com.example.parking.http.HttpManager2;
-import com.example.parking.activety.MainActivity;
 import com.example.parking.util.JsonUtil2;
 import java.util.HashMap;
 import java.util.Map;
@@ -203,7 +193,7 @@ public class Order_detailsFragment extends BaseFragment{
 //                buf.append("车位号："+orderlistData.getSubname()+" \r\n\r\n");
 //                buf.append("车牌号："+orderlistData.getCarNo()+" \r\n\r\n");
 //                buf.append("驶入时间"+ (a5.getText())+" \r\n");
-//                buf.append("预交金额："+a33.getText().toString()+"元\r\n\r\n");
+//                buf.append("预付金额："+a33.getText().toString()+"元\r\n\r\n");
 //
 //                buf.append("每天单次收费5元，晚上12点后重新收费。车辆离开车位后，视为停车订单结算完成。\r\n\r\n");
 //                buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
@@ -385,7 +375,7 @@ public class Order_detailsFragment extends BaseFragment{
         buf.append("车位号："+orderlistData.getSubname()+" \r\n\r\n");
         buf.append("车牌号："+orderlistData.getCarNo()+" \r\n\r\n");
         buf.append("驶入时间"+ (a5.getText())+" \r\n");
-        buf.append("预交金额："+a33.getText().toString()+"元\r\n\r\n");
+        buf.append("预付金额："+a33.getText().toString()+"元\r\n\r\n");
 
         buf.append("每天单次收费5元，晚上12点后重新收费。车辆离开车位后，视为停车订单结算完成。\r\n\r\n");
         buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");

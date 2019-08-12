@@ -118,6 +118,9 @@ public class MainBaseActivity extends BaseActivity {
             case AlertFeagment.TAG: break;
             case ParkingFragment.TAG: if (parkingFragment.isShow()){ return; }   break;
             case ParkingBase.TAG:  if (parkingFragment.isShow()){ return; }   break;
+
+            case Order_list_detailsFragment.TAG: break;
+
             case Order_detailsFragment.TAG: break;
             case OrderPayBackFragment.TAG: break;
             case OrderListBase.TAG: break;

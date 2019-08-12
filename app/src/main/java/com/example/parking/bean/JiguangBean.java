@@ -13,8 +13,8 @@ public class JiguangBean implements Serializable {
     private String devDockName; //车位名
     private String inOut;   // 出场 out 入场 in
     private String msgType; // move 出入信息  alert 告警信 , finish用户扫码缴费
-
     private String photo_path;//警告的照片地址
+    private String subid;//订单ID
 
     private int state = 0; // 0未处理，1已经处理
     private String stateTime; // 处理时间
@@ -39,6 +39,8 @@ public class JiguangBean implements Serializable {
     public void setMsgType(String msgType) { this.msgType = msgType; }
     public String getPhoto_path() { return photo_path; }
     public void setPhoto_path(String photo_path) { this.photo_path = photo_path; }
+    public String getSubid() { return subid; }
+    public void setSubid(String subid) { this.subid = subid; }
     public int getState() { return state; }
     public void setState(int state) { this.state = state; }
     public String getStateTime() { return stateTime; }
@@ -51,11 +53,13 @@ public class JiguangBean implements Serializable {
                 ", pushTime='" + pushTime + '\'' +
                 ", pushTimeLong=" + pushTimeLong +
                 ", msgid='" + msgid + '\'' +
+                ", devId='" + devId + '\'' +
                 ", devDock='" + devDock + '\'' +
                 ", devDockName='" + devDockName + '\'' +
                 ", inOut='" + inOut + '\'' +
                 ", msgType='" + msgType + '\'' +
                 ", photo_path='" + photo_path + '\'' +
+                ", subid='" + subid + '\'' +
                 ", state=" + state +
                 ", stateTime='" + stateTime + '\'' +
                 '}';

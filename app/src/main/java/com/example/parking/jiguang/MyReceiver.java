@@ -57,7 +57,7 @@ public class MyReceiver extends BroadcastReceiver{
 
 			JiguangBean jiguangBean = JsonUtil2.fromJson(bundle.get("cn.jpush.android.ALERT").toString(), com.example.parking.bean.JiguangBean.class);
 			if (jiguangBean==null)return;
-
+			jiguangBean.setDevId(jiguangBean.getSubid());
 			jiguangBean.setnOTIFICATION_ID(StringUtil.getUuid()+ String.valueOf((int)bundle.get("cn.jpush.android.NOTIFICATION_ID")) );
 			jiguangBean.setPushTimeLong(TimeUtil.dateToStamp(jiguangBean.getPushTime()));
 

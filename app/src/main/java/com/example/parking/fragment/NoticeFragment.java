@@ -45,13 +45,13 @@ public class NoticeFragment extends BaseFragment {
 
         listView = rootView.findViewById(R.id.notice_listview);
 
-        initView( );
         return rootView;
     }
 
     // 初始化
     public void initView(){
         Log.i(TAG,"加载消息列表");
+
         List<JiguangBean> list = Jiguang_DB.query_Jiguang_Yesterday(activity.baseSQL_DB);
 
         listView.setAdapter(new PageAdapter(list,this));
@@ -62,6 +62,8 @@ public class NoticeFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         super.onPosition(TAG);
+
+        initView( );
     }
 
 
@@ -103,7 +105,7 @@ public class NoticeFragment extends BaseFragment {
                                 selectSubPlaceData.setId(selectSubPlaceBean.getData().get(0).getId());
                                 selectSubPlaceData.setCode(selectSubPlaceBean.getData().get(0).getCode());
 
-                            if ( StringUtil.is_valid(selectSubPlaceData.getCarnum()) ){
+                            if ( StringUtil.is_valid(selectSubPlaceBean.getData().get(0).getCarnum()) ){
                                 toast_makeText("任务已完成，请勿重复操作");
                                 Jiguang_DB.updata_Jiguang(activity.baseSQL_DB,param.get("nOTIFICATION_ID"),null);
                                 return;
@@ -208,8 +210,6 @@ public class NoticeFragment extends BaseFragment {
                         +"\",\"subId\":\""+itemList.get(position).getDevDock() +"\",\"type\":\"other\"}";
 
                 notice_relative.setTag( tagJson );
-
-
             }
 
             notice_relative.setOnClickListener(new android.view.View.OnClickListener() {
@@ -220,7 +220,7 @@ public class NoticeFragment extends BaseFragment {
 
                     if ("other".equals(param.get("type"))){
 
-                            activity.openAlert(itemList.get(Integer.valueOf(param.get("position"))));
+                        activity.openAlert(itemList.get(Integer.valueOf(param.get("position"))));
                     }else if("finish".equals(param.get("type"))){
 
                         Map<String,String> param2 = new HashMap<String,String>(6);
