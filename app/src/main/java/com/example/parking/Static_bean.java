@@ -91,11 +91,6 @@ public class Static_bean {
      */
     public final static String allCharge(){ return url+"/point/order/allCharge";}
 
-    /**
-     * TODO 统计收费
-     * @param token
-     */
-    public final static String getMinePage = "http://192.168.0.106:18442/point/order/getMinePage";
 
 
     /**
@@ -111,11 +106,6 @@ public class Static_bean {
      */
     public final static String firstPageRecord(){ return url+"/point/order/firstPageRecord";}
 
-    /**
-     * TODO 刷新tken
-     * @param token
-     */
-    public final static String tokenF5 = "http://192.168.0.106:18442/park/usersube/token";
 
     /**
      * TODO 检测token是否有效
@@ -135,7 +125,7 @@ public class Static_bean {
      * @param orderid 订单id
      * @param pointid 停车场id
      */
-    public final static String QRcode_redict(){return  "http://wx.yilufa.net/pointpay/pointzgr/redict";}
+    public final static String QRcode_redict(){return  "http://wx.yilufa.net/localpay/localprepayredir";}
 
     /**
      * TODO 查看详情二维码

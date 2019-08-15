@@ -6,14 +6,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 授予该程序使用摄像头的权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
-
 
     <!-- Required -->
     <permission
@@ -69,7 +65,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.parking.provider"
+            android:authorities="com.example.parking.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

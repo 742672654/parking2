@@ -55,7 +55,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         initView();
 
         //创建文件夹
-        String strPath = FileUtil.getSDCardPath() + "/parking/" ;
+        String strPath = FileUtil.getSDCardPath() + "/parkings/" ;
         File file = new File(strPath);
         if(!file.exists()){
             file.mkdirs();

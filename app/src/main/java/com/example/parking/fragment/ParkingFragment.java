@@ -150,7 +150,7 @@ public class ParkingFragment extends ParkingBase {
                     parking_carmun.setText(photoToOssBean.getCarmun());
                 } catch (Exception e) {
                     Log.w(TAG, e);
-                    toast_makeText("车牌识别错误，请手动输入车牌");
+                    toast_makeText("车牌识别错误，请手动输入车牌..");
                 }
             }
         });
@@ -182,8 +182,8 @@ public class ParkingFragment extends ParkingBase {
 
 
                 StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict());
-                qRcode.append("?orderid=").append(httpBean.getData().getId());
-                qRcode.append("&pointid=").append(activity.userBean.getParkid());
+                qRcode.append("/").append(httpBean.getData().getId());
+                qRcode.append("/").append(activity.userBean.getParkid());
 
 
                 PrintBillBean PrintBillBean = new PrintBillBean(1,buf.toString(),qRcode.toString());

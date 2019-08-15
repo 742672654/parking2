@@ -3,7 +3,9 @@ package com.example.parking.util;
 
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -57,6 +59,11 @@ public class FileUtil {
 
 		InputStream in = null;
 		try {
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+				StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+				StrictMode.setVmPolicy(builder.build());
+			}
 
 			in = new FileInputStream( uri instanceof String ? (String)uri: uri instanceof Uri? getFile_Path((Uri)uri):null );
 			ByteArrayOutputStream out = new ByteArrayOutputStream();

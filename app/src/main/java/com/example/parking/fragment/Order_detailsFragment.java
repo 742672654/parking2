@@ -382,8 +382,8 @@ public class Order_detailsFragment extends BaseFragment{
         buf.append("监督电话：0595-28282818");
 
         StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict());
-        qRcode.append("?orderid=").append(orderlistData.getId());
-        qRcode.append("&pointid=");
+        qRcode.append("/").append(orderlistData.getId());
+        qRcode.append("/");
         qRcode.append(activity.userBean.getParkid());
 
         printer_marking( new PrintBillBean(1,buf.toString(),qRcode.toString()) );

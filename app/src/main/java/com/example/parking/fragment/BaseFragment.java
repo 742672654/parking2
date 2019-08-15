@@ -163,12 +163,18 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
     //TODO 打印机
     protected void printer_marking(PrintBillBean PrintBillBean){
 
-        if ( PrintBillBean==null ) return;
+        try {
 
-        Intent intentService = new Intent(getActivity(), PrintBillService.class);
-        intentService.putExtra("SPRT", PrintBillBean);
-        intentService.putExtra("type", PrintBillBean.getType());
-        getActivity().startService(intentService);
+
+            if (PrintBillBean == null) return;
+
+            Intent intentService = new Intent(getActivity(), PrintBillService.class);
+            intentService.putExtra("SPRT", PrintBillBean);
+            intentService.putExtra("type", PrintBillBean.getType());
+            getActivity().startService(intentService);
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
     }
 
     //TODO 让屏幕变暗

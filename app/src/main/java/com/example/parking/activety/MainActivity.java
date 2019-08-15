@@ -28,9 +28,11 @@ import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -58,6 +60,8 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
     public static final int JiguangPush = 1000001;//极光推送
 
     private Uri imageUri; //照片的中的URi
+
+
     public BaseSQL_DB baseSQL_DB = null;
 
     public static boolean isForeground = false;
@@ -87,6 +91,13 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
             }
         }).start();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();    StrictMode.setVmPolicy(builder.build());}
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();    StrictMode.setVmPolicy(builder.build());}
     }
 
     @SuppressLint("HandlerLeak")
@@ -349,19 +360,19 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.i(TAG,resultCode == -1 ?FileUtil.getFile_Suffix(imageUri)+"----"+ FileUtil.getFile_Byte(imageUri).length
-                +"系统相机拍照完成，requestCode="+requestCode+"; resultCode="+resultCode+"; File_Path="+FileUtil.getFile_Path(imageUri):"拍照取消");
+        Log.i(TAG,resultCode == -1 ?FileUtil.getFile_Suffix(imageUriString)+"----"+ FileUtil.getFile_Byte(imageUriString).length
+                +"系统相机拍照完成，requestCode="+requestCode+"; resultCode="+resultCode+"; File_Path="+imageUriString:"拍照取消");
 
         //TODO 上传全景
         if ( requestCode == MainActivity.parkingPhoto && resultCode == -1 ){
             Map<String,String> params = new HashMap<String,String>(5) ;
             params.put("token", userBean.getToken());
             params.put("type", "2");
-            params.put("panoramaPath",FileUtil.getFile_Path(imageUri));
+            params.put("panoramaPath",imageUriString);
             HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
-                     FileUtil.getFile_Suffix(imageUri),
-                     FileUtil.getFile_Byte(imageUri),
+                     FileUtil.getFile_Suffix(imageUriString),
+                     FileUtil.getFile_Byte(imageUriString),
                     this,
                     "photoToOssNO");
             Log.i(TAG,"上传停车页面拍摄的全景照片");
@@ -374,11 +385,11 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
             Map<String,String> params = new HashMap<String,String>(5) ;
             params.put("token", userBean.getToken());
             params.put("type", "1");
-            params.put("inimagePath",FileUtil.getFile_Path(imageUri));
+            params.put("inimagePath",imageUriString);
             HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
-                     FileUtil.getFile_Suffix(imageUri),
-                     FileUtil.getFile_Byte(imageUri),
+                     FileUtil.getFile_Suffix(imageUriString),
+                     FileUtil.getFile_Byte(imageUriString),
                     this,
                     "photoToOss");
             toast_makeText("照片正在上传...请稍等");
@@ -392,8 +403,8 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
             params.put("type", "1");
             HttpManager2.onResponseFile(Static_bean.photoToOss(), params,
                     "file",
-                    FileUtil.getFile_Suffix(imageUri),
-                    FileUtil.getFile_Byte(imageUri),
+                    FileUtil.getFile_Suffix(imageUriString),
+                    FileUtil.getFile_Byte(imageUriString),
                     this,
                     "orderPhoto");
             toast_makeText("照片正在上传...请稍等");
@@ -404,7 +415,7 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
         if ( requestCode == MainActivity.alertPhoto && resultCode == -1 ){
 
             alertFeagment.alert_imageview.setImageBitmap(
-                    BitmapFactory.decodeFile( alertFeagment.inimageImageString = FileUtil.getFile_Path(imageUri) ));
+                    BitmapFactory.decodeFile( alertFeagment.inimageImageString = imageUriString ));
 
             Jiguang_DB.updata_Jinggao(baseSQL_DB,alertFeagment.jiguangBean.getnOTIFICATION_ID(),alertFeagment.inimageImageString);
 
@@ -416,8 +427,8 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
 
             HttpManager2.onResponseFile(Static_bean.photoToAlert(), params,
                     "file",
-                    FileUtil.getFile_Suffix(imageUri),
-                    FileUtil.getFile_Byte(imageUri),
+                    FileUtil.getFile_Suffix(imageUriString),
+                    FileUtil.getFile_Byte(imageUriString),
                     this,
                     "photoToAlert");
             toast_makeText("照片正在上传...请稍等");

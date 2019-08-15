@@ -29,24 +29,29 @@ public class PrintBillService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        int type = intent.getIntExtra("type", 0);
+        try {
 
-        PrintBillBean printBillBean = (PrintBillBean) intent.getSerializableExtra("SPRT");
+            int type = intent.getIntExtra("type", 0);
 
-        Log.i(TAG,printBillBean.toString());
+            PrintBillBean printBillBean = (PrintBillBean) intent.getSerializableExtra("SPRT");
 
-        if (type == 1) {
+            Log.i(TAG, printBillBean.toString());
 
-            gaozi(printBillBean);
-        } else if (type == 2) {
+            if (type == 1) {
 
-            soufei(printBillBean);
-        } else if (type == 3) {
+                gaozi(printBillBean);
+            } else if (type == 2) {
 
-            taodan(printBillBean);
-        } else if (type == 4) {
+                soufei(printBillBean);
+            } else if (type == 3) {
 
-            bujiao(printBillBean);
+                taodan(printBillBean);
+            } else if (type == 4) {
+
+                bujiao(printBillBean);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
         }
     }
 

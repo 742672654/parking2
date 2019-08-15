@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -39,6 +40,7 @@ import java.util.Map;
 
 public class BaseActivity extends AppCompatActivity implements HttpCallBack2 {
 
+    public String imageUriString; //照片的中的URi
 
     public static String ActivityStartTAG = "";
 
@@ -86,31 +88,52 @@ public class BaseActivity extends AppCompatActivity implements HttpCallBack2 {
 
     //TODO 动态获取Url
     protected Uri getOutputMediaFileUri() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();    StrictMode.setVmPolicy(builder.build());}
+//        File mediaFile = null;
+//        try {
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+//                StrictMode.setVmPolicy(builder.build());
+//            }
+//
+           File mediaStorageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+//
+//            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) { return null; }
 
-        File mediaFile = null;
-        try {
+//            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "parkings/" + StringUtil.getUuid() + ".jpg");
+//            mediaFile.getAbsolutePath();
 
-            File mediaStorageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+//            //TODO sdk >= 24  android7.0以上，报FileUriExposedException
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                Uri contentUri = FileProvider.getUriForFile(this,
+//                        this.getApplicationContext().getPackageName() + ".provider",//与清单文件中android:authorities的值保持一致
+//                        mediaFile);//FileProvider方式或者ContentProvider。也可使用VmPolicy方式
+//                return contentUri;
+//            } else {
+//                return Uri.fromFile(mediaFile);//或者 Uri.isPaise("file://"+file.toString()
+//            }
 
-            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) { return null; }
 
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "parking/" + StringUtil.getUuid() + ".jpg");
-            mediaFile.getAbsolutePath();
+String filePath = mediaStorageDir.getPath() + File.separator + "parkings/" + StringUtil.getUuid() + ".jpg";
 
-            //TODO sdk >= 24  android7.0以上，报FileUriExposedException
+        imageUriString = filePath;
+
+
+Log.i(TAG,"--------------"+filePath);
+            Uri uri = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Uri contentUri = FileProvider.getUriForFile(this,
-                        this.getApplicationContext().getPackageName() + ".provider",//与清单文件中android:authorities的值保持一致
-                        mediaFile);//FileProvider方式或者ContentProvider。也可使用VmPolicy方式
-                return contentUri;
+                uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName()+".fileprovider", new File(filePath));
             } else {
-                return Uri.fromFile(mediaFile);//或者 Uri.isPaise("file://"+file.toString()
+                uri = Uri.fromFile(new File(filePath));
             }
-
-        } catch (Exception e) {
-            Log.w(TAG, e);
-            return null;
-        }
+            return uri;
+//
+//
+//        } catch (Exception e) {
+//            Log.w(TAG, e);
+//            return null;
+//        }
     }
 
     //TODO 1是进，2是出，3是警告
