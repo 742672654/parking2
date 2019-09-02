@@ -189,10 +189,11 @@ public class ParkingBase extends BaseFragment implements View.OnTouchListener {
                 public void onClick(DialogInterface dialog, int which) {
 
                     switch (which){
-                        case 0: parking_pre_price.setText("1元");break;
-                        case 1: parking_pre_price.setText("3元");break;
-                        case 2: parking_pre_price.setText("5元");break;
-                        case 3: parking_pre_price.setText("10元");break;
+                        case 0: parking_pre_price.setText("0元");break;
+                        case 1: parking_pre_price.setText("1元");break;
+                        case 2: parking_pre_price.setText("3元");break;
+                        case 3: parking_pre_price.setText("5元");break;
+                        case 4: parking_pre_price.setText("10元");break;
 
                         default:break;
                     }

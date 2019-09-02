@@ -20,7 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:text="车牌 : 闽CA5010S"
+            android:text="车牌 :"
             android:textColor="#ffffff"
             android:textSize="18sp" />
 
@@ -42,7 +42,7 @@
         android:layout_below="@id/a1"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="入场时间:09-23 17:57"
+        android:text="入场时间"
         android:textColor="#566866"
         android:textSize="18sp" />
 
@@ -54,8 +54,32 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp"
-        android:text="出场时间:09-23 17:57"
+        android:text="出场时间"
         android:textColor="#566866"
         android:textSize="18sp" />
 
+    <TextView
+        android:id="@+id/order_all_textview_tips_up"
+        android:layout_below="@+id/a1"
+        android:layout_width="wrap_content"
+        android:layout_height="22sp"
+        android:layout_marginLeft="260dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/idle_green"
+        android:text=" 已出场 "
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/order_all_textview_tips_down"
+        android:layout_below="@+id/order_all_textview_tips_up"
+        android:layout_marginLeft="260dp"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="22sp"
+        android:background="@color/idle_green"
+        android:text=" 已缴费 "
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+    <!-- 已补费orange  逃费colorAccent  已缴费idle_green  已出场idle_green-->
 </RelativeLayout>

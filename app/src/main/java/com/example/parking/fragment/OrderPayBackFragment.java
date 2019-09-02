@@ -3,6 +3,7 @@ package com.example.parking.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Instrumentation;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.parking.R;
@@ -34,6 +36,7 @@ import com.example.parking.util.StringUtil;
 import com.example.parking.util.TimeUtil;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +53,7 @@ public class OrderPayBackFragment extends BaseFragment {
 
     private TextView escapeprice_text,carnum_text,point_text,parkDateStr_text;
     private Button bujiao_button,dayin_qianfei,dayin_jiaofei;
-
+    private RelativeLayout parkDateStr_Relative_bujiao;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.order_payback, container, false);
@@ -66,6 +69,7 @@ public class OrderPayBackFragment extends BaseFragment {
         dayin_qianfei = rootView.findViewById(R.id.dayin_qianfei);
         dayin_qianfei.setOnClickListener(this);
 
+        parkDateStr_Relative_bujiao = rootView.findViewById(R.id.parkDateStr_Relative_bujiao);
 
         return rootView;
     }
@@ -79,6 +83,11 @@ public class OrderPayBackFragment extends BaseFragment {
 
         try{
             orderAddDate = (OrderAddBean.OrderAddDate) getArguments().getSerializable("orderAddDate");
+
+            //如果没有补缴，就隐藏提示
+            if (orderAddDate.sfjiaofei==null || !orderAddDate.sfjiaofei){
+                parkDateStr_Relative_bujiao.setVisibility( View.INVISIBLE );
+            }
 
             escapeprice_text.setText(orderAddDate.getEscapeprice());
             carnum_text.setText(orderAddDate.getCarnum());
@@ -105,14 +114,15 @@ public class OrderPayBackFragment extends BaseFragment {
             case R.id.dayin_qianfei:
 
                 StringBuffer buf = new StringBuffer("\r\n\r\n---------------------------\r\n");
-                buf.append("补交金额："+orderAddDate.getEscapeprice()+".0元\r\n\r\n");
+                buf.append("您上次停车忘记缴费了哦，麻烦请您补缴上次停车费。\r\n\r\n");
+                buf.append("补交金额："+orderAddDate.getEscapeprice()+"元\r\n\r\n");
                 buf.append("车牌号："+orderAddDate.getCarnum()+" \r\n\r\n");
                 buf.append("停车场："+activity.userBean.getParkname()+"   \r\n\r\n");
                 buf.append("欠费时间"+ orderAddDate.getParkDateStr()+" \r\n");
-
-                buf.append("您上次停车忘记缴费了哦，麻烦请您补缴上次停车费。\r\n\r\n");
-                buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
-                buf.append("监督电话：0595-28282818");
+                buf.append(Static_bean.ChargingTime);
+                buf.append(Static_bean.ChargingStandard);
+                buf.append(Static_bean.ChargingUnit);
+                buf.append(Static_bean.ComplaintTelephone);
 
 
                 StringBuffer qRcode = new StringBuffer("http://wx.yilufa.net/pointpay/pointzgr/redict?orderid=");
@@ -137,8 +147,19 @@ public class OrderPayBackFragment extends BaseFragment {
 
                 if (httpBean.getCode()==200){
 
-                    //返回上个页面
-                   activity.onKeyDown(KeyEvent.KEYCODE_BACK, null);
+//                    Instrumentation inst = new Instrumentation();
+//                    inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+
+                    try {
+                        Runtime runtime = Runtime.getRuntime();
+                        runtime.exec("input keyevent " + KeyEvent.KEYCODE_BACK);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+//                    //返回上个页面
+//                   activity.onKeyDown(KeyEvent.KEYCODE_BACK,  null);
+
                 }else {
                     toast_makeText(httpBean.getMessage());
                 }

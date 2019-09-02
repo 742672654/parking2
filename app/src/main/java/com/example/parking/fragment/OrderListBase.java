@@ -16,9 +16,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.parking.R;
 import com.example.parking.Static_bean;
+import com.example.parking.bean.http.EscapeListToMinePageBean;
+import com.example.parking.bean.http.OrderAddBean;
 import com.example.parking.bean.http.Report_orderlistBean;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.util.JsonUtil2;
+import com.example.parking.util.StringUtil;
 import com.example.parking.util.TimeUtil;
 import com.example.parking.view.KeyboardViewPager;
 import java.util.HashMap;
@@ -35,6 +38,8 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
 
 
     public static final String TAG = "OrderListBase<全部订单>";
+
+    public static String record = "";//页面暂时内容、、taodannum/taodantotal逃单，为空是7天全部订单
 
     protected PageAdapter adapter;
     protected ListView mListView;
@@ -56,10 +61,24 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
             mListView =  rootView.findViewById(R.id.menulist);
             mListView.addFooterView(mLoadMoreView);
 
+
         String dataOld = TimeUtil.getDate(TimeUtil.dateAddDay(-7));
+
+
+        switch ( record = getArguments().getString("record")==null ? "" : getArguments().getString("record") ){
+
+            case "ordernum1": dataOld = TimeUtil.getDate(TimeUtil.dateAddDay(0));break;
+            case "ordertotal1": dataOld = TimeUtil.getDate(TimeUtil.dateAddDay(0));break;
+            case "taodannum": dataOld = TimeUtil.getDate(TimeUtil.dateAddDay(0));break;
+            case "taodantotal": dataOld = TimeUtil.getDate(TimeUtil.dateAddDay(0));break;
+            case "ordernum30": dataOld = TimeUtil.getDate(TimeUtil.dateAddDay(-30));break;
+            case "ordertotal30": dataOld = TimeUtil.getDate(TimeUtil.dateAddDay(-30));break;
+            default:break;
+        }
+
+
             order_all_textview_rucangtime_kaisi = rootView.findViewById(R.id.order_all_textview_rucangtime_kaisi);
             order_all_textview_rucangtime_kaisi.setOnClickListener(this);
-
             order_all_textview_rucangtime_kaisi_lian = rootView.findViewById(R.id.order_all_textview_rucangtime_kaisi_lian);
             order_all_textview_rucangtime_kaisi_lian.setText(dataOld.substring(0,4));
             order_all_textview_rucangtime_kaisi_yue = rootView.findViewById(R.id.order_all_textview_rucangtime_kaisi_yue);
@@ -71,7 +90,7 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
             order_all_textview_rucangtime_jiesu = rootView.findViewById(R.id.order_all_textview_rucangtime_jiesu);
             order_all_textview_rucangtime_jiesu.setOnClickListener(this);
             order_all_textview_rucangtime_jiesu_lian = rootView.findViewById(R.id.order_all_textview_rucangtime_jiesu_lian);
-            order_all_textview_rucangtime_jiesu_lian.setText(dataOld.substring(0,4));
+            order_all_textview_rucangtime_jiesu_lian.setText(dataNow.substring(0,4));
             order_all_textview_rucangtime_jiesu_yue = rootView.findViewById(R.id.order_all_textview_rucangtime_jiesu_yue);
             order_all_textview_rucangtime_jiesu_yue.setText(dataNow.substring(5,7));
             order_all_textview_rucangtime_jiesu_ri = rootView.findViewById(R.id.order_all_textview_rucangtime_jiesu_ri);
@@ -93,7 +112,7 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
 
    protected void pointOrderReport_orderlist(String sign){
 
-       Map<String,String> param = new HashMap<String,String>(9);
+       Map<String,String> param = new HashMap<String,String>(12);
        param.put("page",String.valueOf(visibleLastIndex/10+1));
        param.put("size","10");
        param.put("token",activity.userBean.getToken());
@@ -102,10 +121,18 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
        param.put("enddate",order_all_textview_rucangtime_jiesu_lian.getText()+"-"
                +order_all_textview_rucangtime_jiesu_yue.getText()+"-"+order_all_textview_rucangtime_jiesu_ri.getText());
 
+       param.put("pStartTime",order_all_textview_rucangtime_kaisi_lian.getText()+"-"
+               +order_all_textview_rucangtime_kaisi_yue.getText()+"-"+order_all_textview_rucangtime_kaisi_ri.getText());
+       param.put("pEndTime",order_all_textview_rucangtime_jiesu_lian.getText()+"-"
+               +order_all_textview_rucangtime_jiesu_yue.getText()+"-"+order_all_textview_rucangtime_jiesu_ri.getText());
+
       if ( !order_all_textview_cph.getText().toString().contains("车牌号") && !order_all_textview_cph.getText().toString().equals("")){
           param.put("carnum",order_all_textview_cph.getText().toString());
       }
-       HttpManager2.requestPost(Static_bean.pointOrderReport_orderlist(),  param, this, sign);
+        //如果是taodantotal或taodannum就是逃单的
+       HttpManager2.requestPost("taodannum".equals(record) || "taodantotal".equals(record) ?
+               Static_bean.escapeListToMinePage():  Static_bean.pointOrderReport_orderlist(),
+               param, this, sign);
    }
 
    //TODO 接收数据返回
@@ -120,6 +147,25 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
         }
 
         toast_makeText(report_orderlistBean.getMessage());
+        return null;
+    }
+
+    protected List<EscapeListToMinePageBean.EscapeListToMinePageBeanList> getArticleList2(String object ) {
+
+        EscapeListToMinePageBean escapeListToMinePageBean = JsonUtil2.fromJson(object, EscapeListToMinePageBean.class);
+
+        Log.i(TAG,"解析http返回的json数据="+escapeListToMinePageBean.toString());
+
+        if (escapeListToMinePageBean==null || escapeListToMinePageBean.getData() == null ){
+            return null;
+        }
+
+        if (escapeListToMinePageBean.getCode()==200 && escapeListToMinePageBean.getData()!=null ){
+
+            return escapeListToMinePageBean.getData().getList();
+        }
+
+        toast_makeText(escapeListToMinePageBean.getData().getList().toString());
         return null;
     }
 
@@ -144,12 +190,42 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
         ListView listView = (ListView) parent;
-        Report_orderlistBean.Report_orderlistList article = (Report_orderlistBean.Report_orderlistList) listView.getItemAtPosition(position);
 
+
+        Object article =  listView.getItemAtPosition(position);
         if (article==null)return;
 
         Log.i("点击事件",article.toString());
-        activity.openOrder_list_details(article);
+
+
+        if ("taodannum".equals(record) || "taodantotal".equals(record)){
+
+
+            EscapeListToMinePageBean.EscapeListToMinePageBeanList escapeList = (EscapeListToMinePageBean.EscapeListToMinePageBeanList)article;
+            OrderAddBean.OrderAddDate orderAddDate = new OrderAddBean.OrderAddDate();
+            orderAddDate.setEscapeprice(String.valueOf(escapeList.EscapePrice));
+            orderAddDate.setCarnum(escapeList.CarNum);
+            orderAddDate.setParkDateStr(!StringUtil.is_valid(escapeList.CreateTime)?"":escapeList.CreateTime.substring(0,10)+" "+escapeList.CreateTime.substring(11,19));
+
+            if (escapeList.isdeleted==2){
+                orderAddDate.sfjiaofei = true;
+            }else{
+                orderAddDate.sfjiaofei = false;
+            }
+
+            activity.openOrderPayBack(orderAddDate);
+        }else{
+
+            activity.openOrder_list_details((Report_orderlistBean.Report_orderlistList)article);
+        }
+
+
+
+
+
+
+
+
     }
 
     @Override
@@ -160,40 +236,50 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
         switch (sign) {
 
             case "onStart":
-                List<Report_orderlistBean.Report_orderlistList> itemList = getArticleList(object);
-                if ( itemList==null ){return;}
-                adapter = new PageAdapter(itemList);
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mListView.setAdapter(adapter);
-                    }});
-                break;
 
-            case "onAdd":
-                List<Report_orderlistBean.Report_orderlistList> articleList = getArticleList(object);
-                if ( articleList==null ){return;}
+                if ("taodannum".equals(record) || "taodantotal".equals(record)){
 
-                for (Report_orderlistBean.Report_orderlistList article : articleList) {
-                    adapter.itemList.add(article);
+                    List<EscapeListToMinePageBean.EscapeListToMinePageBeanList> itemList = getArticleList2(object);
+                    if ( itemList==null ){return;}
+                    adapter = new PageAdapter(null, itemList);
+                }else{
+
+                    List<Report_orderlistBean.Report_orderlistList> itemList = getArticleList(object);
+                    if ( itemList==null ){return;}
+                    adapter = new PageAdapter(itemList, null);
                 }
                 activity.runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        //更新UI
-                        adapter.notifyDataSetChanged();
-                    }});
+                    public void run() { mListView.setAdapter(adapter); }});
+                break;
+
+            case "onAdd":
+
+                if ("taodannum".equals(record) || "taodantotal".equals(record)){
+
+                    List<EscapeListToMinePageBean.EscapeListToMinePageBeanList> itemList = getArticleList2(object);
+                    if ( itemList==null ){return;}
+
+                    for (EscapeListToMinePageBean.EscapeListToMinePageBeanList article: itemList) {
+                        adapter.itemList2.add(article);
+                    }
+                }else{
+
+                    List<Report_orderlistBean.Report_orderlistList> itemList = getArticleList(object);
+                    if ( itemList==null ){return;}
+                    for (Report_orderlistBean.Report_orderlistList article : itemList) {
+                        adapter.itemList.add(article);
+                    }
+                }
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() { adapter.notifyDataSetChanged(); }});
                 break;
 
             default:
                 break;
-
         }
-
-
-
     }
-
 
     class MyRunnable implements Runnable{
         @Override
@@ -209,32 +295,89 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
 
     class PageAdapter extends BaseAdapter {
 
-        List<Report_orderlistBean.Report_orderlistList> itemList;
+        List<Report_orderlistBean.Report_orderlistList> itemList; //普通订单
 
-        public PageAdapter(List<Report_orderlistBean.Report_orderlistList> itemList){ this.itemList = itemList; }
+        List<EscapeListToMinePageBean.EscapeListToMinePageBeanList> itemList2; //逃费订单
+
+        public PageAdapter(List<Report_orderlistBean.Report_orderlistList> itemList,List<EscapeListToMinePageBean.EscapeListToMinePageBeanList> itemList2) {
+            this.itemList = itemList;
+            this.itemList2 = itemList2;
+        }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            if(convertView == null){
-                convertView = LayoutInflater.from(activity).inflate(R.layout.listview_order_all_item, null);
+            if(convertView == null){ convertView = LayoutInflater.from(activity).inflate(R.layout.listview_order_all_item, null); }
+
+            if ("taodannum".equals(record) || "taodantotal".equals(record)){
+
+                ((TextView) convertView.findViewById(R.id.all_cph)).setText("车牌 : "+itemList2.get(position).CarNum);
+                ((TextView) convertView.findViewById(R.id.all_jine)).setText("金额 : "+itemList2.get(position).EscapePrice+"元");
+                ((TextView) convertView.findViewById(R.id.all_in)).setText("入场时间 : "+itemList2.get(position).ParkDate.substring(5,16));
+                ((TextView) convertView.findViewById(R.id.all_out)).setText("逃单时间 : "+itemList2.get(position).CreateTime.substring(5,16));
+
+                // <!-- 已补费orange  逃费colorAccent  已缴费idle_green  已出场idle_green-->
+                TextView tips_down = ((TextView) convertView.findViewById(R.id.order_all_textview_tips_down));
+                tips_down.setText(" 逃    单 ");
+
+
+                tips_down.setBackgroundResource(R.color.colorAccent);
+                tips_down.setPadding(tips_down.getPaddingLeft(),
+                        tips_down.getPaddingTop(),
+                        tips_down.getPaddingRight(),
+                        tips_down.getPaddingBottom());
+
+
+
+
+
+                if (itemList2.get(position).isdeleted==2){
+                    TextView tips_up = ((TextView) convertView.findViewById(R.id.order_all_textview_tips_up));
+                    tips_up.setText(" 已补缴 ");
+                    tips_up.setBackgroundResource(R.color.orange);
+                    tips_up.setPadding(tips_up.getPaddingLeft(),
+                            tips_up.getPaddingTop(),
+                            tips_up.getPaddingRight(),
+                            tips_up.getPaddingBottom());
+                }else{
+                    TextView tips_up = ((TextView) convertView.findViewById(R.id.order_all_textview_tips_up));
+                    tips_up.setVisibility( View.INVISIBLE );
+                }
+
+
+
+                return convertView;
             }
 
             ((TextView) convertView.findViewById(R.id.all_cph)).setText("车牌 : "+itemList.get(position).CarNum);
             ((TextView) convertView.findViewById(R.id.all_jine)).setText("金额 : "+itemList.get(position).OrderPrice+"元");
             ((TextView) convertView.findViewById(R.id.all_in)).setText("入场时间 : "+itemList.get(position).ParkDate.substring(5,16));
             ((TextView) convertView.findViewById(R.id.all_out)).setText("出场时间 : "+itemList.get(position).LeaveDate.substring(5,16));
+
+            TextView tips_up = ((TextView) convertView.findViewById(R.id.order_all_textview_tips_up));
+                     tips_up.setText(" 已缴费 ");
+            TextView tips_down = ((TextView) convertView.findViewById(R.id.order_all_textview_tips_down));
+                     tips_down.setText(" 已出场 ");
+
             return convertView;
         }
 
         @Override
-        public long getItemId(int position) { return position; }
+        public long getItemId(int position) {
+            return position;
+        }
 
         @Override
-        public Object getItem(int position) { return itemList.get(position); }
+        public Object getItem(int position) {
+            return "taodannum".equals(record) || "taodantotal".equals(record)
+                    ? itemList2.get(position):itemList.get(position);
+        }
 
         @Override
-        public int getCount() { return itemList.size(); }
+        public int getCount() {
+            return "taodannum".equals(record) || "taodantotal".equals(record)
+                    ? itemList2.size():itemList.size();
+        }
 
     }
 

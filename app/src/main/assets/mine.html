@@ -10,14 +10,12 @@
 
       function implement( parkname, address, mobile, pointid, url ){
 
-
         //停车场电话
 	    $("#bindPhone").html( "电话："+isnull(mobile) );
         //停车场名
 	    $("#parkname").html( isnull(parkname) );
 	    //地址
 	    $("#address").html( '地址：'+isnull(address) );
-
 
     $.ajax({
 			 type: 'POST',
@@ -29,14 +27,14 @@
 				  if (result.code==200) {
                     var data = result.data;
 
-                    //七天内收费总次数
-	                 $("#ordernum7").html( data.weekOrderTotal +"次" );
-	                //七天内收费总金额
-	                 $("#ordertotal7").html( data.weekPriceTotal +"元");
+                    //今日逃单总次数
+	                 $("#taodannum").html( data.todayEscapeTotal +"次" );
+	                //今日逃单总金额
+	                 $("#taodantotal").html( data.todayEscapePriceTotal +"元");
 
-	                //1天内收费总次数
+	                //今日收费总次数
 	                 $("#ordernum1").html( data.todayOrderTotal +"次" );
-	                //1天内收费总金额
+	                //今日收费总金额
 	                 $("#ordertotal1").html( data.todayPriceTotal +"元");
 
 	                //30天内收费总次数
@@ -52,6 +50,8 @@
 
 
       };
+
+
 
 function GetQueryString(name)
 {
@@ -251,13 +251,13 @@ img{
   <div class="base_item" id="bindPhone">电话：</div>
 </div>
 <div class="grids_list flex">
-  <div class="grids_item" onclick='gotoRecord'>
+  <div class="grids_item" onclick='justTest.gotoRecord("ordernum1")'>
     <div class="grids_title">今日收费次数</div>
     <div class="grids_txt" id="ordernum1">
       <span>次</span>
     </div>
   </div>
-  <div class="grids_item" onclick='gotoRecord'>
+  <div class="grids_item" onclick='justTest.gotoRecord("ordertotal1")'>
     <div class="grids_title">今日收费金额</div>
     <div class="grids_txt" id="ordertotal1">
       <span>元</span>
@@ -266,28 +266,28 @@ img{
 </div>
 
 <div class="grids_list flex">
-  <div class="grids_item" onclick='gotoRecord'>
-    <div class="grids_title">7天收费次数</div>
-    <div class="grids_txt" id="ordernum7">
+  <div class="grids_item" onclick='justTest.gotoRecord("taodannum")'>
+    <div class="grids_title">今日逃单次数</div>
+    <div class="grids_txt" id="taodannum">
       <span>次</span>
     </div>
   </div>
-  <div class="grids_item" onclick='gotoRecord'>
-    <div class="grids_title">7天收费金额</div>
-    <div class="grids_txt" id="ordertotal7">
+  <div class="grids_item" onclick='justTest.gotoRecord("taodantotal")'>
+    <div class="grids_title">今日逃单金额</div>
+    <div class="grids_txt" id="taodantotal">
       <span>元</span>
     </div>
   </div>
 </div>
 
 <div class="grids_list flex">
-  <div class="grids_item" onclick='gotoRecord'>
+  <div class="grids_item" onclick='justTest.gotoRecord("ordernum30")'>
     <div class="grids_title">30天收费次数</div>
     <div class="grids_txt" id="ordernum30">
       <span>次</span>
     </div>
   </div>
-  <div class="grids_item" onclick='gotoRecord'>
+  <div class="grids_item" onclick='justTest.gotoRecord("ordertotal30")'>
     <div class="grids_title">30天收费金额</div>
     <div class="grids_txt" id="ordertotal30">
       <span>元</span>

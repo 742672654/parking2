@@ -76,12 +76,13 @@ public class MainBaseActivity extends BaseActivity {
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                     return true;
-                case R.id.navigation_2:
 
-                    fragmentTransaction.replace(R.id.activity_fragment, orderFragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    return true;
+//                case R.id.navigation_2:
+//
+//                    fragmentTransaction.replace(R.id.activity_fragment, orderFragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
+//                    return true;
                 case R.id.navigation_3:
 
                     fragmentTransaction.replace(R.id.activity_fragment,myFragment);

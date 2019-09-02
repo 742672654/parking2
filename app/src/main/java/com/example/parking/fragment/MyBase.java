@@ -61,14 +61,14 @@ public class MyBase extends BaseFragment implements OnClickListener, HttpCallBac
         onPosition(TAG);
     }
 
-
+    //TODO 订单列表
     @JavascriptInterface
     public void orderList() {
 
-        activity.openOrderList();
+        activity.openOrderList(null);
     }
 
-
+    //TODO 重新登录
     @JavascriptInterface
     public void signout() {
 
@@ -94,6 +94,7 @@ public class MyBase extends BaseFragment implements OnClickListener, HttpCallBac
         builder.show();
     }
 
+    //TODO 修改密码
     @JavascriptInterface
     public void changePassword() {
 
@@ -132,6 +133,15 @@ public class MyBase extends BaseFragment implements OnClickListener, HttpCallBac
                 public void onClick(DialogInterface dialog, int i) { }
             });
             ad1.show();// 显示对话框
+    }
+
+    //TODO 订单类型
+    @JavascriptInterface
+    public void gotoRecord(String record) {
+
+        //ordertotal30//ordernum30//taodantotal//taodannum//ordertotal1//ordernum1
+
+        activity.openOrderList(record);
     }
 
     //TODO 初始化控件

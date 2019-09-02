@@ -66,7 +66,7 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
 
     public static boolean isForeground = false;
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.activity = this;
         super.onCreate(savedInstanceState);
@@ -235,7 +235,7 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
     }
 
     //TODO 打开订单列表
-    public void openOrderList(){
+    public void openOrderList(final String record ){
 
         MainActivity.this.runOnUiThread(new Runnable() {
             @Override
@@ -244,6 +244,11 @@ public class MainActivity extends MainBaseActivity implements HttpCallBack2 {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.activity_fragment,orderListFragment );
                 fragmentTransaction.addToBackStack(null);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("record", record);
+                orderListFragment.setArguments(bundle);
+
                 fragmentTransaction.commit();
             }
         });

@@ -149,8 +149,10 @@ public class Order_list_detailsFragment extends BaseFragment{
         buf.append("已缴金额："+ order_details_a22222.getText().toString()+"元\r\n\r\n");
         buf.append("本次收取："+ ( Double.valueOf(order_details_aa22.getText().toString())
                 -Double.valueOf(order_details_a22222.getText().toString()) )+"元\r\n\r\n");
-        buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
-        buf.append("监督电话：0595-28282818");
+        buf.append(Static_bean.ChargingTime);
+        buf.append(Static_bean.ChargingStandard);
+        buf.append(Static_bean.ChargingUnit);
+        buf.append(Static_bean.ComplaintTelephone);
 
         String QRcode = Static_bean.QRcode_orderdetail()+"?orderid=" + article.id;
         PrintBillBean PrintBillBean = new PrintBillBean(2,buf.toString(),QRcode);

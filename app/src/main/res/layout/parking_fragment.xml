@@ -140,7 +140,7 @@
                 android:gravity="center|left"
                 android:maxLength="20"
                 android:singleLine="true"
-                android:text="0"
+                android:text="0元"
                 android:background="@null"
                 android:textCursorDrawable="@null" />
         </LinearLayout>

@@ -60,7 +60,7 @@ public class PrintBillService extends IntentService {
         try {
 
             //打印Title
-            printer.drawTextEx("告知", 130, 0, 380, -1, "simsun", 50, 0, 0, 0);
+            printer.drawTextEx("测试告知单", 60, 0, 380, -1, "simsun", 50, 0, 0, 0);
             printer.drawTextEx(printBillBean.getData(), 0, 0, 385, -1, "simsun", 28, 0, 0, 0);
             sendBroadcast(new Intent("android.prnt.message").putExtra("ret", printer.printPage(0)));
 
@@ -92,7 +92,7 @@ public class PrintBillService extends IntentService {
         try {
 
             //打印Title
-            printer.drawTextEx("收费", 130, 0, 380, -1, "simsun", 50, 0, 0, 0);
+            printer.drawTextEx("测试收费单", 60, 0, 380, -1, "simsun", 50, 0, 0, 0);
             printer.drawTextEx(printBillBean.getData(), 0, 0, 385, -1, "simsun", 28, 0, 0, 0);
             sendBroadcast(new Intent("android.prnt.message").putExtra("ret", printer.printPage(0)));
 
@@ -114,7 +114,7 @@ public class PrintBillService extends IntentService {
             super.onCreate();
             printer = new PrinterManager();
             printer.setupPage(384, -1);
-            printer.drawTextEx(("\r\n\r\n"), 80, 0, 380, -1, "simsun", 50, 0, 0, 0);
+            printer.drawTextEx(("\r\n\r\n"), 80, 0, 380, -1, "simsun", 35, 0, 0, 0);
            // printer.drawTextEx("\r\n\r\n\r\n", 0, 0, 385, -1, "simsun", 28, 0, 0, 0);
             sendBroadcast(new Intent("android.prnt.message").putExtra("ret", printer.printPage(0)));
 
@@ -130,7 +130,7 @@ public class PrintBillService extends IntentService {
         try {
 
             //打印Title
-            printer.drawTextEx("补缴", 130, 0, 380, -1, "simsun", 50, 0, 0, 0);
+            printer.drawTextEx("测试补缴单", 60,  0, 380, -1, "simsun", 50, 0, 0, 0);
             printer.drawTextEx(printBillBean.getData(), 0, 0, 385, -1, "simsun", 28, 0, 0, 0);
             sendBroadcast(new Intent("android.prnt.message").putExtra("ret", printer.printPage(0)));
 
@@ -161,7 +161,7 @@ public class PrintBillService extends IntentService {
         try {
 
             //打印Title
-            printer.drawTextEx("补缴", 130, 0, 380, -1, "simsun", 50, 0, 0, 0);
+            printer.drawTextEx("测试补缴单", 60, 0, 380, -1, "simsun", 50, 0, 0, 0);
             printer.drawTextEx(printBillBean.getData(), 0, 0, 385, -1, "simsun", 28, 0, 0, 0);
             sendBroadcast(new Intent("android.prnt.message").putExtra("ret", printer.printPage(0)));
 

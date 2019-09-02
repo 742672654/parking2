@@ -46,7 +46,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
 
     private MediaPlayer mMediaPlayer = null;
 
-    protected static String[] string_pre_price = new String[]{"1元","3元","5元","10元"};
+    protected static String[] string_pre_price = new String[]{"0元","1元","3元","5元","10元"};
 
     @Override
     public void onStart() {

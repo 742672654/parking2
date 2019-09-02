@@ -44,21 +44,21 @@ public class OrderAddBean implements Serializable{
 
     public static class OrderAddDate implements Serializable {
 
-
+        public Boolean sfjiaofei;//是否缴费 //自定义字段，接口没有的
 
         private String parkTime;//订单创建时间
 
         private String carnum;//name"闽A12345",
         //创建时间
-        private long createtime;//1559185362000,
+        //private Long createtime;//1559185362000,
         //创建人ID
         private String createuserid;//"6cf5f230-908c-4ce6-ba87-a7ed517ddcf6",
         //获取逃单金额
         private String escapeprice;//0,
 
-        private int id;//11,
+        private Integer id;//11,
 
-        private int orderid;//64,
+        private Integer orderid;//64,
 
         private String parkDateStr;//"2019-05-30 11:02:28",
 
@@ -81,12 +81,8 @@ public class OrderAddBean implements Serializable{
         public void setCarnum(String carnum) {
             this.carnum = carnum;
         }
-        public long getCreatetime() {
-            return createtime;
-        }
-        public void setCreatetime(long createtime) {
-            this.createtime = createtime;
-        }
+//        public Long getCreatetime() { return createtime; }
+//        public void setCreatetime(Long createtime) { this.createtime = createtime; }
         public String getCreateuserid() {
             return createuserid;
         }
@@ -99,16 +95,16 @@ public class OrderAddBean implements Serializable{
         public void setEscapeprice(String escapeprice) {
             this.escapeprice = escapeprice;
         }
-        public int getId() {
+        public Integer getId() {
             return id;
         }
-        public void setId(int id) {
+        public void setId(Integer id) {
             this.id = id;
         }
-        public int getOrderid() {
+        public Integer getOrderid() {
             return orderid;
         }
-        public void setOrderid(int orderid) {
+        public void setOrderid(Integer orderid) {
             this.orderid = orderid;
         }
         public String getParkDateStr() {
@@ -135,7 +131,7 @@ public class OrderAddBean implements Serializable{
             return "OrderAddDate{" +
                     "parkTime='" + parkTime + '\'' +
                     ", carnum='" + carnum + '\'' +
-                    ", createtime=" + createtime +
+                   // ", createtime=" + createtime +
                     ", createuserid='" + createuserid + '\'' +
                     ", escapeprice='" + escapeprice + '\'' +
                     ", id=" + id +

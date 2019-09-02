@@ -19,6 +19,7 @@ public class MyFragment extends MyBase {
     public static final String TAG = "MyFragment我的";
 
 
+    @Override
     public void onStart() {
         super.onStart();
         super.onPosition(TAG);

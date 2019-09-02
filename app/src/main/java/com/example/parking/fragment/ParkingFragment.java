@@ -86,10 +86,17 @@ public class ParkingFragment extends ParkingBase {
                 break;
 
             case R.id.button_order_add:
+
+
+                if(parking_carmun.getText().toString().contains("错误")){
+                    toast_makeText("车牌识别错误");
+                    return;
+                }
+
                 Map<String,String> params = new HashMap<String,String>() ;
                 params.put("token", activity.userBean.getToken());
                 params.put("carnum", parking_carmun.getText().toString());
-                params.put("preprice", parking_pre_price.getText().toString().substring(0,1));
+                params.put("preprice", parking_pre_price.getText().toString().substring(0,parking_pre_price.getText().toString().length()-1));
                 params.put("ordertype", String.valueOf(1));
                 params.put("inimage", right_photo.getTag()==null ?"":right_photo.getTag().toString().split("###")[1]);
                 params.put("panorama",left_photo.getTag()==null ?"": left_photo.getTag().toString().split("###")[1]);
@@ -175,11 +182,10 @@ public class ParkingFragment extends ParkingBase {
                 buf.append("车牌号："+parking_carmun.getText().toString()+" \r\n\r\n");
                 buf.append("驶入时间"+ httpBean.getData().getParkTime()+" \r\n");
                 buf.append("预付金额："+parking_pre_price.getText().toString()+"\r\n\r\n");
-
-                buf.append("每天单次收费5元，晚上12点后重新收费。车辆离开车位后，视为停车订单结算完成。\r\n\r\n");
-                buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
-                buf.append("监督电话：0595-28282818");
-
+                buf.append(Static_bean.ChargingTime);
+                buf.append(Static_bean.ChargingStandard);
+                buf.append(Static_bean.ChargingUnit);
+                buf.append(Static_bean.ComplaintTelephone);
 
                 StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict());
                 qRcode.append("/").append(httpBean.getData().getId());

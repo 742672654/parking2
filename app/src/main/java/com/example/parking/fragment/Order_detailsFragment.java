@@ -298,15 +298,17 @@ public class Order_detailsFragment extends BaseFragment{
             buf.append("总停车费："+ a3.getText().toString()+"元\r\n\r\n");
             buf.append("已缴金额："+ a33.getText().toString()+"元\r\n\r\n");
             buf.append("本次收取："+ a22.getText().toString()+"元\r\n\r\n");
-            buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
-            buf.append("监督电话：0595-28282818");
+            buf.append(Static_bean.ChargingTime);
+            buf.append(Static_bean.ChargingStandard);
+            buf.append(Static_bean.ChargingUnit);
+            buf.append(Static_bean.ComplaintTelephone);
 
             String QRcode = Static_bean.QRcode_orderdetail()+"?orderid="+param.get("id");
             PrintBillBean PrintBillBean = new PrintBillBean(2,buf.toString(),QRcode);
 
             printer_marking(PrintBillBean);
 
-            activity.openOrder();
+            activity.openParkingIndex();
         }else if (httpBean.getCode()==400){
 
             toast_makeText(httpBean.getMessage());
@@ -320,7 +322,7 @@ public class Order_detailsFragment extends BaseFragment{
         if (httpBean.getCode()==200){
 
             toast_makeText("订单已提交");
-            activity.openOrder();
+            activity.openParkingIndex();
         }else if (httpBean.getCode()==400){
             toast_makeText(httpBean.getMessage());
         }
@@ -376,10 +378,10 @@ public class Order_detailsFragment extends BaseFragment{
         buf.append("车牌号："+orderlistData.getCarNo()+" \r\n\r\n");
         buf.append("驶入时间"+ (a5.getText())+" \r\n");
         buf.append("预付金额："+a33.getText().toString()+"元\r\n\r\n");
-
-        buf.append("每天单次收费5元，晚上12点后重新收费。车辆离开车位后，视为停车订单结算完成。\r\n\r\n");
-        buf.append("收费单位：泉州市畅顺停车管理有限公司\r\n\r\n");
-        buf.append("监督电话：0595-28282818");
+        buf.append(Static_bean.ChargingTime);
+        buf.append(Static_bean.ChargingStandard);
+        buf.append(Static_bean.ChargingUnit);
+        buf.append(Static_bean.ComplaintTelephone);
 
         StringBuffer qRcode = new StringBuffer(Static_bean.QRcode_redict());
         qRcode.append("/").append(orderlistData.getId());
