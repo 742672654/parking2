@@ -58,7 +58,7 @@ public class OrderAddBean implements Serializable{
 
         private Integer id;//11,
 
-        private Integer orderid;//64,
+        private Integer orderid;//64, //订单id
 
         private String parkDateStr;//"2019-05-30 11:02:28",
 

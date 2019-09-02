@@ -69,16 +69,23 @@ public class EscapeListToMinePageBean {
     }
 
     public static class EscapeListToMinePageBeanList implements Serializable {
+
+        public Integer id;//逃单id
+        public Integer OrderId;//281
+        public String SubId;//"446691ce-12d6-4fd4-b3b0-5a21b346247e"
         public String CarNum;// "苏A",
         public Double EscapePrice;// 2.0,
         public String CreateTime;// "2019-09-02T08:06:09.000+0000",
         public String SubName;// "农行车位003",
         public Integer isdeleted;// 2,
         public String ParkDate;// "2019-09-02T08:03:52.000+0000"
+
         @Override
         public String toString() {
             return "EscapeListToMinePageBeanList{" +
-                    "CarNum='" + CarNum + '\'' +
+                    "OrderId='" + OrderId + '\'' +
+                    ", SubId='" + SubId + '\'' +
+                    ", CarNum='" + CarNum + '\'' +
                     ", EscapePrice=" + EscapePrice +
                     ", CreateTime='" + CreateTime + '\'' +
                     ", SubName='" + SubName + '\'' +
