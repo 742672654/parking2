@@ -80,7 +80,7 @@ public class TimeUtil {
 	}
 
 	/**
-	 * 获取当前日期时间Short
+	 * 获取当前日期时间
 	 * 格式：yyyy-MM-dd HH:mm:ss
 	 */
 	public static String getDateTime(long time) {

@@ -204,12 +204,12 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
             EscapeListToMinePageBean.EscapeListToMinePageBeanList escapeList = (EscapeListToMinePageBean.EscapeListToMinePageBeanList)article;
             OrderAddBean.OrderAddDate orderAddDate = new OrderAddBean.OrderAddDate();
 
+            orderAddDate.setParkdate(escapeList.ParkDate);
             orderAddDate.setEscapeprice(String.valueOf(escapeList.EscapePrice));
             orderAddDate.setCarnum(escapeList.CarNum);
             orderAddDate.setParkDateStr(!StringUtil.is_valid(escapeList.CreateTime)?"":escapeList.CreateTime.substring(0,10)+" "+escapeList.CreateTime.substring(11,19));
             orderAddDate.setOrderid(escapeList.OrderId);
             orderAddDate.setId(escapeList.id);
-
 
             if (escapeList.isdeleted==2){
                 orderAddDate.sfjiaofei = true;

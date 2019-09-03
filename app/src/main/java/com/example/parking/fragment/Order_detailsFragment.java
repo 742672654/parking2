@@ -27,6 +27,8 @@ import com.example.parking.db.Jiguang_DB;
 import com.example.parking.db.Order_DB;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.util.JsonUtil2;
+import com.example.parking.util.StringUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -266,12 +268,22 @@ public class Order_detailsFragment extends BaseFragment{
                     a5.setText(orderDetailsBean.getData().getStartTime());
                     a6.setText(param.get("subname"));
 
+                    //去数据库查询出照片来
                     OrderDbBean orderBean = Order_DB.query_Order(activity.baseSQL_DB,String.valueOf(orderDetailsBean.getData().getId()));
-                    panoramaImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto1_path()));
-                    panoramaImageString = orderBean.getPhoto1_path();
 
-                    inimageImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto2_path()));
-                    inimageImageString = orderBean.getPhoto2_path();
+                    if (orderBean==null){
+
+                    }
+
+                    if ( StringUtil.is_valid(orderBean.getPhoto1_path()) ){
+                        panoramaImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto1_path()));
+                        panoramaImageString = orderBean.getPhoto1_path();
+                    }
+
+                    if ( StringUtil.is_valid(orderBean.getPhoto2_path()) ){
+                        inimageImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto2_path()));
+                        inimageImageString = orderBean.getPhoto2_path();
+                    }
 
                 } catch (Exception e) {
                     Log.w(TAG, e);

@@ -63,7 +63,8 @@ public class OrderAddBean implements Serializable{
         private String parkDateStr;//"2019-05-30 11:02:28",
 
         //获取进场时间
-        private String parkdate;//1559185348000,
+        private String parkdate;// "2019-09-03T02:48:36.000 0000"
+
 
         //泊车点ID
         private String pointid;//"2200021733",

@@ -10,10 +10,12 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-
+import java.net.URL;
+import java.net.URLConnection;
 
 
 public class FileUtil {
@@ -136,5 +138,91 @@ public class FileUtil {
 		}
 	}
 
+	//TODO http请求下载文件保存到本地
+	public static String downloadFile1( String url, String path, String filename ) {
+
+
+		if ( !StringUtil.is_valid(url) || !StringUtil.is_valid(path) || !StringUtil.is_valid(filename) ){
+			return null;
+		}
+
+		InputStream is = null;
+		URLConnection conn = null;
+		try{
+			//下载路径，如果路径无效了，可换成你的下载路径
+//			String url = "http://c.qijingonline.com/test.mkv";
+//			String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+			String suffix = getSuffix(url);
+
+			final long startTime = System.currentTimeMillis();
+			Log.i(TAG+"文件下载","startTime="+startTime);
+
+			//获取文件名
+			URL myURL = new URL(url);
+			conn = myURL.openConnection();
+			is = conn.getInputStream();
+			int fileSize = conn.getContentLength();//根据响应获取文件大小
+			if (fileSize <= 0) throw new RuntimeException("无法获知文件大小 ");
+			if (is == null) throw new RuntimeException("stream is null");
+			File file1 = new File(path);
+			if(!file1.exists()){
+				file1.mkdirs();
+			}
+			//把数据存入路径+文件名
+			FileOutputStream fos = new FileOutputStream(path+"/"+filename+"."+suffix);
+			byte buf[] = new byte[1024];
+			int downLoadFileSize = 0;
+			do{
+				//循环读取
+				int numread = is.read(buf);
+				if (numread == -1)
+				{
+					break;
+				}
+				fos.write(buf, 0, numread);
+				downLoadFileSize += numread;
+				//更新进度条
+			} while (true);
+
+			Log.i("DOWNLOAD","totalTime="+ (System.currentTimeMillis() - startTime));
+
+			return path+"/"+filename+"."+suffix;
+		} catch (Exception ex) {
+			Log.w(TAG+"文件下载",  ex);
+		}finally {
+			try {
+				is.close();
+			} catch (Exception e) {
+				Log.w(TAG+"文件下载",  e);
+			}
+			try {
+				conn.connect();
+			} catch (Exception e) {
+				Log.w(TAG+"文件下载",  e);
+			}
+		}
+		return null;
+	}
+
+
+	//TODO 取http连接的文件后缀
+	public static String getSuffix(String url){
+
+		Log.i(TAG,"取http连接的文件后缀="+url);
+
+		String suffix = "";
+		if (url.contains("?")){
+			url = url.split("\\?")[0];
+		}
+
+		if (url.contains(".")){
+			String[] urlsplit = url.split("\\.");
+
+			suffix = urlsplit[urlsplit.length-1];
+		}
+
+		return suffix;
+	}
 
 }

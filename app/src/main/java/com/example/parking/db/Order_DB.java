@@ -58,9 +58,4 @@ public class Order_DB {
         baseSQL_DB.getWritableDatabase().execSQL(buf.toString());
         Log.i(TAG,orderBean.toString() + "--------"+  buf.toString());
     }
-
-
-
-
-
 }

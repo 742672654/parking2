@@ -21,6 +21,7 @@ import com.example.parking.bean.http.PhotoToOssBean;
 import com.example.parking.db.Order_DB;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.util.JsonUtil2;
+import com.example.parking.util.TimeUtil;
 import com.google.gson.Gson;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -206,6 +207,7 @@ public class ParkingFragment extends ParkingBase {
                 orderDbBean.setPhoto1_url(panorama[1]);
                 orderDbBean.setPhoto2_path(inimage[0]);
                 orderDbBean.setPhoto2_url(inimage[1]);
+                orderDbBean.setTime(TimeUtil.getDateTime());
                 Order_DB.insert_in_Order(activity.baseSQL_DB,orderDbBean);
 
                 activity.openParkingIndex();

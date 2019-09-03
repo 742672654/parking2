@@ -2,17 +2,18 @@ package com.example.parking;
 
 public class Static_bean {
 
+    public final static String printBillType = "android"; //打印机版本：android 或 PDA
 
     public final static String ChargingTime = "收费时间：7：30 - 21：30\r\n\r\n";
-    public final static String ChargingStandard = "收费标准：单次收费5元，晚上12点后重新计费，车辆离开车位视为订单结算\r\n";
+    public final static String ChargingStandard = "收费标准：单次收费5元，车辆离开车位视为订单结算\r\n";
     public final static String ChargingUnit = "收费单位：泉州市畅顺停车管理有限公司\r\n";
     public final static String ComplaintTelephone = "监督电话：0595-28282818";
 
 
 
 
-   // public final static String url = "https://parking.yilufa.net:18443";
-   public final static String url = "http://192.168.0.104:18442";
+    public final static String url = "https://parking.yilufa.net:18443";
+ //public final static String url = "http://192.168.0.104:18442";
 
     /**
      * TODO 登录，返回个人信息
@@ -169,6 +170,13 @@ public class Static_bean {
      * @param subId 车位ID
      */
     public final static String photoToAlert(){ return url+"/abnormalSubMonitorReport/park/upload/photoToAlert";}
+
+    /**
+     * TODO 获取逃单图片接口
+     * @param token
+     * @param id 逃费的id
+     */
+    public final static String pointEscapeEscapePic(){ return url+"/point/escape/escapePic";}
 
 
 }

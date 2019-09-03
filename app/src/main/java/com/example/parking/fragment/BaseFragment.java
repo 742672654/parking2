@@ -165,6 +165,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
 
         try {
 
+            if ("android".equals(Static_bean.printBillType)){ return; }
 
             if (PrintBillBean == null) return;
 
