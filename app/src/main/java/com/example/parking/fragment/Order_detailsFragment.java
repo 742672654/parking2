@@ -23,9 +23,11 @@ import com.example.parking.bean.http.OrderDetailsBean;
 import com.example.parking.bean.http.OrderlistBean;
 import com.example.parking.bean.http.ParkingSpaceBean;
 import com.example.parking.bean.http.ParkingSpaceData;
+import com.example.parking.bean.http.PointEscapeEscapePicBean;
 import com.example.parking.db.Jiguang_DB;
 import com.example.parking.db.Order_DB;
 import com.example.parking.http.HttpManager2;
+import com.example.parking.util.FileUtil;
 import com.example.parking.util.JsonUtil2;
 import com.example.parking.util.StringUtil;
 
@@ -259,7 +261,7 @@ public class Order_detailsFragment extends BaseFragment{
             public void run() {
                 try {
 
-                    OrderDetailsBean  orderDetailsBean = JsonUtil2.fromJson(object, OrderDetailsBean.class);
+                    final OrderDetailsBean  orderDetailsBean = JsonUtil2.fromJson(object, OrderDetailsBean.class);
                     a1.setText(orderDetailsBean.getData().getCarnum()==null?"":orderDetailsBean.getData().getCarnum());
                     a22.setText(String.valueOf(orderDetailsBean.getData().getWait_price()));
                     a3.setText(String.valueOf(orderDetailsBean.getData().getPrice()));
@@ -273,6 +275,15 @@ public class Order_detailsFragment extends BaseFragment{
 
                     if (orderBean==null){
 
+                        // 下载照片,并设置照片
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                downloadFiles( orderDetailsBean);
+                            }
+                        }.start();
+
+                        return;
                     }
 
                     if ( StringUtil.is_valid(orderBean.getPhoto1_path()) ){
@@ -290,6 +301,46 @@ public class Order_detailsFragment extends BaseFragment{
                 }
             }
         });
+    }
+
+    //TODO >>> 下载照片
+    public void downloadFiles(final OrderDetailsBean  orderDetailsBean){
+
+        try{
+            String uuidPanorama = StringUtil.getUuid();
+            String uuidInimage = StringUtil.getUuid();
+
+            final String panoramaPath = FileUtil.downloadFile1(orderDetailsBean.getData().getPanorama(),FileUtil.getSDCardPath() + "/parkings",uuidPanorama);
+            final String inimagePath = FileUtil.downloadFile1(orderDetailsBean.getData().getInimage(),FileUtil.getSDCardPath() + "/parkings",uuidInimage);
+
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+
+                        panoramaImageString = panoramaPath;
+                        inimageImageString = inimagePath;
+
+                        //修改图片暂时
+                        panoramaImageView.setImageBitmap( BitmapFactory.decodeFile(panoramaPath));
+                        inimageImageView.setImageBitmap( BitmapFactory.decodeFile(inimagePath));
+
+                        //保存到数据库
+                        OrderDbBean orderBean = new OrderDbBean();
+                        orderBean.setId(String.valueOf(orderDetailsBean.getData().getId()));
+                        orderBean.setPhoto1_url(orderDetailsBean.getData().getPanorama());
+                        orderBean.setPhoto2_url(orderDetailsBean.getData().getInimage());
+                        orderBean.setPhoto1_path(panoramaPath);
+                        orderBean.setPhoto2_path(inimagePath);
+                        Order_DB.insert_in_Order(activity.baseSQL_DB,orderBean);
+                    } catch (Exception e) {
+                        Log.w(TAG, e);
+                    }
+                }
+            });
+        }catch (Exception e){
+            Log.w(TAG,e);
+        }
     }
 
     //TODO >>>获取订单收费结果

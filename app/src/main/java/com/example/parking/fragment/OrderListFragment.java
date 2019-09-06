@@ -4,19 +4,19 @@ package com.example.parking.fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.parking.R;
+import com.example.parking.activety.MainActivity;
 import com.example.parking.ui.dataChoice.DataChoiceReturn;
 import com.example.parking.ui.dataChoice.DatePickerDialogCustom;
 import com.example.parking.ui.dataChoice.SpecificDateBean;
 import com.example.parking.util.InputUtil;
 import com.example.parking.util.TimeUtil;
 import com.example.parking.view.KeyboardViewPager;
-import java.util.Map;
+
 
 
 /**
@@ -27,7 +27,6 @@ import java.util.Map;
 public class OrderListFragment extends OrderListBase implements DataChoiceReturn, View.OnTouchListener{
 
     public static final String TAG = "OrderListFragment<全部订单>";
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,9 +58,14 @@ public class OrderListFragment extends OrderListBase implements DataChoiceReturn
 
     @Override
     public void onStart() {
+
+        if (MainActivity.FragmentStartTAG.equals(MyFragment.TAG) || MainActivity.FragmentStartTAG.equals(MyBase.TAG) ) {
+            pointOrderReport_orderlist("onStart");
+        }
+
         super.onStart();
         super.onPosition(TAG);
-        pointOrderReport_orderlist("onStart");
+
     }
 
     @Override
@@ -119,7 +123,5 @@ public class OrderListFragment extends OrderListBase implements DataChoiceReturn
         }
         return false;
     }
-
-
 
 }

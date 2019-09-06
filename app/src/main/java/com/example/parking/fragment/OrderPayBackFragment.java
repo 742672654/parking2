@@ -193,25 +193,23 @@ public class OrderPayBackFragment extends BaseFragment {
             @Override
             public void run() {
 
-                HttpBean httpBean = JsonUtil2.fromJson(object,HttpBean.class);
+                try {
+                    HttpBean httpBean = JsonUtil2.fromJson(object, HttpBean.class);
 
-                if (httpBean.getCode()==200){
+                    if (httpBean.getCode() == 200) {
 
 //                    Instrumentation inst = new Instrumentation();
 //                    inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
-
-                    try {
                         Runtime runtime = Runtime.getRuntime();
                         runtime.exec("input keyevent " + KeyEvent.KEYCODE_BACK);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
 //                    //返回上个页面
 //                   activity.onKeyDown(KeyEvent.KEYCODE_BACK,  null);
 
-                }else {
-                    toast_makeText(httpBean.getMessage());
+                    } else {
+                        toast_makeText(httpBean.getMessage());
+                    }
+                } catch (IOException e) {
+                    Log.w(TAG,e);
                 }
             }
         });
@@ -266,9 +264,6 @@ public class OrderPayBackFragment extends BaseFragment {
         }catch (Exception e){
             Log.w(TAG,e);
         }
-
-
-
     }
 
     @Override

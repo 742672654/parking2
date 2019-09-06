@@ -32,6 +32,8 @@ public class OrderDetailsBean {
         private int id;// 79,
         private double pre_price;// 6,
         private double price;// 40,
+        private String panorama; //全景照
+        private String inimage;//车牌照
 
         private String pointId;// "1d466235-5eb7-4a3d-81e8-ce90be5170be",
         private String startTime;// "2019-06-25 20:36:43",
@@ -40,59 +42,28 @@ public class OrderDetailsBean {
         private String address;// null,
 
 
-        public double getWait_price() {
-            return wait_price;
-        }
-        public void setWait_price(double wait_price) {
-            this.wait_price = wait_price;
-        }
-        public int getId() {
-            return id;
-        }
-        public void setId(int id) {
-            this.id = id;
-        }
-        public double getPre_price() {
-            return pre_price;
-        }
-        public void setPre_price(double pre_price) {
-            this.pre_price = pre_price;
-        }
-        public double getPrice() {
-            return price;
-        }
-        public void setPrice(double price) {
-            this.price = price;
-        }
-        public String getPointId() {
-            return pointId;
-        }
-        public void setPointId(String pointId) {
-            this.pointId = pointId;
-        }
-        public String getStartTime() {
-            return startTime;
-        }
-        public void setStartTime(String startTime) {
-            this.startTime = startTime;
-        }
-        public String getTime() {
-            return time;
-        }
-        public void setTime(String time) {
-            this.time = time;
-        }
-        public String getCarnum() {
-            return carnum;
-        }
-        public void setCarnum(String carnum) {
-            this.carnum = carnum;
-        }
-        public String getAddress() {
-            return address;
-        }
+        public double getWait_price() { return wait_price; }
+        public void setWait_price(double wait_price) { this.wait_price = wait_price; }
+        public int getId() { return id; }
+        public void setId(int id) { this.id = id; }
+        public double getPre_price() { return pre_price; }
+        public void setPre_price(double pre_price) { this.pre_price = pre_price; }
+        public double getPrice() { return price; }
+        public void setPrice(double price) { this.price = price; }
+        public String getPanorama() { return panorama; }
+        public void setPanorama(String panorama) { this.panorama = panorama; }
+        public String getInimage() { return inimage; }
+        public void setInimage(String inimage) { this.inimage = inimage; }
+        public String getPointId() { return pointId; }
+        public void setPointId(String pointId) { this.pointId = pointId; }
+        public String getStartTime() { return startTime; }
+        public void setStartTime(String startTime) { this.startTime = startTime; }
+        public String getTime() { return time; }
+        public void setTime(String time) { this.time = time; }
+        public String getCarnum() { return carnum; }
+        public void setCarnum(String carnum) { this.carnum = carnum; }
+        public String getAddress() { return address; }
         public void setAddress(String address) { this.address = address; }
-
 
         @Override
         public String toString() {
@@ -101,6 +72,8 @@ public class OrderDetailsBean {
                     ", id=" + id +
                     ", pre_price=" + pre_price +
                     ", price=" + price +
+                    ", panorama='" + panorama + '\'' +
+                    ", inimage='" + inimage + '\'' +
                     ", pointId='" + pointId + '\'' +
                     ", startTime='" + startTime + '\'' +
                     ", time='" + time + '\'' +

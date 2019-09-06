@@ -55,7 +55,7 @@ public class StringUtil {
      */
     public static boolean is_valid(String s0){
 
-        if ( s0==null || "".equals(s0) || s0.length()==0 ||  replaceUseless(s0).length()==0 ){
+        if ( s0==null || "".equals(s0) || s0.length()==0 ||  replaceUseless(s0).length()==0 || "null".equals(s0) || "NULL".equals(s0)){
             return false;
         }
         return true;

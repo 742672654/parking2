@@ -2,7 +2,7 @@ package com.example.parking;
 
 public class Static_bean {
 
-    public final static String printBillType = "android"; //打印机版本：android 或 PDA
+    public final static String printBillType = "PDA"; //打印机版本：android 或 PDA
 
     public final static String ChargingTime = "收费时间：7：30 - 21：30\r\n\r\n";
     public final static String ChargingStandard = "收费标准：单次收费5元，车辆离开车位视为订单结算\r\n";
@@ -12,8 +12,8 @@ public class Static_bean {
 
 
 
-    public final static String url = "https://parking.yilufa.net:18443";
- //public final static String url = "http://192.168.0.104:18442";
+  public final static String url = "https://parking.yilufa.net:18443";
+  //    public final static String url = "http://192.168.0.101:18442";
 
     /**
      * TODO 登录，返回个人信息
@@ -142,7 +142,19 @@ public class Static_bean {
     public final static String QRcode_orderdetail(){ return  "http://wx.yilufa.net/pointinfo/orderdetail";}
 
     /**
-     * TODO 全部订单
+     * TODO 全部订单《含逃费/未结算》
+     * @param carnum 车牌号
+     * @param page
+     * @param size
+     * @param startdate 开始日期
+     * @param enddate 结束日期
+     * @param pointid 停车场id
+     */
+    public final static String pointOrderReport_orderlistToAll(){ return url+"/pointOrderReport/orderlistToAll";}
+
+
+    /**
+     * TODO 全部订单《不含逃费》
      * @param carnum 车牌号
      * @param page
      * @param size
@@ -154,7 +166,7 @@ public class Static_bean {
 
 
     /**
-     * TODO 全部逃费订单
+     * TODO 全部逃单
      * @param carnum 车牌号
      * @param page
      * @param size

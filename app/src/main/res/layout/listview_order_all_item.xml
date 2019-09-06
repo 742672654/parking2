@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listview_order_all_item_relativeLayoutmax"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/a1"
+        android:id="@+id/listview_order_all_item_relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="30sp"
         android:layout_alignParentStart="true"
@@ -19,8 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:text="车牌 :"
+            android:layout_marginLeft="14dp"
+            android:text="车  牌 :"
             android:textColor="#ffffff"
             android:textSize="18sp" />
 
@@ -39,7 +40,7 @@
         android:id="@+id/all_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/a1"
+        android:layout_below="@id/listview_order_all_item_relativeLayout"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="入场时间"
@@ -60,13 +61,11 @@
 
     <TextView
         android:id="@+id/order_all_textview_tips_up"
-        android:layout_below="@+id/a1"
+        android:layout_below="@+id/listview_order_all_item_relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="22sp"
         android:layout_marginLeft="260dp"
         android:layout_marginTop="2dp"
-        android:background="@color/idle_green"
-        android:text=" 已出场 "
         android:textColor="#ffffff"
         android:textSize="18sp" />
 
@@ -77,8 +76,6 @@
         android:layout_marginTop="2dp"
         android:layout_width="wrap_content"
         android:layout_height="22sp"
-        android:background="@color/idle_green"
-        android:text=" 已缴费 "
         android:textColor="#ffffff"
         android:textSize="18sp" />
     <!-- 已补费orange  逃费colorAccent  已缴费idle_green  已出场idle_green-->

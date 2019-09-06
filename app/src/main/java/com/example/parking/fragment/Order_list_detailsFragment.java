@@ -15,10 +15,13 @@ import com.example.parking.R;
 import com.example.parking.Static_bean;
 import com.example.parking.bean.OrderDbBean;
 import com.example.parking.bean.PrintBillBean;
+import com.example.parking.bean.http.OrderDetailsBean;
 import com.example.parking.bean.http.Report_orderlistBean;
 import com.example.parking.db.Jiguang_DB;
 import com.example.parking.db.Order_DB;
+import com.example.parking.util.FileUtil;
 import com.example.parking.util.JsonUtil2;
+import com.example.parking.util.StringUtil;
 import com.example.parking.util.TimeUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -96,7 +99,17 @@ public class Order_list_detailsFragment extends BaseFragment{
         order_details_a66.setText( article.SubName);
 
         OrderDbBean orderBean = Order_DB.query_Order(activity.baseSQL_DB,String.valueOf(article.id));
-        if (orderBean==null)return;
+        if (orderBean==null){
+
+            // 下载照片,并设置照片
+            new Thread(){
+                @Override
+                public void run() {
+                    downloadFiles( article);
+                }
+            }.start();
+            return;
+        }
 
         order_lis_panoramaImageView.setImageBitmap( BitmapFactory.decodeFile(orderBean.getPhoto1_path()));
         order_lis_panoramaImage = orderBean.getPhoto1_path();
@@ -161,6 +174,47 @@ public class Order_list_detailsFragment extends BaseFragment{
 
     }
 
+
+    //TODO >>> 下载照片
+    @SuppressLint("LongLogTag")
+    public void downloadFiles(final Report_orderlistBean.Report_orderlistList report_orderlistList){
+
+        try{
+            String uuidPanorama = StringUtil.getUuid();
+            String uuidInimage = StringUtil.getUuid();
+
+            final String panoramaPath = FileUtil.downloadFile1(report_orderlistList.Panorama,FileUtil.getSDCardPath() + "/parkings",uuidPanorama);
+            final String inimagePath = FileUtil.downloadFile1(report_orderlistList.InImage,FileUtil.getSDCardPath() + "/parkings",uuidInimage);
+
+            activity.runOnUiThread(new Runnable() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void run() {
+                    try {
+                        //修改图片
+
+                        order_lis_panoramaImage = panoramaPath;
+                        order_lis_panoramaImageView.setImageBitmap( BitmapFactory.decodeFile(order_lis_panoramaImage) );
+                        order_lis_inimageImage = inimagePath;
+                        order_lis_inimageImageView.setImageBitmap( BitmapFactory.decodeFile(order_lis_inimageImage));
+
+                        //保存到数据库
+                        OrderDbBean orderBean = new OrderDbBean();
+                        orderBean.setId(String.valueOf(report_orderlistList.id));
+                        orderBean.setPhoto1_url(report_orderlistList.Panorama);
+                        orderBean.setPhoto2_url(report_orderlistList.InImage);
+                        orderBean.setPhoto1_path(panoramaPath);
+                        orderBean.setPhoto2_path(inimagePath);
+                        Order_DB.insert_in_Order(activity.baseSQL_DB,orderBean);
+                    } catch (Exception e) {
+                        Log.w(TAG, e);
+                    }
+                }
+            });
+        }catch (Exception e){
+            Log.w(TAG,e);
+        }
+    }
     @SuppressLint("LongLogTag")
     @Override
     public void onResponsePOST(String url, final Map<String, String> param, String sign, final String object) {

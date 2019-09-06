@@ -32,6 +32,8 @@ import com.example.parking.http.HttpCallBack2;
 import com.example.parking.http.HttpManager2;
 import com.example.parking.printer.PrintBillService;
 import com.example.parking.util.JsonUtil2;
+import com.example.parking.util.StringUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -198,6 +200,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Http
     private PopupWindow popupWindow;
     private ImageView popuwindow_ImageView;
     protected void showPopupWindow( View parent, String path){
+
+        if (!StringUtil.is_valid(path)){ return; }
+
+        Log.i(TAG,"放大照片的地址="+path);
 
         if (popupWindow == null) {
             //获取自定义的菜单布局文件

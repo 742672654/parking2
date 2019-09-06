@@ -69,15 +69,17 @@ public class Report_orderlistBean{
         public String PlaceName;// "泉秀街市农行",
         public String OutImage;// "",
         public String CarNum;// "苏GNSNML",
-        public String InImage;//"http://parkbucket.oss-cn-shenzhen.aliyuncs.com/point/images/0f9f22e78b6c423a9fecfd58a84c785d.png",
+        public String InImage;//"http://parkbucket.oss-cn-shenzhen.aliyuncs.com/point/images/2d01bab305164e9ca8be729f9f959933.png"
+        public String Panorama;// "http://parkbucket.oss-cn-shenzhen.aliyuncs.com/point/images/9c58f5152a54469fae5eb632720c4f3b.png"
         public String OrderPrice;// "20.0",
         public String LeaveDate;// "2019-07-26 00:47:14",
-        public String id;// "208",
+        public String id;// "208", //订单id
         public String PrePrice;// "5.0",
         public String SubName;// "农行车位15",
         public String ParkDate;// "2019-07-25 21:34:45"
-
-
+        public String State; //1.未结算订单 2.已经结算订单3.逃单未补缴 4.逃单已补缴
+        public Integer esId;// 46, 逃单id
+        public String SubId;//车位id
 
         @Override
         public String toString() {
@@ -86,14 +88,19 @@ public class Report_orderlistBean{
                     ", OutImage='" + OutImage + '\'' +
                     ", CarNum='" + CarNum + '\'' +
                     ", InImage='" + InImage + '\'' +
+                    ", Panorama='" + Panorama + '\'' +
                     ", OrderPrice='" + OrderPrice + '\'' +
                     ", LeaveDate='" + LeaveDate + '\'' +
                     ", id='" + id + '\'' +
                     ", PrePrice='" + PrePrice + '\'' +
                     ", SubName='" + SubName + '\'' +
                     ", ParkDate='" + ParkDate + '\'' +
+                    ", State='" + State + '\'' +
+                    ", esId=" + esId +
+                    ", SubId='" + SubId + '\'' +
                     '}';
         }
+
     }
 
 }

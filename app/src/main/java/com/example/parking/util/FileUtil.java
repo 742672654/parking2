@@ -141,7 +141,7 @@ public class FileUtil {
 	//TODO http请求下载文件保存到本地
 	public static String downloadFile1( String url, String path, String filename ) {
 
-
+		Log.i(TAG,"下载图片地址="+url);
 		if ( !StringUtil.is_valid(url) || !StringUtil.is_valid(path) || !StringUtil.is_valid(filename) ){
 			return null;
 		}
