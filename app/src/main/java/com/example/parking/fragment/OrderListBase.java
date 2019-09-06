@@ -418,17 +418,14 @@ public class OrderListBase extends BaseFragment implements AbsListView.OnScrollL
                     public void onClick(View v) {
 
                         int position = Integer.valueOf((String) v.getTag());
+                        Report_orderlistBean.Report_orderlistList article = itemList.get(position);
 
+                        article.ParkDate = article.ParkDate.substring(0,10)+" "+article.ParkDate.substring(11,19);
+                        article.LeaveDate = article.LeaveDate.substring(0,10)+" "+article.LeaveDate.substring(11,19);
                         //打开查看订单页面
-                        activity.openOrder_list_details(itemList.get(position));
+                        activity.openOrder_list_details( article );
                     }
                 });
-
-
-
-
-
-
 
                 return convertView;
             }else if ("1".equals(itemList.get(position).State)){

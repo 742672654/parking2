@@ -28,11 +28,11 @@ public class Report_orderlistBean{
     public static class Report_orderlistData{
 
         private int total;// 3,
-        private String enddate;// "2019-07-29",
+        private String enddate;// "2019-07-29",  出场,有的地方时间格式不对
         private int size;// 10,
         private String pointid;// "a51e5f23-7632-40e6-be6b-ff307e30cbd5",
         private int page;// 1,
-        private String startdate;// "2019-07-22",
+        private String startdate;// "2019-07-22",   入场,有的地方时间格式不对
         private List<Report_orderlistList> list;
 
         public int getTotal() { return total; }
@@ -72,11 +72,11 @@ public class Report_orderlistBean{
         public String InImage;//"http://parkbucket.oss-cn-shenzhen.aliyuncs.com/point/images/2d01bab305164e9ca8be729f9f959933.png"
         public String Panorama;// "http://parkbucket.oss-cn-shenzhen.aliyuncs.com/point/images/9c58f5152a54469fae5eb632720c4f3b.png"
         public String OrderPrice;// "20.0",
-        public String LeaveDate;// "2019-07-26 00:47:14",
+        public String LeaveDate;// "2019-07-26 00:47:14",离场时间
         public String id;// "208", //订单id
         public String PrePrice;// "5.0",
         public String SubName;// "农行车位15",
-        public String ParkDate;// "2019-07-25 21:34:45"
+        public String ParkDate;// "2019-07-25 21:34:45" 入场时间
         public String State; //1.未结算订单 2.已经结算订单3.逃单未补缴 4.逃单已补缴
         public Integer esId;// 46, 逃单id
         public String SubId;//车位id
